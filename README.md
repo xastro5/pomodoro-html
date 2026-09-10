@@ -15,6 +15,7 @@ A minimalist Pomodoro timer with a beautiful 7-segment digital clock display, we
 - **Session Tracking**: Visual progress dots show completed focus sessions
 - **Weather Widget**: Automatically detects your location and shows current temperature
 - **Sound Notifications**: Audio alerts when timer completes (Chime, Bell, Digital)
+- **Alarm Clock**: Set a one-time local alarm with time wheels, selectable tones, sound preview, adjustable snooze, and dismiss controls
 - **Dark/Light Theme**: One-click theme toggle
 - **Keep Awake**: Prevent screen from sleeping while timer is running
 - **UI Lock**: Lock the interface to prevent accidental clicks
@@ -31,6 +32,21 @@ Simply open `index.html` in any modern browser. No server or build step required
 - **Lock**: Click the lock button to prevent accidental interactions
 - **Mode Selection**: Choose between 60m, 40m, 15m, or 5m presets
 - **Quick Adjust**: Use +/− buttons or type directly to set a custom duration
+
+### Alarm Clock
+
+The app remains one self-contained `index.html` file, including alarm styles and generated sounds.
+
+- Click the alarm icon in the top bar. Scroll the hour and minute wheels, click a visible number, or use the arrow keys to choose a time in 24-hour format, then save with the orange checkmark. A time already passed, including the current minute, is scheduled for tomorrow; the editor indicates Today or Tomorrow.
+- The saved time appears directly beside the icon in the same compact button. Click either to edit. Its tooltip includes the full date and sound status. The close button discards unsaved edits; **Delete Alarm** clears the saved alarm.
+- The alarm has its own **Sound** switch and **Tone** picker (Chime, Bell, Digital), independent of the Pomodoro tone. Selecting a tone previews it when sound is enabled; the separate play button previews it again.
+- Choose **Snooze** from 1–15 minutes, or **Off** to remove the snooze action. The default is five minutes. The selected duration is used when the alarm rings.
+- Click the **Tone** or **Snooze** row to reveal a compact wheel with a highlighted selection and fading edges. Scroll, click a visible option, or use the arrow keys. Only one picker opens at a time, with no native dropdown menus. Enter folds the wheel away; Escape closes the open picker first, then discards the editor's unsaved changes on a second press. You can also hover over a closed row and scroll to change its value.
+- When due, the alarm shows a dialog and repeats its sound until you choose **Dismiss**, press Escape, or snooze. Time, tone, sound, and snooze edits take effect only when saved.
+- Alarms run independently of the Pomodoro countdown. UI Lock prevents changing the alarm, but a ringing alarm can still be dismissed or snoozed.
+- Keep the page open and the device awake. Browser suspension can delay alerts; a due alarm is detected when execution resumes. Closing the page stops the alarm, and refreshing clears it.
+
+Use a current browser with HTML dialog and Web Audio support for the alarm. If audio is unavailable, the app reports it and still shows the alarm on screen.
 
 ### Settings
 

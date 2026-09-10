@@ -15,6 +15,7 @@ Un minuteur Pomodoro minimaliste avec un magnifique affichage d'horloge numériq
 - **Suivi des sessions** : les points de progression indiquent les sessions de concentration terminées
 - **Widget météo** : détecte automatiquement votre position et affiche la température actuelle
 - **Notifications sonores** : alertes audio à la fin du minuteur (Carillon, Cloche, Numérique)
+- **Réveil** : alarme ponctuelle à une heure locale, avec rouleaux de sélection, choix et aperçu des sonneries, rappel réglable et arrêt
 - **Thème sombre/clair** : commutation en un clic
 - **Garder éveillé** : empêcher l'écran de s'éteindre pendant le minuteur
 - **Verrouillage de l'interface** : verrouiller l'interface pour éviter les clics accidentels
@@ -31,6 +32,21 @@ Ouvrez simplement `index.html` dans n'importe quel navigateur moderne. Aucun ser
 - **Verrouiller** : cliquez sur le bouton de verrouillage pour éviter les interactions accidentelles
 - **Sélection du mode** : choisissez parmi les préréglages 60m, 40m, 15m ou 5m
 - **Ajustement rapide** : utilisez les boutons +/− ou saisissez directement une durée personnalisée
+
+### Réveil
+
+L'application reste contenue dans un seul fichier autonome `index.html`, y compris les styles du réveil et la génération des sons.
+
+- Cliquez sur l'icône de réveil en haut. Faites défiler les rouleaux des heures et minutes, cliquez sur un nombre visible ou utilisez les flèches du clavier pour choisir l'heure au format 24 heures, puis enregistrez avec la coche orange. Une heure déjà passée, y compris la minute actuelle, est programmée pour demain ; l'éditeur indique Today ou Tomorrow.
+- L'heure enregistrée apparaît directement à côté de l'icône, dans le même bouton compact. Cliquez pour modifier ; l'infobulle affiche la date complète et l'état du son. Le bouton de fermeture abandonne les modifications non enregistrées ; **Delete Alarm** supprime l'alarme.
+- Le réveil possède son propre interrupteur **Sound** et son sélecteur **Tone** (Chime, Bell, Digital), indépendants de la sonnerie Pomodoro. Choisir une sonnerie lance un aperçu si le son est activé ; le bouton de lecture permet de la réécouter.
+- Réglez **Snooze** entre 1 et 15 minutes, ou choisissez **Off** pour désactiver le rappel. La valeur par défaut est cinq minutes. L'alarme utilise la durée enregistrée.
+- Cliquez sur la ligne **Tone** ou **Snooze** pour ouvrir un rouleau compact, avec une sélection mise en évidence et des bords estompés. Faites défiler, cliquez sur une option visible ou utilisez les flèches. Un seul sélecteur s'ouvre à la fois, sans menu déroulant natif. Entrée replie le rouleau ; Échap ferme d'abord le sélecteur ouvert, puis abandonne les modifications de l'éditeur au deuxième appui. Vous pouvez aussi faire défiler une ligne fermée pour changer sa valeur.
+- À l'heure prévue, la boîte de dialogue s'affiche et la sonnerie se répète jusqu'à **Dismiss**, Échap ou un rappel. Les modifications de l'heure, du son, de la sonnerie et du rappel prennent effet uniquement après enregistrement.
+- Le réveil fonctionne indépendamment du minuteur Pomodoro. Le verrouillage empêche de modifier l'alarme, mais permet toujours d'arrêter ou de reporter une alarme qui sonne.
+- Gardez la page ouverte et l'appareil éveillé. Une suspension du navigateur peut retarder l'alerte ; une alarme arrivée à échéance est détectée à la reprise. Fermer la page arrête l'alarme et l'actualiser l'efface.
+
+Utilisez un navigateur récent prenant en charge HTML dialog et Web Audio. Si le son est indisponible, l'application le signale et affiche tout de même l'alerte à l'écran.
 
 ### Paramètres
 
