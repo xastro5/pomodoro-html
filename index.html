@@ -2,11 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Pomodoro</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}:root{--bg:#F5F5F7;--card:rgba(255,255,255,0.72);--text-primary:#1D1D1F;--text-secondary:#86868B;--accent-work:#FF3B30;--accent-break:#34C759;--accent-blue:#007AFF;--current-accent:var(--accent-work);--ring-bg:rgba(0,0,0,0.06);--border:rgba(0,0,0,0.06);--clock-color:var(--accent-work)}[data-theme="dark"]{--bg:#000000;--card:rgba(255,255,255,0.08);--text-primary:#F5F5F7;--text-secondary:#86868B;--ring-bg:rgba(255,255,255,0.1);--border:rgba(255,255,255,0.1)}body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Helvetica Neue',Arial,sans-serif;color:var(--text-primary);-webkit-font-smoothing:antialiased;transition:background .3s ease,color .3s ease}.container{width:100%;max-width:420px;padding:1.5rem}.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}.weather{display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:.875rem}.weather-icon{font-size:1.125rem}.weather-temp{font-weight:500;color:var(--text-primary)}.weather-city{color:var(--text-secondary)}.top-actions{display:flex;gap:8px}.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px var(--border);border-radius:50%;cursor:pointer;transition:all .2s ease}.icon-btn:hover{transform:scale(1.05)}.icon-btn svg{width:18px;height:18px;fill:var(--text-secondary)}.icon-btn.active svg{fill:var(--accent-blue)}.clock-display{text-align:center;margin-bottom:1.5rem}.digital-clock{display:inline-flex;align-items:center;gap:4px}.digit-group{display:flex;gap:4px}.digit{position:relative;width:28px;height:44px}.digit-segment{position:absolute;background:var(--clock-color);border-radius:1px;opacity:0;transition:opacity .1s ease}.digit-segment.on{opacity:.9}.digit-segment.top{width:26px;height:3px;top:0;left:1px}.digit-segment.top-left{width:3px;height:20px;top:1px;left:0}.digit-segment.top-right{width:3px;height:20px;top:1px;right:0}.digit-segment.middle{width:26px;height:3px;top:20px;left:1px}.digit-segment.bottom-left{width:3px;height:20px;bottom:1px;left:0}.digit-segment.bottom-right{width:3px;height:20px;bottom:1px;right:0}.digit-segment.bottom{width:26px;height:3px;bottom:0;left:1px}.colon{font-size:2rem;font-weight:300;color:var(--clock-color);margin:0 2px;animation:colon-blink 1s step-end infinite}@keyframes colon-blink{0%,100%{opacity:1}50%{opacity:0.3}}.current-date{color:var(--text-secondary);font-size:.875rem;margin-top:.5rem}.mode-picker{display:flex;justify-content:center;gap:8px;margin-bottom:1.5rem}.mode-btn{padding:.5rem 1rem;border:none;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px var(--border);border-radius:20px;cursor:pointer;font-size:.875rem;color:var(--text-secondary);transition:all .2s ease}.mode-btn:hover{transform:scale(1.05)}.mode-btn.active{background:var(--text-primary);color:var(--bg)}.mode-picker.inactive{opacity:.5}.timer-adjust{display:flex;justify-content:center;align-items:center;gap:1rem;margin-bottom:1.5rem}.adjust-btn{width:32px;height:32px;border-radius:50%;border:1px var(--border);background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);cursor:pointer;font-size:1.25rem;color:var(--text-secondary);transition:all .2s ease}.adjust-btn:hover{transform:scale(1.1)}.duration-input-wrapper{display:flex;align-items:center;gap:8px}.adjust-label{font-size:.875rem;color:var(--text-secondary)}.duration-input{width:50px;height:28px;border:1px var(--border);border-radius:6px;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);text-align:center;font-size:.875rem;color:var(--text-primary)}.duration-input::-webkit-inner-spin-button,.duration-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.timer-container{position:relative;width:200px;height:200px;margin:0 auto 1.5rem}.timer-svg{transform:rotate(-90deg);width:100%;height:100%}.timer-track{fill:none;stroke:var(--ring-bg);stroke-width:8}.timer-progress{fill:none;stroke:var(--clock-color);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .5s ease,stroke 1s ease}.timer-content{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.timer-time{font-size:2.5rem;font-weight:200;color:var(--text-primary)}.timer-mode-label{font-size:.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.1em}.session-progress{display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:1.5rem}.session-text{font-size:.75rem;color:var(--text-secondary)}.session-dots{display:flex;gap:6px}.session-dot{width:8px;height:8px;border-radius:50%;background:var(--ring-bg)}.session-dot.filled{background:var(--accent-work)}.controls{display:flex;justify-content:center;gap:1rem}.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:.875rem 2rem;border:none;border-radius:50px;cursor:pointer;font-size:1rem;font-weight:500;transition:all .2s ease}.btn svg{width:20px;height:20px}.btn-primary{background:var(--accent-work);color:#fff}.btn-primary:hover{transform:scale(1.05)}.btn-primary svg{fill:#fff}.btn-secondary{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px var(--border);color:var(--text-primary);border-radius:50%;width:44px;height:44px;padding:0}.btn-secondary:hover{transform:scale(1.05)}.btn-secondary svg{fill:var(--text-primary)}.settings-panel{position:fixed;top:0;right:-400px;width:400px;max-width:100%;height:100vh;background:var(--bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-left:1px var(--border);padding:1.5rem;transition:right .3s ease;overflow-y:auto;z-index:100}.settings-panel.open{right:0}.settings-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}.settings-header h2{font-size:1.25rem;font-weight:600}.close-btn{width:32px;height:32px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}.close-btn svg{width:24px;height:24px;fill:var(--text-secondary)}.setting-item{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px var(--border)}.setting-info h3{font-size:.875rem;font-weight:500;margin-bottom:.25rem}.setting-info p{font-size:.75rem;color:var(--text-secondary)}.setting-controls{display:flex;align-items:center;gap:1rem}.setting-btn{width:28px;height:28px;border-radius:50%;border:1px var(--border);background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);cursor:pointer;font-size:1rem;color:var(--text-secondary);transition:all .2s ease}.setting-btn:hover{transform:scale(1.1)}.setting-value{min-width:2rem;text-align:center;font-weight:500}.toggle{width:48px;height:28px;border-radius:14px;background:var(--ring-bg);cursor:pointer;position:relative;transition:background .2s ease}.toggle::after{content:'';position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.1);transition:transform .2s ease}.toggle.active{background:var(--accent-blue)}.toggle.active::after{transform:translateX(20px)}.sound-selector{display:flex;gap:8px}.sound-option{padding:.5rem 1rem;border:1px var(--border);border-radius:20px;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);cursor:pointer;font-size:.75rem;color:var(--text-secondary);transition:all .2s ease}.sound-option.active{background:var(--text-primary);color:var(--bg)}.footer{width:100%;text-align:center;padding:16px 24px 24px;font-size:12px;color:#86868b;}
 #lockBtn.active svg{fill:var(--accent-blue)}.container.locked .mode-picker,.container.locked .timer-adjust,.container.locked .controls{pointer-events:none;opacity:0.5}.container.locked #lockBtn{pointer-events:auto;opacity:1}#lockBtn svg,#resetBtn svg{width:14px;height:14px}
+    /* Adapt to available height as well as width, keeping a compact reading area. */
+    body { --layout-gap: 24px; min-height: 100dvh; padding: max(8px, env(safe-area-inset-top)) env(safe-area-inset-right) max(8px, env(safe-area-inset-bottom)) env(safe-area-inset-left); justify-content: safe center; }
+    .container { flex: none; padding: clamp(16px, 4vw, 24px); }
+    .top-bar, .clock-display, .mode-picker, .timer-adjust, .timer-container, .session-progress { margin-bottom: var(--layout-gap); }
+    .mode-btn { min-width: 0; }
+    .timer-content { width: 88%; }
+    .timer-time { font-variant-numeric: tabular-nums; }
+    .timer-end { margin-top: 8px; font-size: .6875rem; line-height: 1.4; color: var(--text-secondary); }
+    .timer-end[hidden] { display: none; }
+    .settings-panel { height: 100dvh; padding-top: max(24px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); overscroll-behavior: contain; }
+    .setting-item { gap: 12px; flex-wrap: wrap; }
+    .setting-controls, .toggle { flex-shrink: 0; }
+    .sound-selector { flex-wrap: wrap; }
+    @media (max-width: 359px) {
+      .mode-picker { gap: 6px; }
+      .mode-btn { flex: 1; padding-inline: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .current-date { font-size: .8125rem; }
+      .settings-panel { padding-inline: 16px; }
+    }
+    @media (max-height: 700px) {
+      body { --layout-gap: clamp(10px, 2dvh, 16px); }
+      .container { padding-block: 16px; }
+      .timer-container { width: clamp(156px, 29dvh, 200px); height: clamp(156px, 29dvh, 200px); }
+      .timer-time { font-size: 2.25rem; }
+      .footer { padding: 4px 16px 8px; font-size: 11px; line-height: 1.4; }
+    }
+    @media (min-width: 560px) and (max-height: 560px) and (min-aspect-ratio: 4/3) {
+      .container { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: 'toolbar toolbar' 'clock timer' 'modes timer' 'duration timer' 'sessions controls'; align-items: center; max-width: 740px; gap: 12px 28px; padding: 12px 24px; }
+      .top-bar { grid-area: toolbar; }
+      .clock-display { grid-area: clock; }
+      .mode-picker { grid-area: modes; gap: 6px; }
+      .mode-btn { flex: 1; padding-inline: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .timer-adjust { grid-area: duration; }
+      .timer-container { grid-area: timer; width: clamp(156px, 44dvh, 200px); height: clamp(156px, 44dvh, 200px); }
+      .session-progress { grid-area: sessions; }
+      .controls { grid-area: controls; }
+      .container > * { margin-bottom: 0; }
+      .footer { padding: 4px 16px 8px; }
+    }
+    @media (min-width: 560px) and (max-height: 360px) {
+      body { padding-top: max(2px, env(safe-area-inset-top)); padding-bottom: max(2px, env(safe-area-inset-bottom)); }
+      .container { gap: 8px 20px; padding-block: 8px; }
+      .current-date { font-size: .75rem; }
+    }
     /* The alarm stays tucked away until needed; the timer keeps its original footprint. */
     :root { --alarm-accent: #ff9f0a; --alarm-surface: #fff; --alarm-group: #f2f2f7; --alarm-muted: #66666d; }
     [data-theme="dark"] { --alarm-surface: #1c1c1e; --alarm-group: #2c2c2e; --alarm-muted: #a1a1a6; }
@@ -20,9 +64,9 @@
     #alarmOpen.active svg { fill: none; }
     #alarmSummaryTime { font-size: .75rem; font-weight: 500; font-variant-numeric: tabular-nums; }
     #alarmSummaryTime[hidden], .alarm-remove[hidden], #alarmSnooze[hidden] { display: none; }
-    .alarm-sheet { margin: auto; width: min(352px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto; padding: 20px; border: 1px solid var(--border); border-radius: 28px; background: var(--alarm-surface); color: var(--text-primary); box-shadow: 0 24px 80px rgba(0,0,0,.16); }
+    .alarm-sheet { margin: auto; width: min(352px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scroll-padding-block: 72px 20px; padding: 20px; border: 1px solid var(--border); border-radius: 28px; background: var(--alarm-surface); color: var(--text-primary); box-shadow: 0 24px 80px rgba(0,0,0,.16); }
     .alarm-sheet::backdrop { background: rgba(0,0,0,.22); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-    .alarm-editor-header { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 8px; }
+    .alarm-editor-header { position: sticky; top: -20px; z-index: 2; display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 8px; margin: -20px -20px 0; padding: 20px 20px 8px; background: var(--alarm-surface); }
     .alarm-editor-header h2 { text-align: center; font-size: 1rem; font-weight: 600; letter-spacing: -.02em; }
     .alarm-round { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; border: 0; border-radius: 50%; background: var(--alarm-group); color: var(--text-primary); cursor: pointer; }
     .alarm-round svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
@@ -55,6 +99,14 @@
     .alarm-option-wheels .alarm-wheel-option[aria-selected="true"] { font-size: 1.125rem; font-weight: 500; }
     .alarm-preview { display: inline-flex; align-items: center; justify-content: center; width: 32px; min-height: 44px; padding: 0; border: 0; background: none; color: var(--alarm-muted); font: inherit; font-size: .875rem; cursor: pointer; }
     .alarm-preview svg { width: 14px; height: 14px; fill: currentColor; }
+    .alarm-volume { display: grid; gap: 4px; padding: 10px 4px 0; }
+    .alarm-volume label { display: flex; justify-content: space-between; color: var(--alarm-muted); font-size: .75rem; }
+    .alarm-volume input { --volume-fill: 68.421%; appearance: none; -webkit-appearance: none; width: 100%; height: 28px; margin: 0; border: 0; background: transparent; cursor: pointer; }
+    .alarm-volume input::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(to right, var(--alarm-accent) var(--volume-fill), var(--ring-bg) var(--volume-fill)); }
+    .alarm-volume input::-moz-range-track { height: 4px; border-radius: 2px; background: linear-gradient(to right, var(--alarm-accent) var(--volume-fill), var(--ring-bg) var(--volume-fill)); }
+    .alarm-volume input::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; margin-top: -7px; border: 1px solid rgba(0,0,0,.06); border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
+    .alarm-volume input::-moz-range-thumb { width: 18px; height: 18px; border: 1px solid rgba(0,0,0,.06); border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
+    .alarm-volume input:disabled { opacity: .45; cursor: not-allowed; }
     #alarmSound { appearance: none; -webkit-appearance: none; flex-shrink: 0; width: 44px; height: 26px; padding: 3px; border: 0; border-radius: 20px; background: #c7c7cc; cursor: pointer; transition: background .2s; }
     #alarmSound::before { content: ''; display: block; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.15); transition: transform .2s; }
     #alarmSound:checked { background: #34c759; }
@@ -70,6 +122,18 @@
     .alarm-dialog-actions { display: grid; gap: 10px; margin-top: 24px; }
     .alarm-button { min-height: 46px; padding: .75rem 1rem; border: 0; border-radius: 24px; background: var(--alarm-group); color: var(--text-primary); font: inherit; font-size: .9375rem; cursor: pointer; }
     .alarm-button.primary { background: var(--alarm-accent); color: #211700; }
+    @media (min-width: 560px) and (max-height: 560px) and (min-aspect-ratio: 4/3) {
+      #alarmEditor[open] { display: flex; flex-direction: column; width: min(640px, calc(100% - 2rem)); overflow: hidden; }
+      #alarmEditor .alarm-editor-header, #alarmNote, #alarmSoundStatus { flex-shrink: 0; }
+      #alarmForm { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; min-height: 0; }
+      .alarm-time-wrap { align-self: center; padding-block: 8px; }
+      .alarm-preferences { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding-inline: 2px; scroll-padding-block: 8px; border-radius: 18px; }
+      .alarm-time-wrap .alarm-wheels { height: calc(var(--wheel-row) * 3); }
+      .alarm-time-wrap .alarm-wheels::before { top: var(--wheel-row); }
+      .alarm-time-wrap .alarm-wheel { padding-block: var(--wheel-row); -webkit-mask-image: linear-gradient(transparent, #000 33%, #000 67%, transparent); mask-image: linear-gradient(transparent, #000 33%, #000 67%, transparent); }
+      #alarmNote { margin-top: 12px; }
+      #alarmNote br { display: none; }
+    }
     @media (prefers-reduced-motion: reduce) { #alarmSound, #alarmSound::before { transition: none; } }
   </style>
 </head>
@@ -107,13 +171,13 @@
     </div>
     <div class="timer-container">
       <svg class="timer-svg" viewBox="0 0 200 200"><circle class="timer-track" cx="100" cy="100" r="96"/><circle class="timer-progress" id="progress" cx="100" cy="100" r="96"/></svg>
-      <div class="timer-content"><div class="timer-time" id="time">40:00</div><div class="timer-mode-label" id="modeLabel">Focus</div></div>
+      <div class="timer-content"><div class="timer-time" id="time">40:00</div><div class="timer-mode-label" id="modeLabel">Focus</div><div class="timer-end" id="timerEnd" hidden></div></div>
     </div>
     <div class="session-progress"><span class="session-text">Session</span><div class="session-dots" id="sessionDots"><div class="session-dot filled"></div><div class="session-dot"></div><div class="session-dot"></div><div class="session-dot"></div></div></div>
     <div class="controls">
       <button class="btn btn-secondary" id="lockBtn" title="Lock UI"><svg viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM8.9 6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9V6z"/></svg></button>
-      <button class="btn btn-primary" id="mainBtn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-      <button class="btn btn-secondary" id="resetBtn"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
+      <button class="btn btn-primary" id="mainBtn" aria-label="Start timer"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="btn btn-secondary" id="resetBtn" aria-label="Reset timer"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></button>
     </div>
   </div>
   <p class="sr-only" id="alarmStatus" role="status" aria-live="polite">No alarm set.</p>
@@ -135,6 +199,7 @@
         <span class="sr-only" id="alarmWheelHelp">Scroll, click a number, or use the arrow keys to choose a time.</span>
         <p class="alarm-when" id="alarmWhen"></p>
       </div>
+      <div class="alarm-preferences">
       <div class="alarm-group">
         <label class="alarm-setting" for="alarmSound"><span>Sound</span><input id="alarmSound" type="checkbox" role="switch" checked></label>
         <div class="alarm-setting-block">
@@ -144,6 +209,7 @@
           </div>
           <div class="alarm-choice-picker" id="alarmTonePicker" hidden>
             <div class="alarm-wheels alarm-option-wheels"><div class="alarm-wheel" id="alarmToneWheel" role="listbox" tabindex="0" aria-label="Alarm tone" aria-describedby="alarmChoiceHelp"></div></div>
+            <div class="alarm-volume"><label for="alarmVolume"><span>Volume</span><output id="alarmVolumeValue" for="alarmVolume">70%</output></label><input id="alarmVolume" type="range" min="5" max="100" step="5" value="70" aria-valuetext="70 percent"></div>
           </div>
         </div>
         <div class="alarm-setting-block">
@@ -153,12 +219,13 @@
           </div>
         </div>
       </div>
+      <button class="alarm-remove" id="alarmCancel" type="button" hidden>Delete Alarm</button>
+      </div>
       <input id="alarmTone" type="hidden" value="chime">
       <input id="alarmSnoozeDuration" type="hidden" value="5">
       <span class="sr-only" id="alarmChoiceHelp">Scroll to change the value, or open the picker and click an option. Arrow keys also change the selection.</span>
-      <button class="alarm-remove" id="alarmCancel" type="button" hidden>Delete Alarm</button>
     </form>
-    <p class="alarm-note" id="alarmNote">Keep this tab open and your device awake.<br>Alarms reset on refresh.</p>
+    <p class="alarm-note" id="alarmNote">Keep this tab open and your device awake.<br> Alarms reset on refresh.</p>
     <p class="alarm-note" id="alarmSoundStatus" role="status"></p>
   </dialog>
   <dialog class="alarm-sheet alarm-dialog" id="alarmDialog" aria-labelledby="alarmDialogTitle" aria-describedby="alarmDialogMessage">
@@ -193,6 +260,7 @@ const CONFIG_KEY='pomodoro-config';const SESSIONS_BEFORE_LONG=4;
 const defaultConfig={hour:60,work:40,short:5,long:15,sound:true,notificationSound:'chime',darkMode:false,keepAwake:false,uiLocked:false};
 function loadConfig(){return{...defaultConfig}}
 let config=loadConfig(),currentMode='work',timeRemaining=config.work*60,isRunning=false,intervalId=null,completedSessions=0,customDuration=null,wakeLock=null,uiLocked=config.uiLocked;
+let sessionDuration=timeRemaining,remainingMs=timeRemaining*1000,timerDeadline=null,transitionId=null;
 const timeDisplay=document.getElementById('time'),modeLabel=document.getElementById('modeLabel'),progress=document.getElementById('progress'),mainBtn=document.getElementById('mainBtn'),resetBtn=document.getElementById('resetBtn'),modeBtns=document.querySelectorAll('.mode-btn'),sessionDots=document.getElementById('sessionDots'),settingsBtn=document.getElementById('settingsBtn'),settingsPanel=document.getElementById('settingsPanel'),closeSettings=document.getElementById('closeSettings'),soundToggle=document.getElementById('soundToggle'),darkModeToggle=document.getElementById('darkModeToggle'),themeToggle=document.getElementById('themeToggle'),decreaseBtn=document.getElementById('decreaseTime'),increaseBtn=document.getElementById('increaseTime'),durationInput=document.getElementById('durationInput'),currentDateEl=document.getElementById('currentDate'),weatherIcon=document.getElementById('weatherIcon'),weatherTemp=document.getElementById('weatherTemp'),keepAwakeToggle=document.getElementById('keepAwakeToggle'),keepAwakeBtn=document.getElementById('keepAwakeBtn'),lockBtn=document.getElementById('lockBtn');
 const modeValues={hour:document.getElementById('hourValue'),work:document.getElementById('workValue'),short:document.getElementById('shortValue'),long:document.getElementById('longValue')};
 const CIRCUMFERENCE=2*Math.PI*96;progress.style.strokeDasharray=CIRCUMFERENCE;
@@ -211,24 +279,93 @@ function formatTime(seconds){const mins=Math.floor(seconds/60),secs=seconds%60;r
 function getDuration(){return(customDuration||config[currentMode])*60}
 function getModeLabelText(){if(currentMode==='work'||currentMode==='hour')return'FOCUS';return'BREAK'}
 function getAccentColor(){return currentMode==='work'||currentMode==='hour'?'var(--accent-work)':'var(--accent-break)'}
-function updateDisplay(){timeDisplay.textContent=formatTime(timeRemaining);const total=getDuration(),percent=timeRemaining/total;progress.style.strokeDashoffset=CIRCUMFERENCE*(1-percent);progress.style.stroke=getAccentColor();const dur=customDuration||config[currentMode];durationInput.value=dur}
+function updateDisplay(){timeDisplay.textContent=formatTime(timeRemaining);const percent=Math.max(0,Math.min(1,timeRemaining/sessionDuration));progress.style.strokeDashoffset=CIRCUMFERENCE*(1-percent);progress.style.stroke=getAccentColor();if(document.activeElement!==durationInput)durationInput.value=sessionDuration/60;updateTimerContext()}
+function updateTimerContext() {
+  const context=document.getElementById('timerEnd');
+  let label='';
+  if(timerDeadline!==null) {
+    const end=new Date(timerDeadline),now=new Date(),tomorrow=new Date(now);
+    tomorrow.setDate(tomorrow.getDate()+1);
+    const time=end.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:false});
+    const day=end.toDateString()===now.toDateString() ? '' : end.toDateString()===tomorrow.toDateString() ? 'tomorrow ' : end.toLocaleDateString([], {month:'short',day:'numeric'})+' ';
+    label=`Ends ${day}at ${time}`;
+  } else if(remainingMs>0&&remainingMs<sessionDuration*1000) label='Paused';
+  context.textContent=label;
+  context.hidden=!label;
+}
+function cancelTransition() { clearTimeout(transitionId); transitionId=null; }
+function stopTimer() {
+  clearInterval(intervalId);
+  intervalId=null; timerDeadline=null; isRunning=false;
+  mainBtn.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>';
+  mainBtn.setAttribute('aria-label','Start timer');
+}
+function tickTimer() {
+  if(!isRunning||timerDeadline===null) return;
+  // A delayed callback refreshes the display; it does not define elapsed time.
+  remainingMs=Math.max(0,timerDeadline-Date.now());
+  timeRemaining=Math.ceil(remainingMs/1000);
+  if(remainingMs===0) {
+    stopTimer();
+    const focus=currentMode==='work'||currentMode==='hour';
+    if(focus) { completedSessions++; updateSessionDots(); }
+    const nextMode=focus ? (completedSessions%SESSIONS_BEFORE_LONG===0?'long':'short') : 'work';
+    try { playNotification(); } catch { /* Timer completion also works without audio. */ }
+    transitionId=setTimeout(()=>{ transitionId=null; switchMode(nextMode); },500);
+  }
+  updateDisplay();
+}
 function updateModeButtons(){const isCustom=customDuration!==null;modeBtns.forEach(btn=>{const mode=btn.dataset.mode,isActive=!isCustom&&mode===currentMode;btn.classList.toggle('active',isActive);if(mode==='hour')btn.textContent=config.hour+'m';else if(mode==='work')btn.textContent=config.work+'m';else if(mode==='long')btn.textContent=config.long+'m';else if(mode==='short')btn.textContent=config.short+'m'})}
 function updateModePickerState(){const modePicker=document.querySelector('.mode-picker');if(customDuration!==null){modePicker.classList.add('inactive')}else{modePicker.classList.remove('inactive')}updateModeButtons()}
 function updateSessionDots(){const dots=sessionDots.querySelectorAll('.session-dot'),filledCount=completedSessions%SESSIONS_BEFORE_LONG;dots.forEach((dot,i)=>{dot.classList.toggle('filled',i<filledCount)})}
-function switchMode(mode){currentMode=mode;customDuration=null;timeRemaining=getDuration();isRunning=false;clearInterval(intervalId);modeLabel.textContent=getModeLabelText();mainBtn.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>';updateModePickerState();updateDisplay()}
-function adjustDuration(delta){const current=customDuration||config[currentMode],newDuration=Math.min(120,Math.max(1,current+delta));customDuration=newDuration;timeRemaining=getDuration();updateDisplay();updateModePickerState()}
-function handleDurationInput(e){const val=parseInt(e.target.value);if(!isNaN(val)&&val>=1){customDuration=val;timeRemaining=getDuration();updateModePickerState();updateDisplay()}}
-function startTimer(){initAudio();if(isRunning){isRunning=false;clearInterval(intervalId);mainBtn.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>'}else{isRunning=true;mainBtn.querySelector('svg').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';intervalId=setInterval(()=>{timeRemaining--;if(timeRemaining<=0){clearInterval(intervalId);isRunning=false;playNotification();if(currentMode==='work'||currentMode==='hour'){completedSessions++;updateSessionDots();const nextMode=completedSessions%SESSIONS_BEFORE_LONG===0?'long':'short';setTimeout(()=>switchMode(nextMode),500)}else{setTimeout(()=>switchMode('work'),500)}}updateDisplay()},1000)}}
-function resetTimer(){clearInterval(intervalId);isRunning=false;if(customDuration!==null){customDuration=null;timeRemaining=getDuration();updateModePickerState()}else{timeRemaining=getDuration()}mainBtn.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>';updateDisplay()}
+function switchMode(mode) {
+  cancelTransition(); stopTimer();
+  currentMode=mode; customDuration=null;
+  sessionDuration=getDuration(); remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
+  modeLabel.textContent=getModeLabelText();
+  updateModePickerState(); updateDisplay();
+}
+function setCustomDuration(minutes) {
+  if(!Number.isSafeInteger(minutes)||minutes<1||minutes*60000>8.64e15-Date.now()) { updateDisplay(); return; }
+  cancelTransition();
+  customDuration=minutes; sessionDuration=minutes*60;
+  remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
+  if(isRunning) timerDeadline=Date.now()+remainingMs;
+  updateModePickerState(); updateDisplay();
+}
+function adjustDuration(delta) { setCustomDuration(Math.max(1,sessionDuration/60+delta)); }
+function handleDurationInput(event) { setCustomDuration(Number(event.target.value)); }
+function startTimer() {
+  if(isRunning) {
+    tickTimer();
+    if(!isRunning) return;
+    stopTimer(); updateDisplay(); return;
+  }
+  cancelTransition();
+  if(remainingMs<=0) { remainingMs=sessionDuration*1000; timeRemaining=sessionDuration; }
+  try { initAudio(); if(audioContext.state==='suspended') void audioContext.resume().catch(()=>{}); } catch {}
+  timerDeadline=Date.now()+remainingMs;
+  isRunning=true;
+  mainBtn.querySelector('svg').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+  mainBtn.setAttribute('aria-label','Pause timer');
+  intervalId=setInterval(tickTimer,250);
+  updateDisplay();
+}
+function resetTimer() {
+  cancelTransition(); stopTimer();
+  remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
+  updateModePickerState(); updateDisplay();
+}
 function openSettings(){settingsPanel.classList.add('open')}
 function closeSettingsPanel(){settingsPanel.classList.remove('open')}
 function updateSettingDisplay(){Object.keys(modeValues).forEach(key=>{modeValues[key].textContent=config[key]});soundToggle.classList.toggle('active',config.sound);document.querySelectorAll('.sound-option').forEach(btn=>{btn.classList.toggle('active',btn.dataset.sound===config.notificationSound)});keepAwakeToggle.classList.toggle('active',config.keepAwake);keepAwakeBtn.classList.toggle('active',config.keepAwake);updateModeButtons()}
 async function requestWakeLock(){if(!('wakeLock' in navigator))return;try{if(wakeLock)await wakeLock.release();wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null})}catch{wakeLock=null}}
 async function releaseWakeLock(){if(wakeLock){await wakeLock.release();wakeLock=null}}
 async function toggleKeepAwake(){config.keepAwake=!config.keepAwake;keepAwakeToggle.classList.toggle('active',config.keepAwake);keepAwakeBtn.classList.toggle('active',config.keepAwake);if(config.keepAwake)await requestWakeLock();else await releaseWakeLock()}
-document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'&&config.keepAwake&&isRunning)await requestWakeLock()});
+document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'){tickTimer();if(config.keepAwake&&isRunning)await requestWakeLock()}});
+window.addEventListener('pageshow',tickTimer);
 function toggleUILock(){uiLocked=!uiLocked;config.uiLocked=uiLocked;lockBtn.classList.toggle('active',uiLocked);document.querySelector('.container').classList.toggle('locked',uiLocked)}
-function adjustSetting(target,delta){const min=1,newValue=Math.max(min,config[target]+delta);if(newValue!==config[target]){config[target]=newValue;updateSettingDisplay();if(currentMode===target&&!isRunning&&!customDuration){timeRemaining=getDuration();updateDisplay()}}}
+function adjustSetting(target,delta){const min=1,newValue=Math.max(min,config[target]+delta);if(newValue!==config[target]){config[target]=newValue;updateSettingDisplay();if(currentMode===target&&!isRunning&&!customDuration&&remainingMs===sessionDuration*1000){sessionDuration=getDuration();remainingMs=sessionDuration*1000;timeRemaining=sessionDuration;updateDisplay()}}}
 mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',resetTimer);settingsBtn.addEventListener('click',openSettings);closeSettings.addEventListener('click',closeSettingsPanel);decreaseBtn.addEventListener('click',()=>adjustDuration(-1));increaseBtn.addEventListener('click',()=>adjustDuration(1));durationInput.addEventListener('change',handleDurationInput);themeToggle.addEventListener('click',toggleTheme);darkModeToggle.addEventListener('click',toggleTheme);modeBtns.forEach(btn=>{btn.addEventListener('click',()=>switchMode(btn.dataset.mode))});document.querySelectorAll('.setting-btn').forEach(btn=>{btn.addEventListener('click',()=>{adjustSetting(btn.dataset.target,btn.dataset.action==='increase'?1:-1)})});soundToggle.addEventListener('click',()=>{config.sound=!config.sound;updateSettingDisplay()});document.querySelectorAll('.sound-option').forEach(btn=>{btn.addEventListener('click',()=>{config.notificationSound=btn.dataset.sound;updateSettingDisplay()})});keepAwakeToggle.addEventListener('click',toggleKeepAwake);keepAwakeBtn.addEventListener('click',toggleKeepAwake);lockBtn.addEventListener('click',toggleUILock);applyTheme();if(uiLocked){document.querySelector('.container').classList.add('locked');lockBtn.classList.add('active')}updateClock();setInterval(updateClock,1000);fetchWeather();setInterval(fetchWeather,10*60*1000);updateDisplay();updateSessionDots();updateSettingDisplay();updateModePickerState();
   </script>
   <script>
@@ -247,6 +384,8 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
       const cancelButton = document.getElementById('alarmCancel');
       const soundInput = document.getElementById('alarmSound');
       const toneInput = document.getElementById('alarmTone');
+      const volumeInput = document.getElementById('alarmVolume');
+      const volumeValue = document.getElementById('alarmVolumeValue');
       const snoozeInput = document.getElementById('alarmSnoozeDuration');
       const testButton = document.getElementById('alarmTest');
       const status = document.getElementById('alarmStatus');
@@ -264,6 +403,9 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
       let audio = null;
       let soundEnabled = true;
       let alarmTone = 'chime';
+      let alarmVolume = .7;
+      let ringStartedAt = 0;
+      let contextInterval = null;
       let snoozeMinutes = 5;
       let audioUnavailable = false;
       let savedTime = inputTime(new Date(Date.now() + 5 * 60 * 1000));
@@ -298,7 +440,18 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         const target = nextOccurrence(timeInput.value);
         if (target === null) { when.textContent = 'Choose a time'; return; }
         const day = new Date(target).toDateString() === new Date().toDateString() ? 'Today' : 'Tomorrow';
-        when.textContent = `${day} · Local time (24-hour)`;
+        const minutes = Math.max(1, Math.ceil((target - Date.now()) / 60000));
+        const hours = Math.floor(minutes / 60);
+        const remainder = minutes % 60;
+        const distance = hours ? `${hours} hr${remainder ? ` ${remainder} min` : ''}` : `${minutes} min`;
+        when.textContent = `${day} · in ${distance}`;
+        when.title = `${describeTime(target)} (local time, 24-hour picker)`;
+      }
+
+      function updateVolume() {
+        volumeValue.textContent = `${volumeInput.value}%`;
+        volumeInput.setAttribute('aria-valuetext', `${volumeInput.value} percent`);
+        volumeInput.style.setProperty('--volume-fill', `${(Number(volumeInput.value) - 5) / 95 * 100}%`);
       }
 
       // Native scrolling supports a mouse wheel, trackpad, and touch. Clicking a
@@ -433,6 +586,8 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         timeInput.value = deadline === null ? savedTime : inputTime(new Date(deadline));
         soundInput.checked = soundEnabled;
         toneInput.value = alarmTone;
+        volumeInput.value = String(Math.round(alarmVolume * 100));
+        updateVolume();
         snoozeInput.value = String(snoozeMinutes);
         heading.textContent = deadline === null ? 'Add Alarm' : 'Edit Alarm';
         updateWhen();
@@ -440,9 +595,13 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         editor.showModal();
         timeInput.value.split(':').forEach((value, index) => wheels[index].select(Number(value), false));
         choices.forEach(choice => choice.sync());
+        clearInterval(contextInterval);
+        contextInterval = setInterval(updateWhen, 1000);
       }
 
       function closeEditor() {
+        clearInterval(contextInterval);
+        contextInterval = null;
         choices.forEach(choice => choice.close());
         if (!ringing) stopSound();
         if (editor.open) editor.close();
@@ -458,6 +617,7 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         setButton.disabled = locked || ringing;
         soundInput.disabled = locked || ringing;
         toneInput.disabled = locked || ringing;
+        volumeInput.disabled = locked || ringing || !soundInput.checked;
         snoozeInput.disabled = locked || ringing;
         for (const choice of choices) choice.button.disabled = locked || ringing;
         for (const wheel of [...wheels, ...choices.map(choice => choice.wheel)]) {
@@ -515,7 +675,7 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         }
       }
 
-      function playTone(enabled = soundEnabled, tone = alarmTone) {
+      function playTone(enabled = soundEnabled, tone = alarmTone, volume = alarmVolume) {
         if (!enabled) return;
         if (!audio || audio.state !== 'running') {
           audioMessage.textContent = 'Sound is unavailable. Your alarm is due.';
@@ -536,7 +696,10 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
           oscillator.frequency.value = frequency;
           oscillator.type = tone === 'digital' ? 'square' : 'sine';
           gain.gain.setValueAtTime(0, now + delay);
-          gain.gain.linearRampToValueAtTime(.15, now + delay + .03);
+          // The repeating alarm reaches the chosen volume over eight seconds.
+          // Preview plays at that volume so the user can judge the final level.
+          const rise = ringing ? .2 + .8 * Math.min(1, (Date.now() - ringStartedAt + delay * 1000) / 8000) : 1;
+          gain.gain.linearRampToValueAtTime(.15 * volume * rise, now + delay + .03);
           gain.gain.exponentialRampToValueAtTime(.001, now + delay + .5);
           soundingNodes.add(oscillator);
           oscillator.onended = () => {
@@ -565,6 +728,7 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         stopChecking();
         stopSound();
         ringing = true;
+        ringStartedAt = Date.now();
         status.textContent = 'Alarm ringing.';
         message.textContent = `Your alarm for ${describeTime(due)} is due.`;
         document.getElementById('alarmRingTime').textContent = inputTime(new Date(due));
@@ -606,6 +770,7 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         savedTime = timeInput.value;
         soundEnabled = soundInput.checked;
         alarmTone = toneInput.value;
+        alarmVolume = Number(volumeInput.value) / 100;
         snoozeMinutes = Number(snoozeInput.value);
         arm(target);
         void prepareAudio();
@@ -627,10 +792,13 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         stopSound();
         const revision = soundRevision;
         const tone = toneInput.value;
-        if (await prepareAudio(soundInput.checked) && revision === soundRevision) playTone(soundInput.checked, tone);
+        const volume = Number(volumeInput.value) / 100;
+        if (await prepareAudio(soundInput.checked) && revision === soundRevision) playTone(soundInput.checked, tone, volume);
       }
       testButton.addEventListener('click', previewTone);
       toneInput.addEventListener('change', previewTone);
+      volumeInput.addEventListener('input', () => { updateVolume(); stopSound(); });
+      volumeInput.addEventListener('change', previewTone);
 
       soundInput.addEventListener('change', () => {
         stopSound();
@@ -650,6 +818,7 @@ mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',r
         } else closeEditor();
       });
       editor.addEventListener('close', () => {
+        if (!editor.open) { clearInterval(contextInterval); contextInterval = null; }
         if (!ringing && !editor.open) {
           choices.forEach(choice => choice.close());
           stopSound();
