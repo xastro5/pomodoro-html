@@ -135,6 +135,68 @@
       #alarmNote br { display: none; }
     }
     @media (prefers-reduced-motion: reduce) { #alarmSound, #alarmSound::before { transition: none; } }
+
+    /* Quiet, grouped controls; all functionality remains in this one file. */
+    :root { --focus-ink: #bc3028; --break-ink: #16783a; --focus-tint: rgba(255,59,48,.09); --break-tint: rgba(52,199,89,.12); }
+    [data-theme="dark"] { --focus-ink: #ff8178; --break-ink: #79de96; --focus-tint: rgba(255,59,48,.17); --break-tint: rgba(52,199,89,.17); }
+    button, input { font-family: inherit; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 3px; }
+    button:disabled { cursor: default; }
+    .mode-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(100%, 280px); justify-self: center; margin-inline: auto; gap: 16px; }
+    .mode-group { min-width: 0; --mode-ink: var(--focus-ink); --mode-tint: var(--focus-tint); }
+    .mode-group.break { --mode-ink: var(--break-ink); --mode-tint: var(--break-tint); }
+    .mode-group-label { margin-bottom: 2px; color: var(--mode-ink); text-align: center; font-size: .6875rem; font-weight: 500; letter-spacing: .02em; }
+    .mode-options { display: flex; gap: 2px; }
+    .mode-group + .mode-group { position: relative; }
+    .mode-group + .mode-group::before { content: ''; position: absolute; left: -8px; bottom: 10px; width: 1px; height: 14px; background: var(--border); }
+    .mode-options .mode-btn { position: relative; isolation: isolate; flex: 1; min-height: 34px; padding: 8px 5px; min-width: 0; border: 0; border-radius: 20px; background: transparent; color: var(--alarm-muted); font-size: .8125rem; font-weight: 500; backdrop-filter: none; -webkit-backdrop-filter: none; white-space: nowrap; }
+    .mode-options .mode-btn::before { content: ''; position: absolute; z-index: -1; inset: 3px 0; border-radius: inherit; background: transparent; transition: background .2s; }
+    .mode-options .mode-btn:hover { transform: none; color: var(--text-primary); }
+    .mode-options .mode-btn:hover::before { background: var(--ring-bg); }
+    .mode-options .mode-btn.active { background: transparent; color: var(--mode-ink); }
+    .mode-options .mode-btn.active::before { background: var(--mode-tint); }
+    .timer-mode-label { font-size: .6875rem; letter-spacing: .08em; }
+    .btn-primary { background: var(--current-accent); }
+    #settingsBtn.active { background: rgba(0,122,255,.1); }
+    #themeToggle svg, #lockBtn svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    #themeToggle { color: var(--text-secondary); }
+    #themeToggle.active svg, #lockBtn.active svg { fill: none; }
+    #lockBtn.active { color: var(--accent-blue); }
+    #lockBtn svg { width: 17px; height: 17px; }
+    .container.locked .controls { pointer-events: auto; opacity: 1; }
+    .container.locked .controls > :disabled { opacity: .4; }
+    .settings-panel { inset: auto; margin: 0; width: min(352px, calc(100vw - 24px)); height: auto; max-width: none; padding: 18px; border: 1px solid var(--border); border-radius: 24px; background: var(--alarm-surface); color: var(--text-primary); box-shadow: 0 16px 60px rgba(0,0,0,.16); transition: none; scrollbar-width: thin; overflow-y: auto; }
+    .settings-header { margin-bottom: 18px; }
+    .settings-header h2 { font-size: 1rem; letter-spacing: -.02em; }
+    .settings-header .close-btn { background: var(--alarm-group); border-radius: 50%; flex-shrink: 0; }
+    .settings-header .close-btn svg { width: 18px; height: 18px; }
+    .settings-section + .settings-section { margin-top: 18px; }
+    .settings-section > h3 { margin: 0 12px 7px; color: var(--alarm-muted); font-size: .6875rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+    .settings-group { padding: 0 12px; border-radius: 16px; background: var(--alarm-group); }
+    .setting-item { min-height: 48px; padding: 8px 0; flex-wrap: nowrap; border: 0; font-size: .8125rem; }
+    .setting-item + .setting-item { border-top: 1px solid var(--border); }
+    .setting-controls { gap: 6px; }
+    .setting-btn { width: 30px; height: 30px; border: 0; background: var(--alarm-surface); color: var(--text-primary); }
+    .setting-btn:disabled { opacity: .4; }
+    .setting-value { min-width: 32px; font-size: .8125rem; font-variant-numeric: tabular-nums; }
+    .setting-switch { appearance: none; -webkit-appearance: none; flex-shrink: 0; width: 44px; height: 26px; padding: 3px; border: 0; border-radius: 20px; background: #c7c7cc; cursor: pointer; transition: background .2s; }
+    .setting-switch::before { content: ''; display: block; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.15); transition: transform .2s; }
+    .setting-switch:checked { background: #34c759; }
+    .setting-switch:checked::before { transform: translateX(18px); }
+    .setting-switch:disabled { opacity: .5; cursor: default; }
+    .tone-setting { display: block; padding-block: 0 12px; }
+    .tone-header { display: flex; align-items: center; justify-content: space-between; min-height: 44px; }
+    .sound-selector { display: flex; gap: 2px; padding: 3px; border-radius: 10px; background: var(--alarm-surface); }
+    .sound-option { flex: 1; padding: 7px 4px; border: 0; border-radius: 7px; background: transparent; font-size: .75rem; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    .sound-option.active { color: var(--text-primary); background: var(--alarm-group); }
+    .sound-selector[aria-disabled="true"], #soundPreview:disabled { opacity: .4; }
+    .settings-note { margin: 8px 12px 0; color: var(--alarm-muted); font-size: .6875rem; line-height: 1.45; }
+    .settings-note:empty { display: none; }
+    .undo-toast { position: fixed; z-index: 90; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; align-items: center; gap: 20px; max-width: calc(100% - 24px); padding: 5px 8px 5px 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--alarm-surface); box-shadow: 0 6px 30px rgba(0,0,0,.12); font-size: .8125rem; white-space: nowrap; }
+    .undo-toast[hidden] { display: none; }
+    .undo-toast button { min-height: 36px; padding: 0 10px; border: 0; border-radius: 10px; background: transparent; color: var(--accent-blue); font-size: inherit; font-weight: 600; cursor: pointer; }
+    @media (pointer: coarse) { .mode-options .mode-btn { min-height: 44px; } .mode-options .mode-btn::before { inset-block: 8px; } .mode-group + .mode-group::before { bottom: 15px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   </style>
 </head>
 <body>
@@ -145,7 +207,7 @@
         <button class="icon-btn" id="alarmOpen" type="button" title="Add alarm" aria-label="Add alarm" aria-haspopup="dialog" aria-controls="alarmEditor"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M5 3 2 6m17-3 3 3M7 20l-1 1m11-1 1 1"/></svg><span id="alarmSummaryTime" hidden></span></button>
         <button class="icon-btn" id="keepAwakeBtn" title="Keep Awake"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button>
         <button class="icon-btn" id="themeToggle" title="Toggle Theme"><svg viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg></button>
-        <button class="icon-btn" id="settingsBtn"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96a7.09 7.09 0 00-1.62-.94l-.36-2.54A.484.484 0 0013.9 2h-3.8a.485.485 0 00-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L.81 8.91a.49.49 0 00.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.49.37 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.8c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 118.4 12 3.6 3.6 0 0112 15.6z"/></svg></button>
+        <button class="icon-btn" id="settingsBtn" type="button" title="Settings" aria-label="Settings" aria-expanded="false" aria-controls="settingsPanel" popovertarget="settingsPanel"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96a7.09 7.09 0 00-1.62-.94l-.36-2.54A.484.484 0 0013.9 2h-3.8a.485.485 0 00-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L.81 8.91a.49.49 0 00.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.49.37 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.8c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 118.4 12 3.6 3.6 0 0112 15.6z"/></svg></button>
       </div>
     </div>
     <div class="clock-display">
@@ -158,16 +220,20 @@
       </div>
       <div class="current-date" id="currentDate">Monday, June 1</div>
     </div>
-    <div class="mode-picker">
-      <button class="mode-btn" data-mode="hour" data-label="60 min">60m</button>
-      <button class="mode-btn active" data-mode="work" data-label="40 min">40m</button>
-      <button class="mode-btn" data-mode="long" data-label="15 min">15m</button>
-      <button class="mode-btn" data-mode="short" data-label="5 min">5m</button>
+    <div class="mode-picker" aria-label="Timer presets">
+      <div class="mode-group" role="group" aria-labelledby="focusGroupLabel">
+        <div class="mode-group-label" id="focusGroupLabel">Focus</div>
+        <div class="mode-options"><button class="mode-btn" data-mode="hour">Long</button><button class="mode-btn active" data-mode="work">Default</button></div>
+      </div>
+      <div class="mode-group break" role="group" aria-labelledby="breakGroupLabel">
+        <div class="mode-group-label" id="breakGroupLabel">Break</div>
+        <div class="mode-options"><button class="mode-btn" data-mode="long">Long</button><button class="mode-btn" data-mode="short">Short</button></div>
+      </div>
     </div>
     <div class="timer-adjust">
-      <button class="adjust-btn" id="decreaseTime">−</button>
-      <div class="duration-input-wrapper"><span class="adjust-label">Duration</span><input type="number" class="duration-input" id="durationInput" value="40" min="1"></div>
-      <button class="adjust-btn" id="increaseTime">+</button>
+      <button class="adjust-btn" id="decreaseTime" title="Subtract one minute" aria-label="Subtract one minute">−</button>
+      <div class="duration-input-wrapper"><label class="adjust-label" for="durationInput">Duration</label><input type="number" class="duration-input" id="durationInput" value="40" min="1" step="1" aria-label="Total duration in minutes" aria-describedby="durationHelp"><span class="sr-only" id="durationHelp">Changes keep time already elapsed. Use a whole number of minutes.</span></div>
+      <button class="adjust-btn" id="increaseTime" title="Add one minute" aria-label="Add one minute">+</button>
     </div>
     <div class="timer-container">
       <svg class="timer-svg" viewBox="0 0 200 200"><circle class="timer-track" cx="100" cy="100" r="96"/><circle class="timer-progress" id="progress" cx="100" cy="100" r="96"/></svg>
@@ -238,19 +304,36 @@
       <button class="alarm-button" id="alarmDismiss" type="button" autofocus>Dismiss</button>
     </div>
   </dialog>
-  <div class="settings-panel" id="settingsPanel">
-    <header class="settings-header"><h2>Settings</h2><button class="close-btn" id="closeSettings"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></header>
-    <div class="settings-content">
-      <div class="setting-item"><div class="setting-info"><h3>Long Focus</h3><p>Default 60 min</p></div><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="hour">−</button><span class="setting-value" id="hourValue">60</span><button class="setting-btn" data-action="increase" data-target="hour">+</button></div></div>
-      <div class="setting-item"><div class="setting-info"><h3>Default Focus</h3><p>Default 40 min</p></div><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="work">−</button><span class="setting-value" id="workValue">40</span><button class="setting-btn" data-action="increase" data-target="work">+</button></div></div>
-      <div class="setting-item"><div class="setting-info"><h3>Long Break</h3><p>Default 15 min</p></div><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="long">−</button><span class="setting-value" id="longValue">15</span><button class="setting-btn" data-action="increase" data-target="long">+</button></div></div>
-      <div class="setting-item"><div class="setting-info"><h3>Short Break</h3><p>Default 5 min</p></div><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="short">−</button><span class="setting-value" id="shortValue">5</span><button class="setting-btn" data-action="increase" data-target="short">+</button></div></div>
-      <div class="setting-item"><div class="setting-info"><h3>Sound</h3><p>Play sound when timer ends</p></div><div class="toggle active" id="soundToggle"></div></div>
-      <div class="setting-item"><div class="setting-info"><h3>Notification Sound</h3><p>Choose alert sound</p></div><div class="sound-selector"><button class="sound-option active" data-sound="chime">Chime</button><button class="sound-option" data-sound="bell">Bell</button><button class="sound-option" data-sound="digital">Digital</button></div></div>
-      <div class="setting-item"><div class="setting-info"><h3>Keep Awake</h3><p>Prevent screen from sleeping</p></div><div class="toggle" id="keepAwakeToggle"></div></div>
-      <div class="setting-item"><div class="setting-info"><h3>Dark Mode</h3><p>Toggle dark appearance</p></div><div class="toggle" id="darkModeToggle"></div></div>
-    </div>
+  <div class="settings-panel" id="settingsPanel" popover="auto" role="dialog" aria-labelledby="settingsHeading">
+    <header class="settings-header"><h2 id="settingsHeading">Settings</h2><button class="close-btn" id="closeSettings" type="button" title="Close settings" aria-label="Close settings" autofocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 4.6 6 6 6-6L19.4 6l-6 6 6 6-1.4 1.4-6-6-6 6L4.6 18l6-6-6-6z"/></svg></button></header>
+    <section class="settings-section" aria-labelledby="durationSettingsHeading">
+      <h3 id="durationSettingsHeading">Durations · minutes</h3>
+      <div class="settings-group">
+        <div class="setting-item"><span>Long Focus</span><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="hour" aria-label="Shorten Long Focus">−</button><span class="setting-value" id="hourValue">60</span><button class="setting-btn" data-action="increase" data-target="hour" aria-label="Lengthen Long Focus">+</button></div></div>
+        <div class="setting-item"><span>Default Focus</span><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="work" aria-label="Shorten Default Focus">−</button><span class="setting-value" id="workValue">40</span><button class="setting-btn" data-action="increase" data-target="work" aria-label="Lengthen Default Focus">+</button></div></div>
+        <div class="setting-item"><span>Long Break</span><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="long" aria-label="Shorten Long Break">−</button><span class="setting-value" id="longValue">15</span><button class="setting-btn" data-action="increase" data-target="long" aria-label="Lengthen Long Break">+</button></div></div>
+        <div class="setting-item"><span>Short Break</span><div class="setting-controls"><button class="setting-btn" data-action="decrease" data-target="short" aria-label="Shorten Short Break">−</button><span class="setting-value" id="shortValue">5</span><button class="setting-btn" data-action="increase" data-target="short" aria-label="Lengthen Short Break">+</button></div></div>
+      </div>
+    </section>
+    <section class="settings-section" aria-labelledby="soundSettingsHeading">
+      <h3 id="soundSettingsHeading">Timer sound</h3>
+      <div class="settings-group">
+        <label class="setting-item" for="soundToggle"><span>Sound</span><input class="setting-switch" id="soundToggle" type="checkbox" role="switch" checked></label>
+        <div class="setting-item tone-setting"><div class="tone-header"><span id="timerToneLabel">Tone</span><button class="alarm-preview" id="soundPreview" type="button" title="Preview timer sound" aria-label="Preview timer sound"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.5v9l7-4.5z"/></svg></button></div><div class="sound-selector" role="group" aria-labelledby="timerToneLabel"><button class="sound-option active" data-sound="chime">Chime</button><button class="sound-option" data-sound="bell">Bell</button><button class="sound-option" data-sound="digital">Digital</button></div></div>
+      </div>
+      <p class="settings-note" id="timerSoundStatus" role="status"></p>
+    </section>
+    <section class="settings-section" aria-labelledby="generalSettingsHeading">
+      <h3 id="generalSettingsHeading">General</h3>
+      <div class="settings-group">
+        <label class="setting-item" for="keepAwakeToggle"><span>Keep Awake</span><input class="setting-switch" id="keepAwakeToggle" type="checkbox" role="switch" aria-describedby="wakeStatus"></label>
+        <label class="setting-item" for="darkModeToggle"><span>Dark Mode</span><input class="setting-switch" id="darkModeToggle" type="checkbox" role="switch"></label>
+      </div>
+      <p class="settings-note" id="wakeStatus" role="status"></p>
+    </section>
   </div>
+  <div class="undo-toast" id="undoToast" hidden><span id="undoMessage" role="status">Timer changed</span><button id="undoTimer" type="button">Undo</button></div>
+  <p class="sr-only" id="timerStatus" role="status" aria-live="polite"></p>
   <footer class="footer">
     <p>Author: astro5<br>Copyright © 2025-2026 xastro5. All rights reserved.</p>
   </footer>
@@ -269,17 +352,65 @@ function createSegments(digitEl){const segments=['top','top-left','top-right','m
 function renderDigit(digitEl,value){const activeSegments=SEGMENTS[value]||[];digitEl.querySelectorAll('.digit-segment').forEach(seg=>{seg.classList.toggle('on',activeSegments.includes(seg.dataset.segment))})}
 let audioContext=null;
 function initAudio(){if(!audioContext){audioContext=new(window.AudioContext||window.webkitAudioContext)()}}
-function playNotification(){if(!config.sound)return;initAudio();const now=audioContext.currentTime;const sounds={chime:[[523.25,0],[659.25,.15],[783.99,.3]],bell:[[440,0],[880,.1],[1320,.2]],digital:[[800,0],[600,.1],[800,.2],[1000,.3]]};const selected=sounds[config.notificationSound]||sounds.chime;selected.forEach(([freq,delay])=>{const osc=audioContext.createOscillator(),gain=audioContext.createGain();osc.connect(gain);gain.connect(audioContext.destination);osc.frequency.value=freq;osc.type=config.notificationSound==='digital'?'square':'sine';gain.gain.setValueAtTime(0,now+delay);gain.gain.linearRampToValueAtTime(.15,now+delay+.03);gain.gain.exponentialRampToValueAtTime(.001,now+delay+.5);osc.start(now+delay);osc.stop(now+delay+.5)})}
-function applyTheme(){if(config.darkMode){document.documentElement.setAttribute('data-theme','dark');darkModeToggle.classList.add('active');themeToggle.classList.add('active')}else{document.documentElement.removeAttribute('data-theme');darkModeToggle.classList.remove('active');themeToggle.classList.remove('active')}}
+async function playNotification(preview=false) {
+  if(!config.sound) return false;
+  try {
+    initAudio();
+    if(audioContext.state==='suspended') await audioContext.resume();
+    if(audioContext.state!=='running') throw new Error('Audio unavailable');
+    const now=audioContext.currentTime;
+    const sounds={chime:[[523.25,0],[659.25,.15],[783.99,.3]],bell:[[440,0],[880,.1],[1320,.2]],digital:[[800,0],[600,.1],[800,.2],[1000,.3]]};
+    (sounds[config.notificationSound]||sounds.chime).forEach(([freq,delay])=>{
+      const osc=audioContext.createOscillator(),gain=audioContext.createGain();
+      osc.connect(gain); gain.connect(audioContext.destination);
+      osc.frequency.value=freq; osc.type=config.notificationSound==='digital'?'square':'sine';
+      gain.gain.setValueAtTime(0,now+delay); gain.gain.linearRampToValueAtTime(.15,now+delay+.03);
+      gain.gain.exponentialRampToValueAtTime(.001,now+delay+.5);
+      osc.start(now+delay); osc.stop(now+delay+.5);
+      osc.onended=()=>{osc.disconnect();gain.disconnect();};
+    });
+    if(preview) document.getElementById('timerSoundStatus').textContent='';
+    return true;
+  } catch {
+    const message='Sound is unavailable in this browser.';
+    if(preview) document.getElementById('timerSoundStatus').textContent=message;
+    else announceTimer(message);
+    return false;
+  }
+}
+function applyTheme() {
+  document.documentElement.toggleAttribute('data-theme',config.darkMode);
+  if(config.darkMode) document.documentElement.setAttribute('data-theme','dark');
+  darkModeToggle.checked=config.darkMode;
+  themeToggle.classList.toggle('active',config.darkMode);
+  const title=config.darkMode?'Switch to light mode':'Switch to dark mode';
+  themeToggle.title=title; themeToggle.setAttribute('aria-label',title);
+  themeToggle.querySelector('svg').innerHTML=config.darkMode
+    ? '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>'
+    : '<path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/>';
+}
 function toggleTheme(){config.darkMode=!config.darkMode;applyTheme()}
 function updateClock(){const now=new Date();const h=now.getHours().toString().padStart(2,'0'),m=now.getMinutes().toString().padStart(2,'0'),s=now.getSeconds().toString().padStart(2,'0');renderDigit(document.getElementById('hourTens'),parseInt(h[0]));renderDigit(document.getElementById('hourOnes'),parseInt(h[1]));renderDigit(document.getElementById('minTens'),parseInt(m[0]));renderDigit(document.getElementById('minOnes'),parseInt(m[1]));renderDigit(document.getElementById('secTens'),parseInt(s[0]));renderDigit(document.getElementById('secOnes'),parseInt(s[1]));const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],months=['January','February','March','April','May','June','July','August','September','October','November','December'];currentDateEl.textContent=days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear()}
 const WEATHER_CODES={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌦️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
 async function fetchWeather(){try{let lat,lon,city;const geoSources=[{url:'http://ip-api.com/json/?fields=status,country,city,lat,lon',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.status==='success'?{lat:d.lat,lon:d.lon,city:d.city}:null}},{url:'https://ip-api.com/json/?fields=status,country,city,lat,lon',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.status==='success'?{lat:d.lat,lon:d.lon,city:d.city}:null}},{url:'https://ipwho.is/',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.success?{lat:d.latitude,lon:d.longitude,city:d.city}:null}},{url:'https://ipapi.co/json/',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.latitude?{lat:d.latitude,lon:d.longitude,city:d.city}:null}}];for(const src of geoSources){try{const res=await fetch(src.url);if(src.ok(res)){const geo=await src.parse(res);if(geo){lat=geo.lat;lon=geo.lon;city=geo.city;break}}}catch{continue}}if(lat===undefined)throw new Error('Geolocation failed');const weatherRes=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code&timezone=auto'),data=await weatherRes.json(),{temperature_2m,weather_code}=data.current;weatherIcon.textContent=WEATHER_CODES[weather_code]||'🌡️';weatherTemp.textContent=Math.round(temperature_2m)+'°';document.getElementById('weatherCity').textContent=city?' in '+city:''}catch{weatherIcon.textContent='🌡️';weatherTemp.textContent='--°';document.getElementById('weatherCity').textContent=''}}
 function formatTime(seconds){const mins=Math.floor(seconds/60),secs=seconds%60;return mins.toString().padStart(2,'0')+':'+secs.toString().padStart(2,'0')}
+const modeNames={hour:'Long Focus',work:'Default Focus',long:'Long Break',short:'Short Break'};
+const undoToast=document.getElementById('undoToast'),undoButton=document.getElementById('undoTimer');
+let undoState=null,undoExpiry=null,wakeRequest=0,wakePending=false;
+function announceTimer(message) { document.getElementById('timerStatus').textContent=message; }
 function getDuration(){return(customDuration||config[currentMode])*60}
-function getModeLabelText(){if(currentMode==='work'||currentMode==='hour')return'FOCUS';return'BREAK'}
+function getModeLabelText(){return (customDuration!==null?'CUSTOM ':'')+((currentMode==='work'||currentMode==='hour')?'FOCUS':'BREAK')}
 function getAccentColor(){return currentMode==='work'||currentMode==='hour'?'var(--accent-work)':'var(--accent-break)'}
-function updateDisplay(){timeDisplay.textContent=formatTime(timeRemaining);const percent=Math.max(0,Math.min(1,timeRemaining/sessionDuration));progress.style.strokeDashoffset=CIRCUMFERENCE*(1-percent);progress.style.stroke=getAccentColor();if(document.activeElement!==durationInput)durationInput.value=sessionDuration/60;updateTimerContext()}
+function updateDisplay() {
+  timeDisplay.textContent=formatTime(timeRemaining);
+  const percent=Math.max(0,Math.min(1,remainingMs/(sessionDuration*1000)));
+  progress.style.strokeDashoffset=CIRCUMFERENCE*(1-percent);
+  progress.style.stroke=getAccentColor();
+  document.documentElement.style.setProperty('--current-accent',getAccentColor());
+  modeLabel.textContent=getModeLabelText();
+  if(document.activeElement!==durationInput) durationInput.value=sessionDuration/60;
+  updateTimerContext();
+}
 function updateTimerContext() {
   const context=document.getElementById('timerEnd');
   let label='';
@@ -288,85 +419,239 @@ function updateTimerContext() {
     tomorrow.setDate(tomorrow.getDate()+1);
     const time=end.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:false});
     const day=end.toDateString()===now.toDateString() ? '' : end.toDateString()===tomorrow.toDateString() ? 'tomorrow ' : end.toLocaleDateString([], {month:'short',day:'numeric'})+' ';
-    label=`Ends ${day}at ${time}`;
+    label='Ends '+day+'at '+time;
   } else if(remainingMs>0&&remainingMs<sessionDuration*1000) label='Paused';
-  context.textContent=label;
-  context.hidden=!label;
+  context.textContent=label; context.hidden=!label;
 }
 function cancelTransition() { clearTimeout(transitionId); transitionId=null; }
+function setPlayState(running) {
+  mainBtn.querySelector('svg').innerHTML=running?'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>':'<path d="M8 5v14l11-7z"/>';
+  const title=running?'Pause timer':remainingMs<sessionDuration*1000&&remainingMs>0?'Resume timer':'Start timer';
+  mainBtn.setAttribute('aria-label',title); mainBtn.title=title;
+}
 function stopTimer() {
-  clearInterval(intervalId);
-  intervalId=null; timerDeadline=null; isRunning=false;
-  mainBtn.querySelector('svg').innerHTML='<path d="M8 5v14l11-7z"/>';
-  mainBtn.setAttribute('aria-label','Start timer');
+  clearInterval(intervalId); intervalId=null; timerDeadline=null; isRunning=false;
+  setPlayState(false);
 }
 function tickTimer() {
   if(!isRunning||timerDeadline===null) return;
-  // A delayed callback refreshes the display; it does not define elapsed time.
-  remainingMs=Math.max(0,timerDeadline-Date.now());
-  timeRemaining=Math.ceil(remainingMs/1000);
+  // Wall-clock deadlines avoid drift when browser callbacks are delayed.
+  remainingMs=Math.max(0,timerDeadline-Date.now()); timeRemaining=Math.ceil(remainingMs/1000);
   if(remainingMs===0) {
-    stopTimer();
+    stopTimer(); clearUndo();
     const focus=currentMode==='work'||currentMode==='hour';
     if(focus) { completedSessions++; updateSessionDots(); }
     const nextMode=focus ? (completedSessions%SESSIONS_BEFORE_LONG===0?'long':'short') : 'work';
-    try { playNotification(); } catch { /* Timer completion also works without audio. */ }
+    void playNotification();
+    announceTimer(focus?'Focus complete. Your break is ready.':'Break complete. Ready to focus.');
     transitionId=setTimeout(()=>{ transitionId=null; switchMode(nextMode); },500);
   }
   updateDisplay();
 }
-function updateModeButtons(){const isCustom=customDuration!==null;modeBtns.forEach(btn=>{const mode=btn.dataset.mode,isActive=!isCustom&&mode===currentMode;btn.classList.toggle('active',isActive);if(mode==='hour')btn.textContent=config.hour+'m';else if(mode==='work')btn.textContent=config.work+'m';else if(mode==='long')btn.textContent=config.long+'m';else if(mode==='short')btn.textContent=config.short+'m'})}
-function updateModePickerState(){const modePicker=document.querySelector('.mode-picker');if(customDuration!==null){modePicker.classList.add('inactive')}else{modePicker.classList.remove('inactive')}updateModeButtons()}
+function updateModeButtons() {
+  modeBtns.forEach(btn=>{
+    const mode=btn.dataset.mode,active=customDuration===null&&mode===currentMode;
+    btn.classList.toggle('active',active); btn.setAttribute('aria-pressed',String(active));
+    btn.title=modeNames[mode]+' · '+config[mode]+' min';
+    btn.setAttribute('aria-label',modeNames[mode]+', '+config[mode]+' minutes');
+  });
+}
+function updateModePickerState(){updateModeButtons()}
 function updateSessionDots(){const dots=sessionDots.querySelectorAll('.session-dot'),filledCount=completedSessions%SESSIONS_BEFORE_LONG;dots.forEach((dot,i)=>{dot.classList.toggle('filled',i<filledCount)})}
-function switchMode(mode) {
-  cancelTransition(); stopTimer();
+function clearUndo() {
+  clearTimeout(undoExpiry); undoExpiry=null; undoState=null;
+  if(document.activeElement===undoButton) mainBtn.focus({preventScroll:true});
+  undoToast.hidden=true;
+}
+function scheduleUndoExpiry() {
+  clearTimeout(undoExpiry);
+  if(undoState&&!undoToast.matches(':hover')&&!undoToast.contains(document.activeElement)) undoExpiry=setTimeout(clearUndo,8000);
+}
+function switchMode(mode,offerUndo=false) {
+  if(!Object.hasOwn(modeNames,mode)) return;
+  if(offerUndo&&uiLocked) return;
+  if(offerUndo&&mode===currentMode&&customDuration===null&&remainingMs>0) return;
+  if(isRunning) tickTimer();
+  const previous=offerUndo&&remainingMs>0?{currentMode,customDuration,sessionDuration,remainingMs,isRunning,timerDeadline}:null;
+  clearUndo(); cancelTransition(); stopTimer();
   currentMode=mode; customDuration=null;
   sessionDuration=getDuration(); remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
-  modeLabel.textContent=getModeLabelText();
-  updateModePickerState(); updateDisplay();
+  setPlayState(false); updateModePickerState(); updateDisplay();
+  if(previous) {
+    undoState=previous; undoToast.hidden=false;
+    document.getElementById('undoMessage').textContent='Timer changed'; scheduleUndoExpiry();
+  }
+}
+function restoreTimer() {
+  if(!undoState||uiLocked) return;
+  const saved=undoState;
+  clearUndo(); cancelTransition(); stopTimer();
+  currentMode=saved.currentMode; customDuration=saved.customDuration; sessionDuration=saved.sessionDuration;
+  remainingMs=saved.remainingMs; timeRemaining=Math.ceil(remainingMs/1000);
+  if(saved.isRunning) {
+    // Time continues to pass while Undo is offered; do not add that time back.
+    isRunning=true; timerDeadline=saved.timerDeadline; intervalId=setInterval(tickTimer,250); tickTimer();
+  }
+  setPlayState(isRunning); updateModePickerState(); updateDisplay();
+  announceTimer('Previous timer restored.');
 }
 function setCustomDuration(minutes) {
-  if(!Number.isSafeInteger(minutes)||minutes<1||minutes*60000>8.64e15-Date.now()) { updateDisplay(); return; }
-  cancelTransition();
+  if(uiLocked) return false;
+  if(!Number.isSafeInteger(minutes)||minutes<1||minutes*60000>8.64e15-Date.now()) {
+    durationInput.value=sessionDuration/60; announceTimer('Enter a valid whole number of minutes, at least 1.'); return false;
+  }
+  if(isRunning) tickTimer();
+  const elapsed=remainingMs>0?sessionDuration*1000-remainingMs:0;
+  const nextRemaining=minutes*60000-elapsed;
+  if(nextRemaining<=0) {
+    durationInput.value=sessionDuration/60; announceTimer('Duration must be longer than the time already elapsed.'); return false;
+  }
+  clearUndo(); cancelTransition();
   customDuration=minutes; sessionDuration=minutes*60;
-  remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
+  remainingMs=nextRemaining; timeRemaining=Math.ceil(remainingMs/1000);
   if(isRunning) timerDeadline=Date.now()+remainingMs;
-  updateModePickerState(); updateDisplay();
+  durationInput.value=minutes;
+  setPlayState(isRunning); updateModePickerState(); updateDisplay();
+  announceTimer('Total duration '+minutes+' minutes.'); return true;
 }
 function adjustDuration(delta) { setCustomDuration(Math.max(1,sessionDuration/60+delta)); }
 function handleDurationInput(event) { setCustomDuration(Number(event.target.value)); }
 function startTimer() {
+  if(uiLocked) return;
+  clearUndo();
   if(isRunning) {
-    tickTimer();
-    if(!isRunning) return;
+    tickTimer(); if(!isRunning) return;
     stopTimer(); updateDisplay(); return;
   }
   cancelTransition();
   if(remainingMs<=0) { remainingMs=sessionDuration*1000; timeRemaining=sessionDuration; }
   try { initAudio(); if(audioContext.state==='suspended') void audioContext.resume().catch(()=>{}); } catch {}
-  timerDeadline=Date.now()+remainingMs;
-  isRunning=true;
-  mainBtn.querySelector('svg').innerHTML='<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-  mainBtn.setAttribute('aria-label','Pause timer');
-  intervalId=setInterval(tickTimer,250);
-  updateDisplay();
+  timerDeadline=Date.now()+remainingMs; isRunning=true;
+  setPlayState(true); intervalId=setInterval(tickTimer,250); updateDisplay();
 }
 function resetTimer() {
-  cancelTransition(); stopTimer();
+  if(uiLocked) return;
+  clearUndo(); cancelTransition(); stopTimer();
   remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
-  updateModePickerState(); updateDisplay();
+  setPlayState(false); updateModePickerState(); updateDisplay();
 }
-function openSettings(){settingsPanel.classList.add('open')}
-function closeSettingsPanel(){settingsPanel.classList.remove('open')}
-function updateSettingDisplay(){Object.keys(modeValues).forEach(key=>{modeValues[key].textContent=config[key]});soundToggle.classList.toggle('active',config.sound);document.querySelectorAll('.sound-option').forEach(btn=>{btn.classList.toggle('active',btn.dataset.sound===config.notificationSound)});keepAwakeToggle.classList.toggle('active',config.keepAwake);keepAwakeBtn.classList.toggle('active',config.keepAwake);updateModeButtons()}
-async function requestWakeLock(){if(!('wakeLock' in navigator))return;try{if(wakeLock)await wakeLock.release();wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null})}catch{wakeLock=null}}
-async function releaseWakeLock(){if(wakeLock){await wakeLock.release();wakeLock=null}}
-async function toggleKeepAwake(){config.keepAwake=!config.keepAwake;keepAwakeToggle.classList.toggle('active',config.keepAwake);keepAwakeBtn.classList.toggle('active',config.keepAwake);if(config.keepAwake)await requestWakeLock();else await releaseWakeLock()}
-document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'){tickTimer();if(config.keepAwake&&isRunning)await requestWakeLock()}});
+function positionSettings() {
+  const rect=settingsBtn.getBoundingClientRect(),viewport=window.visualViewport;
+  const edge=12,vx=viewport?.offsetLeft||0,vy=viewport?.offsetTop||0;
+  const width=viewport?.width||innerWidth,height=viewport?.height||innerHeight;
+  const panelWidth=Math.min(352,width-edge*2),top=Math.max(vy+edge,rect.bottom+10);
+  settingsPanel.style.width=panelWidth+'px';
+  settingsPanel.style.left=Math.max(vx+edge,Math.min(rect.right-panelWidth,vx+width-panelWidth-edge))+'px';
+  settingsPanel.style.top=top+'px'; settingsPanel.style.maxHeight=Math.max(0,vy+height-top-edge)+'px';
+}
+function openSettings(){settingsPanel.showPopover()}
+function closeSettingsPanel(){settingsPanel.hidePopover()}
+settingsPanel.addEventListener('beforetoggle',event=>{
+  const open=event.newState==='open';
+  if(open) positionSettings();
+  settingsBtn.classList.toggle('active',open); settingsBtn.setAttribute('aria-expanded',String(open));
+});
+function refreshSettingsPosition(){if(settingsPanel.matches(':popover-open')) positionSettings()}
+window.addEventListener('resize',refreshSettingsPosition);
+window.addEventListener('scroll',refreshSettingsPosition,{passive:true});
+window.visualViewport?.addEventListener('resize',refreshSettingsPosition);
+function updateSettingDisplay() {
+  Object.keys(modeValues).forEach(key=>{modeValues[key].textContent=config[key]});
+  soundToggle.checked=config.sound;
+  document.querySelectorAll('.sound-option').forEach(btn=>{
+    const selected=btn.dataset.sound===config.notificationSound;
+    btn.classList.toggle('active',selected); btn.setAttribute('aria-pressed',String(selected)); btn.disabled=!config.sound;
+  });
+  document.querySelector('.sound-selector').setAttribute('aria-disabled',String(!config.sound));
+  document.getElementById('soundPreview').disabled=!config.sound;
+  updateWakeDisplay(); updateModeButtons();
+}
+function updateWakeDisplay(message) {
+  const active=!!wakeLock&&!wakeLock.released;
+  if(message!==undefined) document.getElementById('wakeStatus').textContent=message;
+  const status=document.getElementById('wakeStatus').textContent;
+  keepAwakeToggle.checked=active; keepAwakeToggle.disabled=wakePending;
+  keepAwakeBtn.classList.toggle('active',active); keepAwakeBtn.disabled=wakePending;
+  keepAwakeBtn.setAttribute('aria-pressed',String(active));
+  const title=wakePending?'Enabling Keep Awake…':active?'Turn off Keep Awake':status.includes('unavailable')?'Keep Awake is unavailable in this browser':status.includes('could not')?'Keep Awake could not be enabled. Click to retry.':'Keep screen awake';
+  keepAwakeBtn.title=title; keepAwakeBtn.setAttribute('aria-label',title);
+}
+async function requestWakeLock() {
+  if(wakeLock&&!wakeLock.released) return;
+  const request=++wakeRequest;
+  if(!('wakeLock' in navigator)) {
+    config.keepAwake=false; updateWakeDisplay('Keep Awake is unavailable in this browser.'); announceTimer('Keep Awake is unavailable in this browser.'); return;
+  }
+  wakePending=true; updateWakeDisplay('Enabling Keep Awake…');
+  try {
+    const acquired=await navigator.wakeLock.request('screen');
+    if(request!==wakeRequest||!config.keepAwake) { await acquired.release(); return; }
+    wakeLock=acquired;
+    acquired.addEventListener('release',()=>{
+      if(wakeLock!==acquired) return;
+      wakeLock=null;
+      if(document.visibilityState==='visible') config.keepAwake=false;
+      updateWakeDisplay(config.keepAwake?'Keep Awake paused while this page is hidden.':'Keep Awake was released. Enable it again if needed.');
+    });
+    updateWakeDisplay('Your screen will stay awake while this page is visible.');
+  } catch {
+    if(request===wakeRequest) { wakeLock=null; config.keepAwake=false; updateWakeDisplay('Keep Awake could not be enabled. Check browser permissions or power-saving settings.'); announceTimer('Keep Awake could not be enabled.'); }
+  } finally {
+    if(request===wakeRequest) { wakePending=false; updateWakeDisplay(); }
+  }
+}
+async function releaseWakeLock() {
+  ++wakeRequest; wakePending=false;
+  const previous=wakeLock; wakeLock=null; updateWakeDisplay('');
+  if(previous) { try { await previous.release(); } catch {} }
+}
+async function toggleKeepAwake() {
+  if(wakePending) return;
+  config.keepAwake=!config.keepAwake;
+  if(config.keepAwake) await requestWakeLock(); else await releaseWakeLock();
+}
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible') { tickTimer(); if(config.keepAwake) void requestWakeLock(); }
+});
 window.addEventListener('pageshow',tickTimer);
-function toggleUILock(){uiLocked=!uiLocked;config.uiLocked=uiLocked;lockBtn.classList.toggle('active',uiLocked);document.querySelector('.container').classList.toggle('locked',uiLocked)}
-function adjustSetting(target,delta){const min=1,newValue=Math.max(min,config[target]+delta);if(newValue!==config[target]){config[target]=newValue;updateSettingDisplay();if(currentMode===target&&!isRunning&&!customDuration&&remainingMs===sessionDuration*1000){sessionDuration=getDuration();remainingMs=sessionDuration*1000;timeRemaining=sessionDuration;updateDisplay()}}}
-mainBtn.addEventListener('click',startTimer);resetBtn.addEventListener('click',resetTimer);settingsBtn.addEventListener('click',openSettings);closeSettings.addEventListener('click',closeSettingsPanel);decreaseBtn.addEventListener('click',()=>adjustDuration(-1));increaseBtn.addEventListener('click',()=>adjustDuration(1));durationInput.addEventListener('change',handleDurationInput);themeToggle.addEventListener('click',toggleTheme);darkModeToggle.addEventListener('click',toggleTheme);modeBtns.forEach(btn=>{btn.addEventListener('click',()=>switchMode(btn.dataset.mode))});document.querySelectorAll('.setting-btn').forEach(btn=>{btn.addEventListener('click',()=>{adjustSetting(btn.dataset.target,btn.dataset.action==='increase'?1:-1)})});soundToggle.addEventListener('click',()=>{config.sound=!config.sound;updateSettingDisplay()});document.querySelectorAll('.sound-option').forEach(btn=>{btn.addEventListener('click',()=>{config.notificationSound=btn.dataset.sound;updateSettingDisplay()})});keepAwakeToggle.addEventListener('click',toggleKeepAwake);keepAwakeBtn.addEventListener('click',toggleKeepAwake);lockBtn.addEventListener('click',toggleUILock);applyTheme();if(uiLocked){document.querySelector('.container').classList.add('locked');lockBtn.classList.add('active')}updateClock();setInterval(updateClock,1000);fetchWeather();setInterval(fetchWeather,10*60*1000);updateDisplay();updateSessionDots();updateSettingDisplay();updateModePickerState();
+function updateUILock() {
+  lockBtn.classList.toggle('active',uiLocked); document.querySelector('.container').classList.toggle('locked',uiLocked);
+  lockBtn.setAttribute('aria-pressed',String(uiLocked));
+  lockBtn.title=uiLocked?'Unlock controls':'Lock controls'; lockBtn.setAttribute('aria-label',lockBtn.title);
+  lockBtn.querySelector('svg').innerHTML='<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M12 14v3"/>'+(uiLocked?'<path d="M8 10V6a4 4 0 0 1 8 0v4"/>':'<path d="M8 10V6a4 4 0 0 1 7.5-2"/>');
+  document.querySelectorAll('.mode-btn,.adjust-btn,.setting-btn,#durationInput,#mainBtn,#resetBtn').forEach(control=>{control.disabled=uiLocked});
+  undoButton.disabled=uiLocked;
+}
+function toggleUILock(){uiLocked=!uiLocked;config.uiLocked=uiLocked;clearUndo();updateUILock()}
+function adjustSetting(target,delta) {
+  if(uiLocked) return;
+  const newValue=Math.max(1,config[target]+delta);
+  if(!Number.isSafeInteger(newValue)||newValue*60000>8.64e15-Date.now()) return;
+  if(newValue!==config[target]) {
+    config[target]=newValue; updateSettingDisplay();
+    if(currentMode===target&&!isRunning&&customDuration===null&&remainingMs===sessionDuration*1000) {
+      clearUndo(); sessionDuration=getDuration(); remainingMs=sessionDuration*1000; timeRemaining=sessionDuration; updateDisplay();
+    }
+  }
+}
+mainBtn.addEventListener('click',startTimer);
+resetBtn.addEventListener('click',resetTimer); resetBtn.title='Reset timer';
+closeSettings.addEventListener('click',closeSettingsPanel);
+decreaseBtn.addEventListener('click',()=>adjustDuration(-1)); increaseBtn.addEventListener('click',()=>adjustDuration(1));
+durationInput.addEventListener('change',handleDurationInput);
+themeToggle.addEventListener('click',toggleTheme); darkModeToggle.addEventListener('change',toggleTheme);
+modeBtns.forEach(btn=>btn.addEventListener('click',()=>switchMode(btn.dataset.mode,true)));
+document.querySelectorAll('.setting-btn').forEach(btn=>btn.addEventListener('click',()=>adjustSetting(btn.dataset.target,btn.dataset.action==='increase'?1:-1)));
+soundToggle.addEventListener('change',()=>{config.sound=soundToggle.checked;updateSettingDisplay()});
+document.querySelectorAll('.sound-option').forEach(btn=>btn.addEventListener('click',()=>{config.notificationSound=btn.dataset.sound;updateSettingDisplay()}));
+document.getElementById('soundPreview').addEventListener('click',()=>{void playNotification(true)});
+keepAwakeToggle.addEventListener('change',toggleKeepAwake); keepAwakeBtn.addEventListener('click',toggleKeepAwake);
+lockBtn.addEventListener('click',toggleUILock); undoButton.addEventListener('click',restoreTimer);
+undoToast.addEventListener('mouseenter',()=>clearTimeout(undoExpiry)); undoToast.addEventListener('mouseleave',scheduleUndoExpiry);
+undoToast.addEventListener('focusin',()=>clearTimeout(undoExpiry)); undoToast.addEventListener('focusout',()=>setTimeout(scheduleUndoExpiry,0));
+applyTheme(); updateUILock(); setPlayState(false);
+updateClock(); setInterval(updateClock,1000); fetchWeather(); setInterval(fetchWeather,10*60*1000);
+updateDisplay(); updateSessionDots(); updateSettingDisplay(); updateModePickerState();
   </script>
   <script>
     // Alarm clock. Its state is independent of the Pomodoro timer.

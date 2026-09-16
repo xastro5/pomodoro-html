@@ -9,7 +9,7 @@ Un minuteur Pomodoro minimaliste avec un magnifique affichage d'horloge numériq
 
 ## Fonctionnalités
 
-- **Modes de minuteur multiples** : préréglages 60 min, 40 min (par défaut), 15 min et 5 min (tous personnalisables)
+- **Préréglages regroupés** : Focus — Long (60 min), Default (40 min) ; Break — Long (15 min), Short (5 min). Toutes les durées sont personnalisables.
 - **Durée personnalisée** : ajustez la durée du minuteur directement (minimum 1 minute, sans maximum)
 - **Horloge numérique à sept segments** : horloge en temps réel au style LED classique avec affichage de la date
 - **Suivi des sessions** : les points de progression indiquent les sessions de concentration terminées
@@ -18,7 +18,7 @@ Un minuteur Pomodoro minimaliste avec un magnifique affichage d'horloge numériq
 - **Réveil** : alarme ponctuelle à une heure locale, avec rouleaux de sélection, choix et aperçu des sonneries, rappel réglable et arrêt
 - **Thème sombre/clair** : commutation en un clic
 - **Disposition adaptative** : vue verticale compacte et deux colonnes sur les écrans paysage peu hauts
-- **Garder éveillé** : empêcher l'écran de s'éteindre pendant le minuteur
+- **Garder éveillé** : empêcher l'écran de s'éteindre lorsque la page est visible, avec un message si le navigateur ne peut pas l'activer
 - **Verrouillage de l'interface** : verrouiller l'interface pour éviter les clics accidentels
 - **Réinitialisation de session** : tous les paramètres sont réinitialisés au rafraîchissement de la page
 
@@ -31,11 +31,12 @@ Ouvrez simplement `index.html` dans n'importe quel navigateur moderne. Aucun ser
 - **Démarrer/Pause** : cliquez sur le bouton principal pour démarrer ou mettre en pause
 - **Réinitialiser** : redémarrez la durée de session choisie, y compris une durée personnalisée
 - **Verrouiller** : cliquez sur le bouton de verrouillage pour éviter les interactions accidentelles
-- **Sélection du mode** : choisissez parmi les préréglages 60m, 40m, 15m ou 5m
-- **Ajustement rapide** : utilisez les boutons +/− ou saisissez directement une durée personnalisée
+- **Sélection du mode** : quatre boutons regroupés sous Focus et Break, avec des libellés et des couleurs discrètes. Le survol indique la durée du préréglage ; le champ Duration affiche la durée totale de la session.
+- **Ajustement rapide** : utilisez +/− ou saisissez un nombre entier de minutes. Le temps écoulé est conservé : après 10 minutes d'une session de 40 minutes, + fait passer le temps restant de 30 à 31 minutes. La nouvelle durée totale doit dépasser le temps écoulé. Les sessions personnalisées affichent Custom Focus ou Custom Break.
+- **Annuler un changement** : après un changement de préréglage, Undo restaure la session précédente et son état, en marche ou en pause. Une session en marche conserve son heure de fin initiale. Le message reste huit secondes, prolongées au survol ou au focus clavier ; une autre action sur le minuteur l'efface. Cliquer sur le préréglage déjà sélectionné ne réinitialise pas le décompte.
 - **Heure de fin** : le minuteur en marche affiche l'heure de fin prévue ; en pause, il affiche Paused. Le décompte repose sur une heure de fin, évitant une dérive cumulative lorsque le navigateur retarde les mises à jour. La pause conserve le temps restant ; Réinitialiser ou changer de mode annule toute transition automatique en attente.
 
-Les modifications des préréglages s'appliquent aux prochaines sessions lorsqu'une session est en cours ou en pause. La session active conserve sa propre durée pour le décompte, le champ de durée et l'anneau. Modifier directement la durée relance son décompte avec la nouvelle valeur.
+Les modifications des préréglages s'appliquent aux prochaines sessions lorsqu'une session est en cours ou en pause. La session active conserve sa propre durée pour le décompte, le champ de durée et l'anneau. Modifier directement la durée conserve le temps écoulé ; Reset redémarre la durée totale choisie.
 
 ### Disposition selon l'écran
 
@@ -59,11 +60,11 @@ Utilisez un navigateur récent prenant en charge HTML dialog et Web Audio. Si le
 
 ### Paramètres
 
-Cliquez sur l'icône engrenage pour accéder à :
+Cliquez sur l'engrenage pour ouvrir le panneau compact ; un deuxième clic, un clic à l'extérieur ou Échap le ferme. L'engrenage reste une icône, discrètement mise en évidence lorsque le panneau est ouvert. Les réglages sont accessibles au clavier et regroupés par durée, son du minuteur et options générales :
 - Personnaliser la durée de chaque mode (sans limite maximale)
 - Activer/désactiver le son
-- Choisir le son de notification (Carillon, Cloche, Numérique)
-- Activer/désactiver Garder éveillé (empêcher l'écran de s'éteindre)
+- Choisir le son de notification (Carillon, Cloche, Numérique) et l'écouter avec le bouton de lecture
+- Activer/désactiver Garder éveillé : l'icône n'est mise en évidence que si le verrou de veille est réellement acquis ; le panneau explique les échecs ou interruptions
 - Basculer le mode sombre
 
 ## Comment ça fonctionne
@@ -76,11 +77,11 @@ Session de concentration → Pause courte → Session de concentration → Pause
 
 ## Compatibilité des navigateurs
 
-Fonctionne mieux avec les navigateurs modernes supportant ES6+ :
-- Chrome 60+
-- Firefox 55+
-- Safari 11+
-- Edge 79+
+Utilisez une version récente de Chrome, Edge, Firefox ou Safari prenant en charge HTML Popover, dialog et Web Audio. Garder éveillé nécessite aussi Screen Wake Lock et l'autorisation du navigateur ; le minuteur fonctionne sans cette option. L'application reste un seul fichier HTML, sans dépendances d'exécution.
+
+## Vérification
+
+Avec Node.js, Playwright et Microsoft Edge installés, exécutez `node --test tests/controls.test.cjs`. Les tests couvrent les ajustements de durée, Undo, le clavier, les échecs de verrou de veille, l'aperçu sonore, l'indépendance du réveil et les dispositions claires/sombres sur huit tailles d'écran. `PLAYWRIGHT_PATH` permet d'indiquer une autre installation de Playwright, `BROWSER_CHANNEL` un autre navigateur Chromium et `TEST_ARTIFACTS` un dossier de captures. Ces outils ne sont nécessaires que pour les tests.
 
 ## Stack technique
 

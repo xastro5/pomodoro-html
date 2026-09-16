@@ -9,7 +9,7 @@ A minimalist Pomodoro timer with a beautiful 7-segment digital clock display, we
 
 ## Features
 
-- **Multiple Timer Modes**: 60 min, 40 min (default), 15 min, and 5 min presets (all customizable)
+- **Grouped Timer Presets**: Focus — Long (60 min), Default (40 min); Break — Long (15 min), Short (5 min). All durations are customizable.
 - **Custom Duration**: Adjust timer length directly (minimum 1 minute, no maximum)
 - **7-Segment Digital Clock**: Real-time clock with classic LED-style display showing date
 - **Session Tracking**: Visual progress dots show completed focus sessions
@@ -18,7 +18,7 @@ A minimalist Pomodoro timer with a beautiful 7-segment digital clock display, we
 - **Alarm Clock**: Set a one-time local alarm with time wheels, selectable tones, sound preview, adjustable snooze, and dismiss controls
 - **Dark/Light Theme**: One-click theme toggle
 - **Adaptive Layout**: Compact portrait and desktop views, with two columns on short landscape screens
-- **Keep Awake**: Prevent screen from sleeping while timer is running
+- **Keep Awake**: Prevent screen from sleeping while the page is visible, with feedback if the browser cannot enable it
 - **UI Lock**: Lock the interface to prevent accidental clicks
 - **Session Reset**: All settings reset on page refresh
 
@@ -31,11 +31,12 @@ Simply open `index.html` in any modern browser. No server or build step required
 - **Start/Pause**: Click the main button to start or pause the timer
 - **Reset**: Restart the selected session duration, including a custom duration
 - **Lock**: Click the lock button to prevent accidental interactions
-- **Mode Selection**: Choose between 60m, 40m, 15m, or 5m presets
-- **Quick Adjust**: Use +/− buttons or type directly to set a custom duration
+- **Mode Selection**: Four buttons grouped under Focus and Break, with text labels and subtle color accents. Hover to see each preset's duration; the Duration field shows the active session's total.
+- **Quick Adjust**: Use +/− or enter a whole number of minutes. Adjustments preserve elapsed progress: after 10 minutes of a 40-minute session, + changes the remaining time from 30 to 31 minutes. A new total must exceed time already elapsed. Custom sessions display Custom Focus or Custom Break.
+- **Undo**: After changing presets, Undo restores the previous session, including its paused or running state. A running session retains its original deadline. Undo is available for eight seconds, extended while hovering or focusing the message; another timer action clears it. Selecting the already active preset leaves its countdown untouched.
 - **Finish Time**: A running timer shows its planned finish time; a paused timer shows Paused. The countdown uses an end timestamp, so delayed browser callbacks do not accumulate drift. Pause preserves the remaining time, and Reset or a manual mode change cancels a pending automatic transition.
 
-Changes to preset settings apply to future sessions while a session is running or paused. The active session keeps its own duration for the countdown, duration field, and progress ring. Changing the duration directly restarts that session's countdown at the new duration.
+Changes to preset settings apply to future sessions while a session is running or paused. The active session keeps its own duration for the countdown, duration field, and progress ring. Direct duration changes preserve elapsed time in both running and paused sessions. Reset starts the full selected duration again.
 
 ### Screen Layout
 
@@ -59,11 +60,11 @@ Use a current browser with HTML dialog and Web Audio support for the alarm. If a
 
 ### Settings
 
-Click the gear icon to access:
+Click the gear icon to open the compact settings panel; click it again, click outside, or press Escape to close. Controls support keyboard navigation, and the gear indicates whether its panel is open. Settings are grouped into Durations, Timer Sound, and General:
 - Customize each mode's duration (no maximum limit)
 - Toggle sound on/off
-- Choose notification sound (Chime, Bell, Digital)
-- Toggle Keep Awake (prevent screen from sleeping)
+- Choose notification sound (Chime, Bell, Digital) and preview it with the play button
+- Toggle Keep Awake (prevent screen from sleeping). Its toolbar highlight reflects an acquired wake lock, and the panel explains failures or interruptions.
 - Toggle dark mode
 
 ## How It Works
@@ -76,11 +77,17 @@ Work Session → Short Break → Work Session → Short Break → Work Session �
 
 ## Browser Compatibility
 
-Works best in modern browsers with ES6+ support:
-- Chrome 60+
-- Firefox 55+
-- Safari 11+
-- Edge 79+
+Use a current Chrome, Edge, Firefox, or Safari with HTML Popover, dialog, and Web Audio support. Keep Awake also needs the Screen Wake Lock API and browser permission; if unavailable, the timer still works. The application itself has no dependencies and remains a single HTML file.
+
+## Verification
+
+The optional browser tests cover preset controls, exact elapsed-time adjustments, Undo, keyboard interactions, wake-lock failures, audio preview, alarm independence, and light/dark layouts at eight screen sizes. With Node.js, Playwright, and Microsoft Edge available, run:
+
+```sh
+node --test tests/controls.test.cjs
+```
+
+Set `PLAYWRIGHT_PATH` if Playwright is installed elsewhere, `BROWSER_CHANNEL` to use another installed Chromium channel, and `TEST_ARTIFACTS` to save layout screenshots. These tools are only needed to run the tests.
 
 ## Tech Stack
 
