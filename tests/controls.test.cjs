@@ -89,7 +89,7 @@ test('seven-segment countdown remains current through completion, mode changes, 
   assert.equal(await button.getAttribute('data-style'),'segments');
 });
 
-test('weather hides missing or invalid readings and recovers with a monochrome symbol', async t => {
+test('weather hides missing or invalid readings and recovers with a colored symbol', async t => {
   const p=await pageFor(t,()=>{
     window.weatherPayload={current:{temperature_2m:22.4,weather_code:2}};window.weatherOffline=false;
     window.fetch=async url=>{
@@ -98,19 +98,59 @@ test('weather hides missing or invalid readings and recovers with a monochrome s
     };
   });
   const weather=p.locator('#weather');await weather.waitFor({state:'visible'});
-  assert.equal(await p.locator('#weatherTemp').textContent(),'22°');
+  assert.equal(await p.locator('#weatherTemp').textContent(),'22℃');
   assert.match(await weather.getAttribute('aria-label'),/Partly cloudy.*Shanghai/);
   assert.equal(await p.locator('#weatherIcon svg').count(),1);
+  const iconColors=await p.locator('#weatherIcon svg > path').evaluateAll(es=>es.map(e=>getComputedStyle(e).color));
+  assert.notEqual(iconColors[0],iconColors[1]);
   await p.evaluate(async()=>{weatherOffline=true;await fetchWeather()});
   assert.equal(await weather.isVisible(),false);assert.equal(await p.locator('#weatherTemp').textContent(),'');
   await p.evaluate(async()=>{weatherOffline=false;weatherPayload={current:{temperature_2m:null,weather_code:0}};await fetchWeather()});
   assert.equal(await weather.isVisible(),false);
   await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:0,weather_code:95}};await fetchWeather()});
-  assert.equal(await weather.isVisible(),true);assert.equal(await p.locator('#weatherTemp').textContent(),'0°');
+  assert.equal(await weather.isVisible(),true);assert.equal(await p.locator('#weatherTemp').textContent(),'0℃');
   assert.match(await weather.getAttribute('aria-label'),/Thunderstorm/);
   await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:-3.2,weather_code:999}};await fetchWeather()});
-  assert.equal(await p.locator('#weatherTemp').textContent(),'-3°');
+  assert.equal(await p.locator('#weatherTemp').textContent(),'-3℃');
   assert.match(await weather.getAttribute('aria-label'),/Current temperature/);
+});
+
+test('weather units convert unrounded Celsius readings by click and keyboard without affecting the timer or alarm', async t => {
+  const p=await pageFor(t,()=>{
+    window.weatherPayload={current:{temperature_2m:22.4,weather_code:2}};window.weatherCalls=0;
+    window.fetch=async url=>{
+      window.weatherCalls++;
+      if(String(url).includes('open-meteo'))return {ok:true,json:async()=>window.weatherPayload};
+      return {ok:true,json:async()=>({status:'success',lat:31.2,lon:121.5,city:'Shanghai'})};
+    };
+  });
+  const button=p.locator('#weatherTemp');await button.waitFor({state:'visible'});
+  await p.locator('#alarmOpen').click();
+  await p.locator('#alarmHour [data-value="10"]').click();await p.locator('#alarmMinute [data-value="30"]').click();await p.locator('#alarmSet').click();
+  await p.locator('#mainBtn').click();await p.clock.runFor(1250);
+  const before=await state(p),calls=await p.evaluate(()=>weatherCalls);
+  for(const [celsius,celsiusText,fahrenheitText]of [[0,'0℃','32℉'],[100,'100℃','212℉'],[-40,'-40℃','-40℉'],[-3.2,'-3℃','26℉'],[0.49,'0℃','33℉']]){
+    await p.evaluate(value=>renderWeather({temperature_2m:value,weather_code:0},'Shanghai'),celsius);
+    assert.equal(await button.textContent(),celsiusText);
+    for(let i=0;i<3;i++){
+      await button.click();assert.equal(await button.textContent(),fahrenheitText);
+      assert.match(await button.getAttribute('aria-label'),/degrees Fahrenheit.*Switch to Celsius/);
+      assert.match(await p.locator('#weather').getAttribute('title'),/℉, Shanghai/);
+      await button.click();assert.equal(await button.textContent(),celsiusText);
+    }
+  }
+  await button.focus();await button.press('Space');assert.equal(await button.textContent(),'33℉');
+  await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:10,weather_code:61}};await fetchWeather()});
+  assert.equal(await button.textContent(),'50℉');
+  await button.press('Enter');assert.equal(await button.textContent(),'10℃');
+  assert.deepEqual(await state(p),before);
+  assert.equal(await p.locator('#alarmSummaryTime').textContent(),'10:30');
+  assert.equal(await p.evaluate(()=>weatherCalls),calls+2,'Only the explicit weather refresh should fetch');
+  await button.click();await p.evaluate(()=>renderWeather(null));
+  assert.equal(await button.isVisible(),false);
+  await p.evaluate(()=>renderWeather({temperature_2m:20,weather_code:0},'Shanghai'));
+  assert.equal(await button.textContent(),'68℉');
+  await p.reload();assert.equal(await button.textContent(),'22℃');
 });
 
 test('gear stays an icon and closes by second click, outside click, Escape, and close button', async t => {

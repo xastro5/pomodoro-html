@@ -74,8 +74,14 @@
     .weather { min-width: 0; overflow: hidden; white-space: nowrap; }
     .weather[hidden] { display: none; }
     .top-bar:has(.weather[hidden]) { justify-content: flex-end; }
-    .weather-icon { display: inline-flex; width: 1em; height: 1em; flex-shrink: 0; }
+    .weather-icon { display: inline-flex; width: 1em; height: 1em; flex-shrink: 0; color: #7896b2; }
     .weather-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+    .weather-icon [data-icon="sun"], .weather-icon [data-icon="partly"] > :first-child { color: #e6a000; }
+    .weather-icon [data-icon="rain"] { color: #3399e6; }
+    .weather-icon [data-icon="snow"] { color: #38a8bd; }
+    .weather-icon [data-icon="thunder"] { color: #a57cdb; }
+    .weather-icon [data-icon="temperature"] { color: #ed8848; }
+    .weather-temp { padding: 0; border: 0; border-radius: 3px; background: none; font: inherit; font-weight: 500; cursor: pointer; flex-shrink: 0; }
     .weather-city { overflow: hidden; text-overflow: ellipsis; }
     .top-actions { flex-shrink: 0; margin-left: 8px; }
     #alarmOpen svg { flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
@@ -318,7 +324,7 @@
 <body>
   <div class="container">
     <div class="top-bar">
-      <div class="weather" id="weather" role="img" aria-label="Current weather" hidden><span class="weather-icon" id="weatherIcon"></span><span class="weather-temp" id="weatherTemp"></span><span class="weather-city" id="weatherCity"></span></div>
+      <div class="weather" id="weather" role="group" aria-label="Current weather" hidden><span class="weather-icon" id="weatherIcon" aria-hidden="true"></span><button class="weather-temp" id="weatherTemp" type="button" aria-label="Current temperature"></button><span class="weather-city" id="weatherCity"></span></div>
       <div class="top-actions">
         <button class="icon-btn" id="alarmOpen" type="button" title="Add alarm" aria-label="Add alarm" aria-haspopup="dialog" aria-controls="alarmEditor"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M5 3 2 6m17-3 3 3M7 20l-1 1m11-1 1 1"/></svg><span id="alarmSummaryTime" hidden></span></button>
         <button class="icon-btn" id="keepAwakeBtn" title="Keep Awake"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button>
@@ -619,19 +625,31 @@ const WEATHER_ICONS={
   temperature:'<path d="M9 14.5V5a3 3 0 0 1 6 0v9.5a5 5 0 1 1-6 0ZM12 7v10"/><circle cx="12" cy="18" r="1.5"/>'
 };
 const WEATHER_CODES={0:['sun','Clear sky'],1:['partly','Mainly clear'],2:['partly','Partly cloudy'],3:['cloud','Overcast'],45:['fog','Fog'],48:['fog','Fog'],51:['rain','Drizzle'],53:['rain','Drizzle'],55:['rain','Drizzle'],61:['rain','Rain'],63:['rain','Rain'],65:['rain','Rain'],71:['snow','Snow'],73:['snow','Snow'],75:['snow','Snow'],80:['rain','Rain showers'],81:['rain','Rain showers'],82:['rain','Rain showers'],95:['thunder','Thunderstorm'],96:['thunder','Thunderstorm'],99:['thunder','Thunderstorm']};
+let currentWeather=null,weatherInFahrenheit=false;
 function renderWeather(current,city='') {
   const widget=document.getElementById('weather'),cityLabel=document.getElementById('weatherCity');
   if(!Number.isFinite(current?.temperature_2m)) {
+    currentWeather=null;
     widget.hidden=true; weatherIcon.replaceChildren(); weatherTemp.textContent=''; cityLabel.textContent='';
     widget.removeAttribute('title'); widget.setAttribute('aria-label','Weather unavailable'); return;
   }
   const [icon,condition]=WEATHER_CODES[current.weather_code]||['temperature','Current temperature'];
   const location=typeof city==='string'?city.trim():'';
-  weatherIcon.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+WEATHER_ICONS[icon]+'</svg>';
-  weatherTemp.textContent=Math.round(current.temperature_2m)+'°'; cityLabel.textContent=location?' in '+location:'';
-  widget.title=condition+', '+weatherTemp.textContent+'C'+(location?', '+location:'');
-  widget.setAttribute('aria-label',widget.title); widget.hidden=false;
+  currentWeather={current:{temperature_2m:current.temperature_2m,weather_code:current.weather_code},city:location};
+  const temperature=Math.round(weatherInFahrenheit?current.temperature_2m*9/5+32:current.temperature_2m);
+  const unitName=weatherInFahrenheit?'Fahrenheit':'Celsius',nextUnit=weatherInFahrenheit?'Celsius':'Fahrenheit';
+  weatherIcon.innerHTML='<svg viewBox="0 0 24 24" data-icon="'+icon+'" aria-hidden="true">'+WEATHER_ICONS[icon]+'</svg>';
+  weatherTemp.textContent=temperature+(weatherInFahrenheit?'℉':'℃'); cityLabel.textContent=location?' in '+location:'';
+  weatherTemp.title='Switch to '+nextUnit;
+  weatherTemp.setAttribute('aria-label',temperature+' degrees '+unitName+'. Switch to '+nextUnit);
+  widget.title=condition+', '+weatherTemp.textContent+(location?', '+location:'');
+  widget.setAttribute('aria-label',condition+', '+temperature+' degrees '+unitName+(location?', '+location:'')); widget.hidden=false;
 }
+weatherTemp.addEventListener('click',()=>{
+  if(!currentWeather)return;
+  weatherInFahrenheit=!weatherInFahrenheit;
+  renderWeather(currentWeather.current,currentWeather.city);
+});
 async function fetchWeather() {
   try {
     let lat,lon,city;
