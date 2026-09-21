@@ -11,13 +11,13 @@ Un minuteur Pomodoro minimaliste avec un magnifique affichage d'horloge numériq
 
 - **Préréglages regroupés** : Focus — Long (60 min), Default (40 min) ; Break — Long (15 min), Short (5 min). Toutes les durées sont personnalisables.
 - **Durée personnalisée** : ajustez la durée du minuteur directement (minimum 1 minute, sans maximum)
-- **Horloge numérique à sept segments** : horloge en temps réel au style LED classique avec affichage de la date
+- **Deux styles d'horloge** : cliquez sur l'heure pour alterner discrètement entre les chiffres à sept segments et la police du décompte, avec la date en dessous
 - **Suivi des sessions** : les points de progression indiquent les sessions de concentration terminées
-- **Widget météo** : détecte automatiquement votre position et affiche la température actuelle
+- **Widget météo** : détecte automatiquement votre position et affiche la température avec un symbole monochrome ; les données indisponibles sont masquées
 - **Notifications sonores** : alertes audio à la fin du minuteur (Carillon, Cloche, Numérique)
 - **Réveil** : alarme ponctuelle à une heure locale, avec rouleaux de sélection, choix et aperçu des sonneries, rappel réglable et arrêt
 - **Thème sombre/clair** : commutation en un clic
-- **Disposition adaptative** : vue verticale compacte et deux colonnes sur les écrans paysage peu hauts
+- **Disposition adaptative** : vue verticale fluide, deux colonnes dans les fenêtres larges et peu hautes, et mini minuteur dans les très petites fenêtres
 - **Garder éveillé** : empêcher l'écran de s'éteindre lorsque la page est visible, avec un message si le navigateur ne peut pas l'activer
 - **Verrouillage de l'interface** : verrouiller l'interface pour éviter les clics accidentels
 - **Réinitialisation de session** : tous les paramètres sont réinitialisés au rafraîchissement de la page
@@ -31,16 +31,28 @@ Ouvrez simplement `index.html` dans n'importe quel navigateur moderne. Aucun ser
 - **Démarrer/Pause** : cliquez sur le bouton principal pour démarrer ou mettre en pause
 - **Réinitialiser** : redémarrez la durée de session choisie, y compris une durée personnalisée
 - **Verrouiller** : cliquez sur le bouton de verrouillage pour éviter les interactions accidentelles
-- **Sélection du mode** : quatre boutons regroupés sous Focus et Break, avec des libellés et des couleurs discrètes. Le survol indique la durée du préréglage ; le champ Duration affiche la durée totale de la session.
+- **Sélection du mode** : quatre boutons compacts, avec des libellés rouges pour la concentration et verts pour les pauses. Chaque bouton contient son propre symbole de concentration ou sa tasse, également cliquable ; le bouton sélectionné porte un fond légèrement teinté. Le survol indique le nom complet et la durée du préréglage ; Duration affiche la durée totale de la session.
 - **Ajustement rapide** : utilisez +/− ou saisissez un nombre entier de minutes. Le temps écoulé est conservé : après 10 minutes d'une session de 40 minutes, + fait passer le temps restant de 30 à 31 minutes. La nouvelle durée totale doit dépasser le temps écoulé. Les sessions personnalisées affichent Custom Focus ou Custom Break.
 - **Annuler un changement** : après un changement de préréglage, Undo restaure la session précédente et son état, en marche ou en pause. Une session en marche conserve son heure de fin initiale. Le message reste huit secondes, prolongées au survol ou au focus clavier ; une autre action sur le minuteur l'efface. Cliquer sur le préréglage déjà sélectionné ne réinitialise pas le décompte.
 - **Heure de fin** : le minuteur en marche affiche l'heure de fin prévue ; en pause, il affiche Paused. Le décompte repose sur une heure de fin, évitant une dérive cumulative lorsque le navigateur retarde les mises à jour. La pause conserve le temps restant ; Réinitialiser ou changer de mode annule toute transition automatique en attente.
 
 Les modifications des préréglages s'appliquent aux prochaines sessions lorsqu'une session est en cours ou en pause. La session active conserve sa propre durée pour le décompte, le champ de durée et l'anneau. Modifier directement la durée conserve le temps écoulé ; Reset redémarre la durée totale choisie.
 
+### Apparence de l'horloge et du décompte
+
+Cliquez sur l'horloge pour alterner entre l'affichage à sept segments et les chiffres de la police système. Les deux montrent la même heure locale et occupent le même espace, avec un fondu discret, sans son ni menu. Entrée et Espace permettent aussi de changer de style lorsque l'horloge a le focus. Le décompte et le réveil restent inchangés ; un rafraîchissement rétablit les sept segments.
+
+Cliquez sur les chiffres du décompte pour changer leur style indépendamment, avec les mêmes commandes au clavier et le même fondu discret. Les deux styles gardent la couleur du texte et la même taille visuelle. Le changement préserve l'échéance, la progression en pause et le réveil. Le style choisi reste actif après une remise à zéro ou une nouvelle session ; un rafraîchissement rétablit les chiffres de la police système. Les longues durées personnalisées s'adaptent à l'espace disponible dans les deux styles.
+
+Les deux styles d'horloge conservent le rouge d'origine et la même taille visuelle. Les commandes de concentration et de pause conservent le rouge et le vert ; le préréglage actif porte un libellé plus gras. L'anneau est plus fin, son épaisseur est plafonnée sur grand écran et le pied de page reste petit, même en plein écran. En paysage ultralarge, les trois commandes du minuteur restent sous les réglages à gauche.
+
 ### Disposition selon l'écran
 
-Le minuteur reste une colonne compacte en portrait, sur tablette et sur un écran de bureau ordinaire. En paysage peu haut, l'horloge et les réglages de durée se placent à côté du décompte. L'espacement s'adapte à la hauteur ; les très petites fenêtres en portrait peuvent défiler. En paysage peu haut, les réglages du réveil défilent indépendamment de l'heure, avec les boutons de validation et de fermeture toujours visibles. En portrait, l'en-tête reste visible pendant le défilement.
+La disposition privilégie une colonne centrée, y compris dans les fenêtres de bureau classiques au format 16:9. Lorsque la largeur et la hauteur le permettent, l'horloge, le décompte, les libellés, les commandes et les espacements grandissent ensemble, jusqu'à 1,5 fois leur taille habituelle. Le mode paysage pour écran ultralarge ne s'active qu'à partir de 1440 pixels CSS de largeur et d'un rapport largeur/hauteur d'au moins 2:1 : l'horloge et les préréglages se placent alors à côté du décompte, avec les mêmes proportions. Un grand écran ne suffit pas à déclencher ce mode. Lorsque la hauteur manque et que la largeur le permet, une disposition paysage compacte garde les commandes accessibles ; la date et les informations météo sont abrégées. Les fenêtres carrées restent en portrait lorsque les commandes tiennent.
+
+Les très petites fenêtres affichent un mini minuteur qui privilégie le décompte, les commandes de lecture et l'accès au réveil. Les mêmes préréglages et réglages de durée passent dans Settings. Une fine barre de progression remplace l'anneau lorsque la hauteur devient très faible. L'horloge secondaire, la météo, les points de session et le pied de page sont omis dans cette vue ; l'apparence et Garder éveillé restent accessibles dans Settings si leurs icônes ne tiennent plus dans la barre d'outils.
+
+Le redimensionnement conserve l'heure de fin, la progression en pause et le réveil. Les réglages prennent la forme d'un panneau compact dans une fenêtre étroite et d'un popover ancré lorsqu'il y a de la place, en laissant l'engrenage accessible pour fermer. Les boutons de validation et de fermeture du réveil restent au-dessus du contenu défilant. Les deux panneaux s'adaptent à la zone visible réduite par un clavier logiciel ; en dessous des tailles minimales pratiques, le contenu peut défiler plutôt que masquer des commandes.
 
 ### Réveil
 
@@ -81,7 +93,7 @@ Utilisez une version récente de Chrome, Edge, Firefox ou Safari prenant en char
 
 ## Vérification
 
-Avec Node.js, Playwright et Microsoft Edge installés, exécutez `node --test tests/controls.test.cjs`. Les tests couvrent les ajustements de durée, Undo, le clavier, les échecs de verrou de veille, l'aperçu sonore, l'indépendance du réveil et les dispositions claires/sombres sur huit tailles d'écran. `PLAYWRIGHT_PATH` permet d'indiquer une autre installation de Playwright, `BROWSER_CHANNEL` un autre navigateur Chromium et `TEST_ARTIFACTS` un dossier de captures. Ces outils ne sont nécessaires que pour les tests.
+Avec Node.js, Playwright et Microsoft Edge installés, exécutez `node --test tests/controls.test.cjs tests/layout.test.cjs`. Les tests couvrent les ajustements de durée, Undo, le clavier, les échecs de verrou de veille, l'aperçu sonore et l'indépendance du réveil. Les vérifications de disposition comprennent 18 tailles représentatives en clair et sombre, 168 tailles intermédiaires, le focus pendant le redimensionnement, le tactile, des tailles équivalentes à un zoom de 200 % et la simulation d'un clavier logiciel. `PLAYWRIGHT_PATH` permet d'indiquer une autre installation de Playwright, `BROWSER_CHANNEL` un autre navigateur Chromium et `TEST_ARTIFACTS` un dossier de captures. Ces outils ne sont nécessaires que pour les tests.
 
 ## Stack technique
 

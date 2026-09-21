@@ -11,13 +11,13 @@ A minimalist Pomodoro timer with a beautiful 7-segment digital clock display, we
 
 - **Grouped Timer Presets**: Focus — Long (60 min), Default (40 min); Break — Long (15 min), Short (5 min). All durations are customizable.
 - **Custom Duration**: Adjust timer length directly (minimum 1 minute, no maximum)
-- **7-Segment Digital Clock**: Real-time clock with classic LED-style display showing date
+- **Two Clock Styles**: Click the real-time clock to switch quietly between classic seven-segment digits and numerals matching the countdown, with the date below
 - **Session Tracking**: Visual progress dots show completed focus sessions
-- **Weather Widget**: Automatically detects your location and shows current temperature
+- **Weather Widget**: Automatically detects your location and shows current temperature with a monochrome weather symbol; unavailable readings are hidden
 - **Sound Notifications**: Audio alerts when timer completes (Chime, Bell, Digital)
 - **Alarm Clock**: Set a one-time local alarm with time wheels, selectable tones, sound preview, adjustable snooze, and dismiss controls
 - **Dark/Light Theme**: One-click theme toggle
-- **Adaptive Layout**: Compact portrait and desktop views, with two columns on short landscape screens
+- **Adaptive Layout**: Fluid portrait and desktop views, two columns in wide shallow windows, and a mini timer for very small windows
 - **Keep Awake**: Prevent screen from sleeping while the page is visible, with feedback if the browser cannot enable it
 - **UI Lock**: Lock the interface to prevent accidental clicks
 - **Session Reset**: All settings reset on page refresh
@@ -31,16 +31,31 @@ Simply open `index.html` in any modern browser. No server or build step required
 - **Start/Pause**: Click the main button to start or pause the timer
 - **Reset**: Restart the selected session duration, including a custom duration
 - **Lock**: Click the lock button to prevent accidental interactions
-- **Mode Selection**: Four buttons grouped under Focus and Break, with text labels and subtle color accents. Hover to see each preset's duration; the Duration field shows the active session's total.
+- **Mode Selection**: Four compact buttons with red focus labels and green break labels. Each button contains its own focus symbol or cup, including within its clickable area; the selected button has a soft tinted pill and a bolder label. Hover to see each preset's full name and duration; the Duration field shows the active session's total.
 - **Quick Adjust**: Use +/− or enter a whole number of minutes. Adjustments preserve elapsed progress: after 10 minutes of a 40-minute session, + changes the remaining time from 30 to 31 minutes. A new total must exceed time already elapsed. Custom sessions display Custom Focus or Custom Break.
 - **Undo**: After changing presets, Undo restores the previous session, including its paused or running state. A running session retains its original deadline. Undo is available for eight seconds, extended while hovering or focusing the message; another timer action clears it. Selecting the already active preset leaves its countdown untouched.
 - **Finish Time**: A running timer shows its planned finish time; a paused timer shows Paused. The countdown uses an end timestamp, so delayed browser callbacks do not accumulate drift. Pause preserves the remaining time, and Reset or a manual mode change cancels a pending automatic transition.
 
 Changes to preset settings apply to future sessions while a session is running or paused. The active session keeps its own duration for the countdown, duration field, and progress ring. Direct duration changes preserve elapsed time in both running and paused sessions. Reset starts the full selected duration again.
 
+### Clock and Timer Appearance
+
+Click the clock itself to alternate between seven-segment and system-font numerals. Both show the same local time and occupy the same space, with a brief fade and no sound or menu. You can also focus the clock and press Enter or Space. Switching styles leaves the countdown and alarm untouched; refreshing restores the seven-segment default.
+
+Click the countdown digits to switch their style independently, with the same keyboard support and quiet fade. Both countdown styles keep the current text color and match in visible size. Changing appearance preserves the running deadline, paused progress, and alarm. The chosen timer style continues through resets and new sessions; refreshing restores the numeral default. Long custom durations fit within the available space in either style.
+
+Both clock styles use the original red and match in visible size; red and green continue to identify focus and break controls. The progress ring has a thinner stroke capped on large screens, and the footer stays small even in fullscreen.
+
 ### Screen Layout
 
-The timer stays a compact vertical column on portrait, tablet, and regular desktop screens. Short landscape windows place the clock and duration controls beside the countdown. Spacing adapts to available height; very small portrait windows scroll naturally. On short landscape screens, alarm settings scroll separately from the time wheels, while Save and Cancel remain visible. In portrait, the alarm header stays visible when the editor scrolls.
+The layout responds to available width and height, including intermediate window sizes:
+
+- **Portrait first:** a centered vertical composition is the default, including ordinary 16:9 desktop windows. When there is enough height and width, the clock, countdown, labels, controls, and spacing grow together, up to 1.5 times their regular size. The clock keeps its proportions relative to the ring.
+- **Extra-wide:** landscape activates at widths of at least 1440 CSS pixels and an aspect ratio of at least 2:1. The clock, presets, and playback controls sit on the left, beside the countdown and session indicator. A large screen alone does not trigger landscape.
+- **Shallow:** when height is limited and width permits, a compact landscape layout keeps the countdown and playback controls accessible. Short dates and reduced weather detail make room for essential controls. Square windows retain portrait when the controls fit.
+- **Mini:** very narrow or short windows prioritize the countdown, playback controls, and alarm access. The same preset and duration controls move into Settings. Very shallow windows replace the ring with a thin progress bar. The secondary clock, weather, session dots, and footer are omitted in this view; appearance and Keep Awake remain available in Settings when their toolbar icons no longer fit.
+
+Resizing preserves the running deadline, paused progress, current preset, and alarm. Settings opens as a compact sheet in narrow windows and an anchored popover when there is room; the gear remains accessible for closing it. The alarm editor keeps Save and Cancel above a scrolling body. Both panels fit the visual viewport when a software keyboard reduces the visible area. Below practical minimum sizes, content can scroll rather than clipping controls.
 
 ### Alarm Clock
 
@@ -81,10 +96,10 @@ Use a current Chrome, Edge, Firefox, or Safari with HTML Popover, dialog, and We
 
 ## Verification
 
-The optional browser tests cover preset controls, exact elapsed-time adjustments, Undo, keyboard interactions, wake-lock failures, audio preview, alarm independence, and light/dark layouts at eight screen sizes. With Node.js, Playwright, and Microsoft Edge available, run:
+The optional browser tests cover preset controls, exact elapsed-time adjustments, Undo, keyboard interactions, wake-lock failures, audio preview, and alarm independence. Layout checks include 18 representative sizes in light/dark mode, a sweep through 168 intermediate sizes, focused edits during resizing, touch controls, 200% zoom-equivalent viewport sizes, and simulated software-keyboard viewport changes. With Node.js, Playwright, and Microsoft Edge available, run:
 
 ```sh
-node --test tests/controls.test.cjs
+node --test tests/controls.test.cjs tests/layout.test.cjs
 ```
 
 Set `PLAYWRIGHT_PATH` if Playwright is installed elsewhere, `BROWSER_CHANNEL` to use another installed Chromium channel, and `TEST_ARTIFACTS` to save layout screenshots. These tools are only needed to run the tests.

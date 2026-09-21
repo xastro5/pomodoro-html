@@ -26,6 +26,93 @@ async function duration(p, value) { await p.locator('#durationInput').fill(Strin
 const settingsOpen = p => p.locator('#settingsPanel').evaluate(e => e.matches(':popover-open'));
 const near = (a,b) => assert(Math.abs(a-b)<0.0001, `${a} != ${b}`);
 
+test('clock style switches by click and keyboard without changing the countdown or alarm', async t => {
+  const p=await pageFor(t),clock=p.getByRole('button',{name:'Use numeral clock style',exact:true});
+  assert.equal(await clock.getAttribute('aria-pressed'),'false');
+  assert.equal(await p.locator('#clockNumerals').textContent(),'09:00:00');
+  await p.locator('#alarmOpen').click();
+  await p.locator('#alarmHour [data-value="10"]').click();await p.locator('#alarmMinute [data-value="30"]').click();await p.locator('#alarmSet').click();
+  await p.locator('#mainBtn').click();await p.clock.runFor(1250);
+  const before=await state(p),audio=await p.evaluate(()=>audioContext?.state||null);
+  await clock.click();
+  assert.equal(await clock.getAttribute('data-style'),'numerals');
+  assert.equal(await clock.getAttribute('aria-pressed'),'true');
+  assert.deepEqual(await state(p),before);
+  assert.equal(await p.locator('#alarmSummaryTime').textContent(),'10:30');
+  assert.equal(await p.evaluate(()=>audioContext?.state||null),audio);
+  await p.clock.fastForward(62000);
+  assert.equal(await p.locator('#clockNumerals').textContent(),'09:01:03');
+  assert.equal(await p.locator('#clockReading').textContent(),'Current time 09:01:03.');
+  await clock.focus();await clock.press('Space');
+  assert.equal(await clock.getAttribute('data-style'),'segments');
+  await clock.press('Enter');assert.equal(await clock.getAttribute('data-style'),'numerals');
+  assert.equal((await state(p)).timerDeadline,before.timerDeadline);
+  await p.reload();assert.equal(await clock.getAttribute('data-style'),'segments');
+});
+
+test('countdown style is independent and changes by click or keyboard without changing timer state', async t => {
+  const p=await pageFor(t),button=p.getByRole('button',{name:'Use seven-segment timer style',exact:true});
+  assert.equal(await button.getAttribute('data-style'),'numerals');
+  await p.locator('#alarmOpen').click();
+  await p.locator('#alarmHour [data-value="10"]').click();await p.locator('#alarmMinute [data-value="30"]').click();await p.locator('#alarmSet').click();
+  await duration(p,100);await p.locator('#mainBtn').click();await p.clock.runFor(1250);
+  const running=await state(p);assert.equal(await time(p),'99:59');
+  await button.click();
+  assert.equal(await button.getAttribute('data-style'),'segments');
+  assert.equal(await button.getAttribute('aria-pressed'),'true');
+  assert.deepEqual(await state(p),running);
+  assert.equal(await p.locator('#timerSegments').getAttribute('data-value'),'99:59');
+  assert.equal(await p.locator('#clockStyleToggle').getAttribute('data-style'),'segments');
+  await p.locator('#clockStyleToggle').click();
+  assert.equal(await p.locator('#clockStyleToggle').getAttribute('data-style'),'numerals');
+  assert.equal(await button.getAttribute('data-style'),'segments');
+  await button.focus();await button.press('Space');assert.equal(await button.getAttribute('data-style'),'numerals');
+  await button.press('Enter');assert.equal(await button.getAttribute('data-style'),'segments');
+  assert.deepEqual(await state(p),running);
+  assert.equal(await p.locator('#alarmSummaryTime').textContent(),'10:30');
+  await p.locator('#mainBtn').click();const paused=await state(p);await button.click();
+  assert.deepEqual(await state(p),paused);
+  await p.reload();assert.equal(await button.getAttribute('data-style'),'numerals');
+});
+
+test('seven-segment countdown remains current through completion, mode changes, and reset', async t => {
+  const p=await pageFor(t),button=p.locator('#timerStyleToggle'),segments=p.locator('#timerSegments');
+  await duration(p,1);await button.click();await p.locator('#mainBtn').click();await p.clock.fastForward(59000);
+  assert.equal(await segments.getAttribute('data-value'),'00:01');
+  await p.clock.runFor(1000);assert.equal(await segments.getAttribute('data-value'),'00:00');
+  await p.clock.runFor(500);assert.equal(await segments.getAttribute('data-value'),'05:00');
+  assert.equal(await button.getAttribute('data-style'),'segments');
+  assert.equal(await p.locator('#modeLabel').textContent(),'BREAK');
+  await p.locator('[data-mode="hour"]').click();assert.equal(await segments.getAttribute('data-value'),'60:00');
+  await p.locator('#mainBtn').click();await p.clock.runFor(1250);await p.locator('#resetBtn').click();
+  assert.equal(await segments.getAttribute('data-value'),'60:00');
+  assert.equal(await button.getAttribute('data-style'),'segments');
+});
+
+test('weather hides missing or invalid readings and recovers with a monochrome symbol', async t => {
+  const p=await pageFor(t,()=>{
+    window.weatherPayload={current:{temperature_2m:22.4,weather_code:2}};window.weatherOffline=false;
+    window.fetch=async url=>{
+      if(String(url).includes('open-meteo'))return {ok:!window.weatherOffline,json:async()=>window.weatherPayload};
+      return {ok:true,json:async()=>({status:'success',lat:31.2,lon:121.5,city:'Shanghai'})};
+    };
+  });
+  const weather=p.locator('#weather');await weather.waitFor({state:'visible'});
+  assert.equal(await p.locator('#weatherTemp').textContent(),'22°');
+  assert.match(await weather.getAttribute('aria-label'),/Partly cloudy.*Shanghai/);
+  assert.equal(await p.locator('#weatherIcon svg').count(),1);
+  await p.evaluate(async()=>{weatherOffline=true;await fetchWeather()});
+  assert.equal(await weather.isVisible(),false);assert.equal(await p.locator('#weatherTemp').textContent(),'');
+  await p.evaluate(async()=>{weatherOffline=false;weatherPayload={current:{temperature_2m:null,weather_code:0}};await fetchWeather()});
+  assert.equal(await weather.isVisible(),false);
+  await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:0,weather_code:95}};await fetchWeather()});
+  assert.equal(await weather.isVisible(),true);assert.equal(await p.locator('#weatherTemp').textContent(),'0°');
+  assert.match(await weather.getAttribute('aria-label'),/Thunderstorm/);
+  await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:-3.2,weather_code:999}};await fetchWeather()});
+  assert.equal(await p.locator('#weatherTemp').textContent(),'-3°');
+  assert.match(await weather.getAttribute('aria-label'),/Current temperature/);
+});
+
 test('gear stays an icon and closes by second click, outside click, Escape, and close button', async t => {
   const p = await pageFor(t), gear = p.locator('#settingsBtn');
   assert.equal(await gear.locator('svg').count(), 1);

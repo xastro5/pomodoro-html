@@ -7,55 +7,75 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box}:root{--bg:#F5F5F7;--card:rgba(255,255,255,0.72);--text-primary:#1D1D1F;--text-secondary:#86868B;--accent-work:#FF3B30;--accent-break:#34C759;--accent-blue:#007AFF;--current-accent:var(--accent-work);--ring-bg:rgba(0,0,0,0.06);--border:rgba(0,0,0,0.06);--clock-color:var(--accent-work)}[data-theme="dark"]{--bg:#000000;--card:rgba(255,255,255,0.08);--text-primary:#F5F5F7;--text-secondary:#86868B;--ring-bg:rgba(255,255,255,0.1);--border:rgba(255,255,255,0.1)}body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Helvetica Neue',Arial,sans-serif;color:var(--text-primary);-webkit-font-smoothing:antialiased;transition:background .3s ease,color .3s ease}.container{width:100%;max-width:420px;padding:1.5rem}.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}.weather{display:flex;align-items:center;gap:6px;color:var(--text-secondary);font-size:.875rem}.weather-icon{font-size:1.125rem}.weather-temp{font-weight:500;color:var(--text-primary)}.weather-city{color:var(--text-secondary)}.top-actions{display:flex;gap:8px}.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px var(--border);border-radius:50%;cursor:pointer;transition:all .2s ease}.icon-btn:hover{transform:scale(1.05)}.icon-btn svg{width:18px;height:18px;fill:var(--text-secondary)}.icon-btn.active svg{fill:var(--accent-blue)}.clock-display{text-align:center;margin-bottom:1.5rem}.digital-clock{display:inline-flex;align-items:center;gap:4px}.digit-group{display:flex;gap:4px}.digit{position:relative;width:28px;height:44px}.digit-segment{position:absolute;background:var(--clock-color);border-radius:1px;opacity:0;transition:opacity .1s ease}.digit-segment.on{opacity:.9}.digit-segment.top{width:26px;height:3px;top:0;left:1px}.digit-segment.top-left{width:3px;height:20px;top:1px;left:0}.digit-segment.top-right{width:3px;height:20px;top:1px;right:0}.digit-segment.middle{width:26px;height:3px;top:20px;left:1px}.digit-segment.bottom-left{width:3px;height:20px;bottom:1px;left:0}.digit-segment.bottom-right{width:3px;height:20px;bottom:1px;right:0}.digit-segment.bottom{width:26px;height:3px;bottom:0;left:1px}.colon{font-size:2rem;font-weight:300;color:var(--clock-color);margin:0 2px;animation:colon-blink 1s step-end infinite}@keyframes colon-blink{0%,100%{opacity:1}50%{opacity:0.3}}.current-date{color:var(--text-secondary);font-size:.875rem;margin-top:.5rem}.mode-picker{display:flex;justify-content:center;gap:8px;margin-bottom:1.5rem}.mode-btn{padding:.5rem 1rem;border:none;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px var(--border);border-radius:20px;cursor:pointer;font-size:.875rem;color:var(--text-secondary);transition:all .2s ease}.mode-btn:hover{transform:scale(1.05)}.mode-btn.active{background:var(--text-primary);color:var(--bg)}.mode-picker.inactive{opacity:.5}.timer-adjust{display:flex;justify-content:center;align-items:center;gap:1rem;margin-bottom:1.5rem}.adjust-btn{width:32px;height:32px;border-radius:50%;border:1px var(--border);background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);cursor:pointer;font-size:1.25rem;color:var(--text-secondary);transition:all .2s ease}.adjust-btn:hover{transform:scale(1.1)}.duration-input-wrapper{display:flex;align-items:center;gap:8px}.adjust-label{font-size:.875rem;color:var(--text-secondary)}.duration-input{width:50px;height:28px;border:1px var(--border);border-radius:6px;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);text-align:center;font-size:.875rem;color:var(--text-primary)}.duration-input::-webkit-inner-spin-button,.duration-input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.timer-container{position:relative;width:200px;height:200px;margin:0 auto 1.5rem}.timer-svg{transform:rotate(-90deg);width:100%;height:100%}.timer-track{fill:none;stroke:var(--ring-bg);stroke-width:8}.timer-progress{fill:none;stroke:var(--clock-color);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .5s ease,stroke 1s ease}.timer-content{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}.timer-time{font-size:2.5rem;font-weight:200;color:var(--text-primary)}.timer-mode-label{font-size:.75rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.1em}.session-progress{display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:1.5rem}.session-text{font-size:.75rem;color:var(--text-secondary)}.session-dots{display:flex;gap:6px}.session-dot{width:8px;height:8px;border-radius:50%;background:var(--ring-bg)}.session-dot.filled{background:var(--accent-work)}.controls{display:flex;justify-content:center;gap:1rem}.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:.875rem 2rem;border:none;border-radius:50px;cursor:pointer;font-size:1rem;font-weight:500;transition:all .2s ease}.btn svg{width:20px;height:20px}.btn-primary{background:var(--accent-work);color:#fff}.btn-primary:hover{transform:scale(1.05)}.btn-primary svg{fill:#fff}.btn-secondary{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px var(--border);color:var(--text-primary);border-radius:50%;width:44px;height:44px;padding:0}.btn-secondary:hover{transform:scale(1.05)}.btn-secondary svg{fill:var(--text-primary)}.settings-panel{position:fixed;top:0;right:-400px;width:400px;max-width:100%;height:100vh;background:var(--bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-left:1px var(--border);padding:1.5rem;transition:right .3s ease;overflow-y:auto;z-index:100}.settings-panel.open{right:0}.settings-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem}.settings-header h2{font-size:1.25rem;font-weight:600}.close-btn{width:32px;height:32px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center}.close-btn svg{width:24px;height:24px;fill:var(--text-secondary)}.setting-item{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px var(--border)}.setting-info h3{font-size:.875rem;font-weight:500;margin-bottom:.25rem}.setting-info p{font-size:.75rem;color:var(--text-secondary)}.setting-controls{display:flex;align-items:center;gap:1rem}.setting-btn{width:28px;height:28px;border-radius:50%;border:1px var(--border);background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);cursor:pointer;font-size:1rem;color:var(--text-secondary);transition:all .2s ease}.setting-btn:hover{transform:scale(1.1)}.setting-value{min-width:2rem;text-align:center;font-weight:500}.toggle{width:48px;height:28px;border-radius:14px;background:var(--ring-bg);cursor:pointer;position:relative;transition:background .2s ease}.toggle::after{content:'';position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.1);transition:transform .2s ease}.toggle.active{background:var(--accent-blue)}.toggle.active::after{transform:translateX(20px)}.sound-selector{display:flex;gap:8px}.sound-option{padding:.5rem 1rem;border:1px var(--border);border-radius:20px;background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);cursor:pointer;font-size:.75rem;color:var(--text-secondary);transition:all .2s ease}.sound-option.active{background:var(--text-primary);color:var(--bg)}.footer{width:100%;text-align:center;padding:16px 24px 24px;font-size:12px;color:#86868b;}
 #lockBtn.active svg{fill:var(--accent-blue)}.container.locked .mode-picker,.container.locked .timer-adjust,.container.locked .controls{pointer-events:none;opacity:0.5}.container.locked #lockBtn{pointer-events:auto;opacity:1}#lockBtn svg,#resetBtn svg{width:14px;height:14px}
-    /* Adapt to available height as well as width, keeping a compact reading area. */
-    body { --layout-gap: 24px; min-height: 100dvh; padding: max(8px, env(safe-area-inset-top)) env(safe-area-inset-right) max(8px, env(safe-area-inset-bottom)) env(safe-area-inset-left); justify-content: safe center; }
-    .container { flex: none; padding: clamp(16px, 4vw, 24px); }
+    /* Layouts respond to usable width and height, independently of device or aspect ratio. */
+    body { --ui-unit: 1px; --layout-gap: clamp(8px, calc(3dvh - 5px), 24px); min-height: 100dvh; padding: max(8px, env(safe-area-inset-top)) env(safe-area-inset-right) max(8px, env(safe-area-inset-bottom)) env(safe-area-inset-left); justify-content: safe center; }
+    .container { flex: none; width: 100%; max-width: 432px; padding: clamp(12px, 3vw, 24px); }
     .top-bar, .clock-display, .mode-picker, .timer-adjust, .timer-container, .session-progress { margin-bottom: var(--layout-gap); }
-    .mode-btn { min-width: 0; }
+    .timer-container { width: clamp(160px, 28dvh, 240px); max-width: 100%; height: auto; aspect-ratio: 1; }
+    .timer-track, .timer-progress { stroke-width: var(--ring-stroke, 6); }
+    .timer-progress { stroke: var(--current-accent); }
     .timer-content { width: 88%; }
-    .timer-time { font-variant-numeric: tabular-nums; }
+    .timer-time { font-size: clamp(2.25rem, 5dvh, 2.75rem); font-variant-numeric: tabular-nums; line-height: 1.15; }
     .timer-end { margin-top: 8px; font-size: .6875rem; line-height: 1.4; color: var(--text-secondary); }
     .timer-end[hidden] { display: none; }
-    .settings-panel { height: 100dvh; padding-top: max(24px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); overscroll-behavior: contain; }
-    .setting-item { gap: 12px; flex-wrap: wrap; }
-    .setting-controls, .toggle { flex-shrink: 0; }
-    .sound-selector { flex-wrap: wrap; }
-    @media (max-width: 359px) {
-      .mode-picker { gap: 6px; }
-      .mode-btn { flex: 1; padding-inline: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mini-progress { display: none; }
+    .date-short { display: none; }
+    .setting-item { gap: 12px; }
+    .setting-controls { flex-shrink: 0; }
+    .footer { padding: 4px 16px clamp(8px, 2dvh, 20px); font-size: 11px; line-height: 1.4; }
+    body[data-layout="wide"] .container { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-areas: 'toolbar toolbar' 'clock timer' 'modes timer' 'duration timer' 'sessions controls'; align-items: center; max-width: 760px; gap: clamp(8px, 2dvh, 14px) clamp(16px, 3vw, 32px); padding-block: 12px; }
+    body[data-layout="wide"] .top-bar, body[data-layout="mini"] .top-bar { grid-area: toolbar; }
+    body[data-layout="wide"] .clock-display { grid-area: clock; }
+    body[data-layout="wide"] .mode-picker { grid-area: modes; }
+    body[data-layout="wide"] .timer-adjust { grid-area: duration; gap: 12px; }
+    body[data-layout="wide"] .timer-container { grid-area: timer; width: min(100%, clamp(136px, 42dvh, 224px)); }
+    body[data-layout="wide"] .session-progress { grid-area: sessions; }
+    body[data-layout="wide"] .controls, body[data-layout="mini"] .controls { grid-area: controls; }
+    body[data-layout="wide"] .container > *, body[data-layout="mini"] .container > * { margin-bottom: 0; }
+    body[data-layout="wide"] .timer-time { font-size: clamp(2rem, 8dvh, 2.5rem); }
+    body[data-layout="mini"] { --layout-gap: 12px; }
+    body[data-layout="mini"] .container { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-areas: 'toolbar' 'timer' 'controls'; gap: 12px; padding-block: 8px; }
+    body[data-layout="mini"] .clock-display, body[data-layout="mini"] .session-progress, body[data-layout="mini"] .weather, body[data-layout="mini"] .footer { display: none; }
+    body[data-layout="mini"] .top-bar { justify-content: flex-end; }
+    body[data-layout="mini"] .timer-container { grid-area: timer; width: clamp(112px, calc(100dvh - 160px), 180px); }
+    body[data-layout="mini"] .timer-time { font-size: 2.25rem; }
+    body[data-layout="mini"] .timer-end { margin-top: 4px; }
+    body[data-layout="mini"] .controls { align-items: center; gap: 12px; }
+    body[data-layout="mini"] .btn-primary { min-width: 72px; padding-inline: 24px; }
+    @media (min-width: 360px) and (max-height: 319px) {
+      body[data-layout="mini"] .container { max-width: 540px; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'toolbar toolbar' 'timer controls'; gap: 12px 16px; }
+      body[data-layout="mini"] .controls { gap: 8px; }
+    }
+    @media (max-height: 259px) {
+      body[data-layout="mini"] { padding-block: max(4px, env(safe-area-inset-top)) max(4px, env(safe-area-inset-bottom)); }
+      body[data-layout="mini"] .container { gap: 8px 16px; padding-block: 4px; }
+      body[data-layout="mini"] .timer-container { width: min(100%, 180px); aspect-ratio: auto; }
+      body[data-layout="mini"] .timer-svg { display: none; }
+      body[data-layout="mini"] .timer-content { position: static; transform: none; width: 100%; }
+      body[data-layout="mini"] .timer-time { font-size: 2rem; }
+      body[data-layout="mini"] .timer-end { font-size: .6875rem; }
+      body[data-layout="mini"] .mini-progress { display: block; height: 3px; margin-top: 8px; border-radius: 3px; overflow: hidden; background: var(--ring-bg); }
+      .mini-progress::before { content: ''; display: block; width: calc(var(--remaining-fraction, 1) * 100%); height: 100%; background: var(--current-accent); }
+    }
+    @media (max-width: 359px), (max-height: 399px) {
+      .date-full, .weather-city { display: none; }
+      .date-short { display: inline; }
       .current-date { font-size: .8125rem; }
-      .settings-panel { padding-inline: 16px; }
     }
-    @media (max-height: 700px) {
-      body { --layout-gap: clamp(10px, 2dvh, 16px); }
-      .container { padding-block: 16px; }
-      .timer-container { width: clamp(156px, 29dvh, 200px); height: clamp(156px, 29dvh, 200px); }
-      .timer-time { font-size: 2.25rem; }
-      .footer { padding: 4px 16px 8px; font-size: 11px; line-height: 1.4; }
-    }
-    @media (min-width: 560px) and (max-height: 560px) and (min-aspect-ratio: 4/3) {
-      .container { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: 'toolbar toolbar' 'clock timer' 'modes timer' 'duration timer' 'sessions controls'; align-items: center; max-width: 740px; gap: 12px 28px; padding: 12px 24px; }
-      .top-bar { grid-area: toolbar; }
-      .clock-display { grid-area: clock; }
-      .mode-picker { grid-area: modes; gap: 6px; }
-      .mode-btn { flex: 1; padding-inline: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .timer-adjust { grid-area: duration; }
-      .timer-container { grid-area: timer; width: clamp(156px, 44dvh, 200px); height: clamp(156px, 44dvh, 200px); }
-      .session-progress { grid-area: sessions; }
-      .controls { grid-area: controls; }
-      .container > * { margin-bottom: 0; }
-      .footer { padding: 4px 16px 8px; }
-    }
-    @media (min-width: 560px) and (max-height: 360px) {
-      body { padding-top: max(2px, env(safe-area-inset-top)); padding-bottom: max(2px, env(safe-area-inset-bottom)); }
-      .container { gap: 8px 20px; padding-block: 8px; }
-      .current-date { font-size: .75rem; }
+    @media (max-width: 359px) { .top-bar:has(#alarmOpen.active) .weather { display: none; } }
+    @media (max-width: 299px) {
+      #themeToggle, #keepAwakeBtn { display: none; }
+      .top-actions { margin-left: 0; }
     }
     /* The alarm stays tucked away until needed; the timer keeps its original footprint. */
     :root { --alarm-accent: #ff9f0a; --alarm-surface: #fff; --alarm-group: #f2f2f7; --alarm-muted: #66666d; }
     [data-theme="dark"] { --alarm-surface: #1c1c1e; --alarm-group: #2c2c2e; --alarm-muted: #a1a1a6; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
     .weather { min-width: 0; overflow: hidden; white-space: nowrap; }
+    .weather[hidden] { display: none; }
+    .top-bar:has(.weather[hidden]) { justify-content: flex-end; }
+    .weather-icon { display: inline-flex; width: 1em; height: 1em; flex-shrink: 0; }
+    .weather-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
     .weather-city { overflow: hidden; text-overflow: ellipsis; }
     .top-actions { flex-shrink: 0; margin-left: 8px; }
     #alarmOpen svg { flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
@@ -122,17 +142,23 @@
     .alarm-dialog-actions { display: grid; gap: 10px; margin-top: 24px; }
     .alarm-button { min-height: 46px; padding: .75rem 1rem; border: 0; border-radius: 24px; background: var(--alarm-group); color: var(--text-primary); font: inherit; font-size: .9375rem; cursor: pointer; }
     .alarm-button.primary { background: var(--alarm-accent); color: #211700; }
-    @media (min-width: 560px) and (max-height: 560px) and (min-aspect-ratio: 4/3) {
-      #alarmEditor[open] { display: flex; flex-direction: column; width: min(640px, calc(100% - 2rem)); overflow: hidden; }
-      #alarmEditor .alarm-editor-header, #alarmNote, #alarmSoundStatus { flex-shrink: 0; }
-      #alarmForm { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; min-height: 0; }
-      .alarm-time-wrap { align-self: center; padding-block: 8px; }
-      .alarm-preferences { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding-inline: 2px; scroll-padding-block: 8px; border-radius: 18px; }
+    .alarm-sheet { inset: auto; margin: 0; left: calc(var(--view-left, 0px) + var(--view-width, 100vw) / 2); top: calc(var(--view-top, 0px) + var(--view-height, 100dvh) / 2); transform: translate(-50%, -50%); width: min(352px, calc(var(--view-width, 100vw) - 24px)); max-height: calc(var(--view-height, 100dvh) - max(12px, env(safe-area-inset-top)) - max(12px, env(safe-area-inset-bottom))); }
+    #alarmEditor[open] { display: flex; flex-direction: column; overflow: hidden; }
+    .alarm-editor-header { position: static; flex-shrink: 0; padding-top: 16px; padding-bottom: 12px; }
+    .alarm-editor-body { min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 0 2px 2px; scroll-padding-block: 8px; }
+    @media (max-height: 599px) {
       .alarm-time-wrap .alarm-wheels { height: calc(var(--wheel-row) * 3); }
       .alarm-time-wrap .alarm-wheels::before { top: var(--wheel-row); }
       .alarm-time-wrap .alarm-wheel { padding-block: var(--wheel-row); -webkit-mask-image: linear-gradient(transparent, #000 33%, #000 67%, transparent); mask-image: linear-gradient(transparent, #000 33%, #000 67%, transparent); }
-      #alarmNote { margin-top: 12px; }
+      .alarm-time-wrap { padding-block: 8px 12px; }
       #alarmNote br { display: none; }
+    }
+    @media (min-width: 480px) and (max-height: 520px) {
+      #alarmEditor { width: min(640px, calc(var(--view-width, 100vw) - 24px)); }
+      #alarmForm { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: 16px; }
+      .alarm-time-wrap { position: sticky; top: 0; background: var(--alarm-surface); }
+      .alarm-time-wrap .alarm-wheel { width: min(84px, 40%); }
+      .alarm-preferences { min-width: 0; }
     }
     @media (prefers-reduced-motion: reduce) { #alarmSound, #alarmSound::before { transition: none; } }
 
@@ -140,21 +166,36 @@
     :root { --focus-ink: #bc3028; --break-ink: #16783a; --focus-tint: rgba(255,59,48,.09); --break-tint: rgba(52,199,89,.12); }
     [data-theme="dark"] { --focus-ink: #ff8178; --break-ink: #79de96; --focus-tint: rgba(255,59,48,.17); --break-tint: rgba(52,199,89,.17); }
     button, input { font-family: inherit; }
+    .icon-btn, .mode-btn, .adjust-btn, .btn { transition: transform .2s ease, background-color .2s ease, color .2s ease; }
     button:focus-visible, input:focus-visible { outline: 2px solid var(--accent-blue); outline-offset: 3px; }
     button:disabled { cursor: default; }
-    .mode-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(100%, 280px); justify-self: center; margin-inline: auto; gap: 16px; }
-    .mode-group { min-width: 0; --mode-ink: var(--focus-ink); --mode-tint: var(--focus-tint); }
+    .clock-switch { position: relative; display: inline-grid; vertical-align: top; max-width: 100%; min-height: 44px; padding: 0; border: 0; border-radius: 8px; background: none; color: var(--clock-color); font: inherit; cursor: pointer; }
+    .clock-switch .digital-clock { grid-area: 1 / 1; }
+    .clock-numerals { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: calc(60 * var(--ui-unit)); font-weight: 200; line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; transform: translateY(var(--clock-numeral-offset, 0px)); opacity: 0; }
+    .clock-switch .digital-clock, .clock-numerals { transition: opacity .16s ease; }
+    .clock-switch[data-style="numerals"] .digital-clock { opacity: 0; }
+    .clock-switch[data-style="numerals"] .clock-numerals { opacity: .9; }
+    .timer-style-switch { position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: 8px; background: none; color: var(--text-primary); font: inherit; text-align: center; cursor: pointer; }
+    .timer-style-switch::after { content: ''; position: absolute; inset: min(0px, calc(50% - 22px)) 0; }
+    .timer-style-switch .timer-time { display: block; white-space: nowrap; }
+    .timer-segments { position: absolute; overflow: visible; fill: currentColor; opacity: 0; pointer-events: none; }
+    .timer-style-switch .timer-time, .timer-segments { transition: opacity .16s ease; }
+    .timer-style-switch[data-style="segments"] .timer-time { opacity: 0; }
+    .timer-style-switch[data-style="segments"] .timer-segments { opacity: 1; }
+    .mode-picker { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); width: min(100%, 328px); justify-self: center; margin-inline: auto; gap: 12px; container-type: inline-size; }
+    .mode-group { display: flex; align-items: center; gap: 3px; min-width: 0; --mode-ink: var(--focus-ink); --mode-tint: var(--focus-tint); }
     .mode-group.break { --mode-ink: var(--break-ink); --mode-tint: var(--break-tint); }
-    .mode-group-label { margin-bottom: 2px; color: var(--mode-ink); text-align: center; font-size: .6875rem; font-weight: 500; letter-spacing: .02em; }
-    .mode-options { display: flex; gap: 2px; }
+    .mode-symbol { width: 14px; height: 14px; flex: 0 0 14px; color: var(--mode-ink); fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
+    .mode-options { display: flex; flex: 1; min-width: 0; gap: 2px; }
     .mode-group + .mode-group { position: relative; }
-    .mode-group + .mode-group::before { content: ''; position: absolute; left: -8px; bottom: 10px; width: 1px; height: 14px; background: var(--border); }
-    .mode-options .mode-btn { position: relative; isolation: isolate; flex: 1; min-height: 34px; padding: 8px 5px; min-width: 0; border: 0; border-radius: 20px; background: transparent; color: var(--alarm-muted); font-size: .8125rem; font-weight: 500; backdrop-filter: none; -webkit-backdrop-filter: none; white-space: nowrap; }
+    .mode-group + .mode-group::before { content: ''; position: absolute; left: -6px; top: calc(50% - 7px); width: 1px; height: 14px; background: var(--border); }
+    .mode-options .mode-btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 4px; flex: 1 0 auto; min-height: 34px; padding: 8px 6px; min-width: 0; border: 0; border-radius: 20px; background: transparent; color: var(--mode-ink); font-size: .8125rem; font-weight: 500; backdrop-filter: none; -webkit-backdrop-filter: none; white-space: nowrap; }
     .mode-options .mode-btn::before { content: ''; position: absolute; z-index: -1; inset: 3px 0; border-radius: inherit; background: transparent; transition: background .2s; }
-    .mode-options .mode-btn:hover { transform: none; color: var(--text-primary); }
-    .mode-options .mode-btn:hover::before { background: var(--ring-bg); }
-    .mode-options .mode-btn.active { background: transparent; color: var(--mode-ink); }
+    .mode-options .mode-btn:hover { transform: none; color: var(--mode-ink); }
+    .mode-options .mode-btn:hover::before { background: var(--mode-tint); }
+    .mode-options .mode-btn.active { background: transparent; color: var(--mode-ink); font-weight: 600; }
     .mode-options .mode-btn.active::before { background: var(--mode-tint); }
+    @container (max-width: 280px) { .mode-options .mode-btn { gap: 3px; padding-inline: 2px; font-size: .75rem; } }
     .timer-mode-label { font-size: .6875rem; letter-spacing: .08em; }
     .btn-primary { background: var(--current-accent); }
     #settingsBtn.active { background: rgba(0,122,255,.1); }
@@ -166,7 +207,23 @@
     .container.locked .controls { pointer-events: auto; opacity: 1; }
     .container.locked .controls > :disabled { opacity: .4; }
     .settings-panel { inset: auto; margin: 0; width: min(352px, calc(100vw - 24px)); height: auto; max-width: none; padding: 18px; border: 1px solid var(--border); border-radius: 24px; background: var(--alarm-surface); color: var(--text-primary); box-shadow: 0 16px 60px rgba(0,0,0,.16); transition: none; scrollbar-width: thin; overflow-y: auto; }
-    .settings-header { margin-bottom: 18px; }
+    .settings-header { position: sticky; top: -18px; z-index: 2; margin: -18px -18px 18px; padding: 18px 18px 12px; background: var(--alarm-surface); }
+    .settings-panel { scroll-padding-block: 78px 12px; overscroll-behavior: contain; }
+    .settings-panel[data-presentation="sheet"] { border-radius: 24px; }
+    .settings-quick { display: grid; gap: 10px; margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .settings-quick[hidden] { display: none; }
+    .settings-quick .mode-picker, .settings-quick .timer-adjust { margin: 0 auto; }
+    .settings-quick .timer-adjust { gap: 12px; }
+    @media (max-width: 279px) {
+      .settings-panel { padding: 12px; }
+      .settings-header { top: -12px; margin: -12px -12px 12px; padding: 12px; }
+      .settings-quick .mode-picker { grid-template-columns: 1fr; gap: 4px; max-width: 180px; }
+      .settings-quick .mode-group + .mode-group::before { display: none; }
+      .setting-item { flex-wrap: wrap; gap: 6px; }
+      .setting-controls { margin-left: auto; }
+      .settings-quick .timer-adjust { gap: 8px; }
+      .duration-input-wrapper { gap: 4px; }
+    }
     .settings-header h2 { font-size: 1rem; letter-spacing: -.02em; }
     .settings-header .close-btn { background: var(--alarm-group); border-radius: 50%; flex-shrink: 0; }
     .settings-header .close-btn svg { width: 18px; height: 18px; }
@@ -195,14 +252,73 @@
     .undo-toast { position: fixed; z-index: 90; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; align-items: center; gap: 20px; max-width: calc(100% - 24px); padding: 5px 8px 5px 16px; border: 1px solid var(--border); border-radius: 18px; background: var(--alarm-surface); box-shadow: 0 6px 30px rgba(0,0,0,.12); font-size: .8125rem; white-space: nowrap; }
     .undo-toast[hidden] { display: none; }
     .undo-toast button { min-height: 36px; padding: 0 10px; border: 0; border-radius: 10px; background: transparent; color: var(--accent-blue); font-size: inherit; font-weight: 600; cursor: pointer; }
-    @media (pointer: coarse) { .mode-options .mode-btn { min-height: 44px; } .mode-options .mode-btn::before { inset-block: 8px; } .mode-group + .mode-group::before { bottom: 15px; } }
+    body[data-layout="mini"] .undo-toast { position: static; transform: none; margin: 8px 12px; flex-shrink: 0; }
+    @media (pointer: coarse) { .mode-options .mode-btn { min-height: 44px; } .mode-options .mode-btn::before { inset-block: 8px; } }
+    /* Portrait is the default. Scale the whole composition together when height permits. */
+    @media (min-width: 640px) and (min-height: 820px), (min-width: 1440px) and (min-aspect-ratio: 2/1) and (min-height: 521px) {
+      body { --ui-unit: clamp(1px, calc(.125dvh - .025px), 1.5px); --layout-gap: calc(24 * var(--ui-unit)); }
+      .container { max-width: calc(432 * var(--ui-unit)); padding: calc(24 * var(--ui-unit)); }
+      .weather { gap: calc(6 * var(--ui-unit)); font-size: calc(14 * var(--ui-unit)); }
+      .weather-icon { font-size: calc(18 * var(--ui-unit)); }
+      .top-actions { gap: calc(8 * var(--ui-unit)); margin-left: calc(8 * var(--ui-unit)); }
+      .icon-btn { width: calc(36 * var(--ui-unit)); height: calc(36 * var(--ui-unit)); }
+      .icon-btn svg { width: calc(18 * var(--ui-unit)); height: calc(18 * var(--ui-unit)); }
+      #alarmOpen.active { padding-inline: calc(10 * var(--ui-unit)); gap: calc(6 * var(--ui-unit)); border-radius: calc(18 * var(--ui-unit)); }
+      #alarmSummaryTime { font-size: calc(12 * var(--ui-unit)); }
+      .digital-clock, .digit-group { gap: calc(4 * var(--ui-unit)); }
+      .digit { width: calc(28 * var(--ui-unit)); height: calc(44 * var(--ui-unit)); }
+      .digit-segment { border-radius: var(--ui-unit); }
+      .digit-segment.top, .digit-segment.middle, .digit-segment.bottom { width: calc(26 * var(--ui-unit)); height: calc(3 * var(--ui-unit)); left: var(--ui-unit); }
+      .digit-segment.top-left, .digit-segment.top-right, .digit-segment.bottom-left, .digit-segment.bottom-right { width: calc(3 * var(--ui-unit)); height: calc(20 * var(--ui-unit)); }
+      .digit-segment.top-left, .digit-segment.top-right { top: var(--ui-unit); }
+      .digit-segment.bottom-left, .digit-segment.bottom-right { bottom: var(--ui-unit); }
+      .digit-segment.middle { top: calc(20 * var(--ui-unit)); }
+      .colon { font-size: calc(32 * var(--ui-unit)); margin-inline: calc(2 * var(--ui-unit)); }
+      .current-date { margin-top: calc(8 * var(--ui-unit)); font-size: calc(14 * var(--ui-unit)); }
+      .container > .mode-picker { width: min(100%, calc(328 * var(--ui-unit))); gap: calc(12 * var(--ui-unit)); }
+      .container .mode-options { gap: calc(2 * var(--ui-unit)); }
+      .container .mode-options .mode-btn { min-height: max(34px, calc(34 * var(--ui-unit))); padding: calc(8 * var(--ui-unit)) calc(6 * var(--ui-unit)); gap: calc(4 * var(--ui-unit)); font-size: calc(13 * var(--ui-unit)); border-radius: calc(20 * var(--ui-unit)); }
+      .container .mode-options .mode-btn::before { inset-block: calc(3 * var(--ui-unit)); }
+      .container .mode-symbol { width: calc(14 * var(--ui-unit)); height: calc(14 * var(--ui-unit)); flex-basis: calc(14 * var(--ui-unit)); }
+      .container .mode-group + .mode-group::before { left: calc(-6 * var(--ui-unit)); height: calc(14 * var(--ui-unit)); top: calc(50% - 7 * var(--ui-unit)); }
+      .container > .timer-adjust { gap: calc(16 * var(--ui-unit)); }
+      .container .adjust-btn { width: calc(32 * var(--ui-unit)); height: calc(32 * var(--ui-unit)); font-size: calc(20 * var(--ui-unit)); }
+      .container .duration-input-wrapper { gap: calc(8 * var(--ui-unit)); }
+      .container .adjust-label, .container .duration-input { font-size: calc(14 * var(--ui-unit)); }
+      .container .duration-input { width: calc(50 * var(--ui-unit)); height: calc(28 * var(--ui-unit)); border-radius: calc(6 * var(--ui-unit)); }
+      .timer-container { width: calc(240 * var(--ui-unit)); }
+      .timer-time { font-size: calc(44 * var(--ui-unit)); }
+      .timer-mode-label { font-size: calc(11 * var(--ui-unit)); }
+      .timer-end { margin-top: calc(8 * var(--ui-unit)); font-size: calc(11 * var(--ui-unit)); }
+      .session-progress { gap: calc(8 * var(--ui-unit)); }
+      .session-text { font-size: calc(12 * var(--ui-unit)); }
+      .session-dots { gap: calc(6 * var(--ui-unit)); }
+      .session-dot { width: calc(8 * var(--ui-unit)); height: calc(8 * var(--ui-unit)); }
+      .controls { gap: calc(16 * var(--ui-unit)); }
+      .btn-primary { padding: calc(14 * var(--ui-unit)) calc(32 * var(--ui-unit)); }
+      .btn svg { width: calc(20 * var(--ui-unit)); height: calc(20 * var(--ui-unit)); }
+      .btn-secondary { width: calc(44 * var(--ui-unit)); height: calc(44 * var(--ui-unit)); }
+      #lockBtn svg { width: calc(17 * var(--ui-unit)); height: calc(17 * var(--ui-unit)); }
+      #resetBtn svg { width: calc(14 * var(--ui-unit)); height: calc(14 * var(--ui-unit)); }
+      .footer { padding-block: calc(4 * var(--ui-unit)) calc(20 * var(--ui-unit)); }
+    }
+    body[data-layout="landscape"] .container { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: 'toolbar toolbar' 'clock timer' 'modes timer' 'duration timer' 'controls timer' '. sessions'; align-items: center; width: calc(776 * var(--ui-unit)); max-width: 100%; gap: var(--layout-gap) calc(72 * var(--ui-unit)); }
+    body[data-layout="landscape"] .container > * { margin-bottom: 0; }
+    body[data-layout="landscape"] .top-bar { grid-area: toolbar; }
+    body[data-layout="landscape"] .clock-display { grid-area: clock; }
+    body[data-layout="landscape"] .mode-picker { grid-area: modes; }
+    body[data-layout="landscape"] .timer-adjust { grid-area: duration; }
+    body[data-layout="landscape"] .timer-container { grid-area: timer; width: calc(280 * var(--ui-unit)); }
+    body[data-layout="landscape"] .session-progress { grid-area: sessions; }
+    body[data-layout="landscape"] .controls { grid-area: controls; }
+    @media (pointer: coarse) { .container .mode-options .mode-btn { min-height: max(44px, calc(34 * var(--ui-unit))); } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="top-bar">
-      <div class="weather"><span class="weather-icon" id="weatherIcon">☀️</span><span class="weather-temp" id="weatherTemp">--°</span><span class="weather-city" id="weatherCity"></span></div>
+      <div class="weather" id="weather" role="img" aria-label="Current weather" hidden><span class="weather-icon" id="weatherIcon"></span><span class="weather-temp" id="weatherTemp"></span><span class="weather-city" id="weatherCity"></span></div>
       <div class="top-actions">
         <button class="icon-btn" id="alarmOpen" type="button" title="Add alarm" aria-label="Add alarm" aria-haspopup="dialog" aria-controls="alarmEditor"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M5 3 2 6m17-3 3 3M7 20l-1 1m11-1 1 1"/></svg><span id="alarmSummaryTime" hidden></span></button>
         <button class="icon-btn" id="keepAwakeBtn" title="Keep Awake"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button>
@@ -211,23 +327,27 @@
       </div>
     </div>
     <div class="clock-display">
-      <div class="digital-clock" id="digitalClock">
-        <div class="digit-group"><div class="digit" id="hourTens"></div><div class="digit" id="hourOnes"></div></div>
-        <span class="colon">:</span>
-        <div class="digit-group"><div class="digit" id="minTens"></div><div class="digit" id="minOnes"></div></div>
-        <span class="colon">:</span>
-        <div class="digit-group"><div class="digit" id="secTens"></div><div class="digit" id="secOnes"></div></div>
-      </div>
-      <div class="current-date" id="currentDate">Monday, June 1</div>
+      <button class="clock-switch" id="clockStyleToggle" type="button" data-style="segments" aria-label="Use numeral clock style" aria-pressed="false" aria-describedby="clockReading clockStyleHelp" title="Switch to numeral clock">
+        <span class="digital-clock" id="digitalClock" aria-hidden="true">
+          <span class="digit-group"><span class="digit" id="hourTens"></span><span class="digit" id="hourOnes"></span></span>
+          <span class="colon">:</span>
+          <span class="digit-group"><span class="digit" id="minTens"></span><span class="digit" id="minOnes"></span></span>
+          <span class="colon">:</span>
+          <span class="digit-group"><span class="digit" id="secTens"></span><span class="digit" id="secOnes"></span></span>
+        </span>
+        <span class="clock-numerals" id="clockNumerals" aria-hidden="true"></span>
+      </button>
+      <span class="sr-only" id="clockReading"></span><span class="sr-only" id="clockStyleHelp">Click, or press Enter or Space, to switch clock style.</span>
+      <div class="current-date" id="currentDate"><span class="date-full" id="dateFull"></span><span class="date-short" id="dateShort"></span></div>
     </div>
     <div class="mode-picker" aria-label="Timer presets">
       <div class="mode-group" role="group" aria-labelledby="focusGroupLabel">
-        <div class="mode-group-label" id="focusGroupLabel">Focus</div>
-        <div class="mode-options"><button class="mode-btn" data-mode="hour">Long</button><button class="mode-btn active" data-mode="work">Default</button></div>
+        <span class="sr-only" id="focusGroupLabel">Focus</span>
+        <div class="mode-options"><button class="mode-btn" data-mode="hour"><svg class="mode-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2"/></svg>Long</button><button class="mode-btn active" data-mode="work"><svg class="mode-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2"/></svg>Default</button></div>
       </div>
       <div class="mode-group break" role="group" aria-labelledby="breakGroupLabel">
-        <div class="mode-group-label" id="breakGroupLabel">Break</div>
-        <div class="mode-options"><button class="mode-btn" data-mode="long">Long</button><button class="mode-btn" data-mode="short">Short</button></div>
+        <span class="sr-only" id="breakGroupLabel">Break</span>
+        <div class="mode-options"><button class="mode-btn" data-mode="long"><svg class="mode-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5Zm12 1h2a3 3 0 0 1 0 6h-2M3 22h15M8 3v2m5-3v3"/></svg>Long</button><button class="mode-btn" data-mode="short"><svg class="mode-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5Zm12 1h2a3 3 0 0 1 0 6h-2M3 22h15M8 3v2m5-3v3"/></svg>Short</button></div>
       </div>
     </div>
     <div class="timer-adjust">
@@ -237,7 +357,13 @@
     </div>
     <div class="timer-container">
       <svg class="timer-svg" viewBox="0 0 200 200"><circle class="timer-track" cx="100" cy="100" r="96"/><circle class="timer-progress" id="progress" cx="100" cy="100" r="96"/></svg>
-      <div class="timer-content"><div class="timer-time" id="time">40:00</div><div class="timer-mode-label" id="modeLabel">Focus</div><div class="timer-end" id="timerEnd" hidden></div></div>
+      <div class="timer-content">
+        <button class="timer-style-switch" id="timerStyleToggle" type="button" data-style="numerals" aria-label="Use seven-segment timer style" aria-pressed="false" aria-describedby="timerReading timerStyleHelp" title="Switch to seven-segment timer">
+          <span class="timer-time" id="time" aria-hidden="true">40:00</span><svg class="timer-segments" id="timerSegments" aria-hidden="true" preserveAspectRatio="none"></svg>
+        </button>
+        <span class="sr-only" id="timerReading"></span><span class="sr-only" id="timerStyleHelp">Click, or press Enter or Space, to switch countdown style.</span>
+        <div class="timer-mode-label" id="modeLabel">Focus</div><div class="timer-end" id="timerEnd" hidden></div><div class="mini-progress" aria-hidden="true"></div>
+      </div>
     </div>
     <div class="session-progress"><span class="session-text">Session</span><div class="session-dots" id="sessionDots"><div class="session-dot filled"></div><div class="session-dot"></div><div class="session-dot"></div><div class="session-dot"></div></div></div>
     <div class="controls">
@@ -254,6 +380,7 @@
       <h2 id="alarmHeading">Add Alarm</h2>
       <button class="alarm-round save" id="alarmSet" type="submit" form="alarmForm" aria-label="Save alarm" title="Save alarm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4.5 4.5L19 6"/></svg></button>
     </header>
+    <div class="alarm-editor-body">
     <form id="alarmForm">
       <div class="alarm-time-wrap">
         <input id="alarmTime" type="hidden">
@@ -293,6 +420,7 @@
     </form>
     <p class="alarm-note" id="alarmNote">Keep this tab open and your device awake.<br> Alarms reset on refresh.</p>
     <p class="alarm-note" id="alarmSoundStatus" role="status"></p>
+    </div>
   </dialog>
   <dialog class="alarm-sheet alarm-dialog" id="alarmDialog" aria-labelledby="alarmDialogTitle" aria-describedby="alarmDialogMessage">
     <h2 id="alarmDialogTitle">Alarm</h2>
@@ -306,6 +434,7 @@
   </dialog>
   <div class="settings-panel" id="settingsPanel" popover="auto" role="dialog" aria-labelledby="settingsHeading">
     <header class="settings-header"><h2 id="settingsHeading">Settings</h2><button class="close-btn" id="closeSettings" type="button" title="Close settings" aria-label="Close settings" autofocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 4.6 6 6 6-6L19.4 6l-6 6 6 6-1.4 1.4-6-6-6 6L4.6 18l6-6-6-6z"/></svg></button></header>
+    <section class="settings-quick" id="settingsQuickControls" aria-label="Current timer" hidden></section>
     <section class="settings-section" aria-labelledby="durationSettingsHeading">
       <h3 id="durationSettingsHeading">Durations · minutes</h3>
       <div class="settings-group">
@@ -347,7 +476,7 @@ let sessionDuration=timeRemaining,remainingMs=timeRemaining*1000,timerDeadline=n
 const timeDisplay=document.getElementById('time'),modeLabel=document.getElementById('modeLabel'),progress=document.getElementById('progress'),mainBtn=document.getElementById('mainBtn'),resetBtn=document.getElementById('resetBtn'),modeBtns=document.querySelectorAll('.mode-btn'),sessionDots=document.getElementById('sessionDots'),settingsBtn=document.getElementById('settingsBtn'),settingsPanel=document.getElementById('settingsPanel'),closeSettings=document.getElementById('closeSettings'),soundToggle=document.getElementById('soundToggle'),darkModeToggle=document.getElementById('darkModeToggle'),themeToggle=document.getElementById('themeToggle'),decreaseBtn=document.getElementById('decreaseTime'),increaseBtn=document.getElementById('increaseTime'),durationInput=document.getElementById('durationInput'),currentDateEl=document.getElementById('currentDate'),weatherIcon=document.getElementById('weatherIcon'),weatherTemp=document.getElementById('weatherTemp'),keepAwakeToggle=document.getElementById('keepAwakeToggle'),keepAwakeBtn=document.getElementById('keepAwakeBtn'),lockBtn=document.getElementById('lockBtn');
 const modeValues={hour:document.getElementById('hourValue'),work:document.getElementById('workValue'),short:document.getElementById('shortValue'),long:document.getElementById('longValue')};
 const CIRCUMFERENCE=2*Math.PI*96;progress.style.strokeDasharray=CIRCUMFERENCE;
-function createSegments(digitEl){const segments=['top','top-left','top-right','middle','bottom-left','bottom-right','bottom'];segments.forEach(seg=>{const el=document.createElement('div');el.className='digit-segment '+seg;el.dataset.segment=seg;digitEl.appendChild(el)})}
+function createSegments(digitEl){const segments=['top','top-left','top-right','middle','bottom-left','bottom-right','bottom'];segments.forEach(seg=>{const el=document.createElement('span');el.className='digit-segment '+seg;el.dataset.segment=seg;digitEl.appendChild(el)})}
 ['hourTens','hourOnes','minTens','minOnes','secTens','secOnes'].forEach(id=>createSegments(document.getElementById(id)));
 function renderDigit(digitEl,value){const activeSegments=SEGMENTS[value]||[];digitEl.querySelectorAll('.digit-segment').forEach(seg=>{seg.classList.toggle('on',activeSegments.includes(seg.dataset.segment))})}
 let audioContext=null;
@@ -390,9 +519,132 @@ function applyTheme() {
     : '<path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/>';
 }
 function toggleTheme(){config.darkMode=!config.darkMode;applyTheme()}
-function updateClock(){const now=new Date();const h=now.getHours().toString().padStart(2,'0'),m=now.getMinutes().toString().padStart(2,'0'),s=now.getSeconds().toString().padStart(2,'0');renderDigit(document.getElementById('hourTens'),parseInt(h[0]));renderDigit(document.getElementById('hourOnes'),parseInt(h[1]));renderDigit(document.getElementById('minTens'),parseInt(m[0]));renderDigit(document.getElementById('minOnes'),parseInt(m[1]));renderDigit(document.getElementById('secTens'),parseInt(s[0]));renderDigit(document.getElementById('secOnes'),parseInt(s[1]));const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],months=['January','February','March','April','May','June','July','August','September','October','November','December'];currentDateEl.textContent=days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear()}
-const WEATHER_CODES={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌦️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
-async function fetchWeather(){try{let lat,lon,city;const geoSources=[{url:'http://ip-api.com/json/?fields=status,country,city,lat,lon',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.status==='success'?{lat:d.lat,lon:d.lon,city:d.city}:null}},{url:'https://ip-api.com/json/?fields=status,country,city,lat,lon',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.status==='success'?{lat:d.lat,lon:d.lon,city:d.city}:null}},{url:'https://ipwho.is/',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.success?{lat:d.latitude,lon:d.longitude,city:d.city}:null}},{url:'https://ipapi.co/json/',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.latitude?{lat:d.latitude,lon:d.longitude,city:d.city}:null}}];for(const src of geoSources){try{const res=await fetch(src.url);if(src.ok(res)){const geo=await src.parse(res);if(geo){lat=geo.lat;lon=geo.lon;city=geo.city;break}}}catch{continue}}if(lat===undefined)throw new Error('Geolocation failed');const weatherRes=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code&timezone=auto'),data=await weatherRes.json(),{temperature_2m,weather_code}=data.current;weatherIcon.textContent=WEATHER_CODES[weather_code]||'🌡️';weatherTemp.textContent=Math.round(temperature_2m)+'°';document.getElementById('weatherCity').textContent=city?' in '+city:''}catch{weatherIcon.textContent='🌡️';weatherTemp.textContent='--°';document.getElementById('weatherCity').textContent=''}}
+const clockStyleToggle=document.getElementById('clockStyleToggle'),clockNumerals=document.getElementById('clockNumerals'),clockReading=document.getElementById('clockReading');
+const clockFontMeasure=document.createElement('canvas').getContext('2d');
+const timerStyleToggle=document.getElementById('timerStyleToggle'),timerSegments=document.getElementById('timerSegments'),timerReading=document.getElementById('timerReading');
+const TIMER_SEGMENT_RECTS={top:[1,0,26,3],'top-left':[0,1,3,20],'top-right':[25,1,3,20],middle:[1,20,26,3],'bottom-left':[0,23,3,20],'bottom-right':[25,23,3,20],bottom:[1,41,26,3]};
+function fitTimerReadout() {
+  const available=timerStyleToggle.clientWidth;
+  if(!available||!clockFontMeasure) return;
+  timeDisplay.style.removeProperty('font-size');
+  const range=document.createRange();range.selectNodeContents(timeDisplay);
+  let style=getComputedStyle(timeDisplay),textBox=range.getBoundingClientRect();
+  // Keep long custom durations inside the ring in either style.
+  if(textBox.width>available-4) {
+    timeDisplay.style.fontSize=parseFloat(style.fontSize)*(available-4)/textBox.width+'px';
+    style=getComputedStyle(timeDisplay);textBox=range.getBoundingClientRect();
+  }
+  clockFontMeasure.font=style.fontWeight+' '+style.fontSize+' '+style.fontFamily;
+  const metrics=clockFontMeasure.measureText(timeDisplay.textContent),height=metrics.actualBoundingBoxAscent+metrics.actualBoundingBoxDescent;
+  if(!(height>0)) return;
+  const buttonBox=timerStyleToggle.getBoundingClientRect(),numberBox=timeDisplay.getBoundingClientRect();
+  const baseline=(parseFloat(style.lineHeight)-metrics.fontBoundingBoxAscent-metrics.fontBoundingBoxDescent)/2+metrics.fontBoundingBoxAscent;
+  const top=Number.isFinite(baseline)?numberBox.top-buttonBox.top+baseline-metrics.actualBoundingBoxAscent:(buttonBox.height-height)/2;
+  timerSegments.style.left=textBox.left-buttonBox.left-metrics.actualBoundingBoxLeft+'px';
+  timerSegments.style.top=top+'px';
+  timerSegments.style.width=Math.max(1,textBox.width-metrics.width+metrics.actualBoundingBoxLeft+metrics.actualBoundingBoxRight)+'px';
+  timerSegments.style.height=height+'px';
+}
+function renderTimerReadout(text) {
+  timeDisplay.textContent=text;
+  if(timerSegments.dataset.value===text) return;
+  let x=0,shapes='';
+  for(const digit of text) {
+    if(digit===':') {
+      shapes+='<rect x="'+(x+2)+'" y="13" width="4" height="4" rx=".7"/><rect x="'+(x+2)+'" y="27" width="4" height="4" rx=".7"/>';x+=12;
+    } else {
+      for(const name of SEGMENTS[digit]||[]) {
+        const [left,top,width,height]=TIMER_SEGMENT_RECTS[name];
+        shapes+='<rect x="'+(x+left)+'" y="'+top+'" width="'+width+'" height="'+height+'" rx="1"/>';
+      }
+      x+=32;
+    }
+  }
+  timerSegments.setAttribute('viewBox','0 0 '+(x-4)+' 44');timerSegments.innerHTML=shapes;timerSegments.dataset.value=text;
+  timerReading.textContent=Math.floor(timeRemaining/60)+' minutes, '+timeRemaining%60+' seconds remaining.';
+  fitTimerReadout();
+}
+timerStyleToggle.addEventListener('click',()=>{
+  const segments=timerStyleToggle.dataset.style!=='segments';
+  timerStyleToggle.dataset.style=segments?'segments':'numerals';
+  timerStyleToggle.setAttribute('aria-pressed',String(segments));
+  timerStyleToggle.title=segments?'Switch to numeral timer':'Switch to seven-segment timer';
+  fitTimerReadout();
+});
+function fitClockNumerals() {
+  const height=document.getElementById('hourTens').getBoundingClientRect().height;
+  const width=document.getElementById('digitalClock').getBoundingClientRect().width;
+  if(!height||!width||!clockFontMeasure||!clockNumerals.textContent) return;
+  // Match visible glyphs, not their larger font boxes; measure the actual system font.
+  const style=getComputedStyle(clockNumerals);
+  clockFontMeasure.font=style.fontWeight+' 100px '+style.fontFamily;
+  const metrics=clockFontMeasure.measureText('0123456789');
+  const inkHeight=metrics.actualBoundingBoxAscent+metrics.actualBoundingBoxDescent;
+  if(!(inkHeight>0)) return;
+  const size=height*100/inkHeight;
+  clockNumerals.style.fontSize=size+'px';
+  clockNumerals.style.letterSpacing='0px';
+  const textRange=document.createRange();textRange.selectNodeContents(clockNumerals);
+  const naturalWidth=textRange.getBoundingClientRect().width;
+  clockNumerals.style.letterSpacing=(width-naturalWidth)/clockNumerals.textContent.length+'px';
+  const offset=(metrics.actualBoundingBoxAscent-metrics.actualBoundingBoxDescent-metrics.fontBoundingBoxAscent+metrics.fontBoundingBoxDescent)*size/200;
+  clockNumerals.style.setProperty('--clock-numeral-offset',Number.isFinite(offset)?offset+'px':'0px');
+}
+document.fonts.ready.then(()=>{fitClockNumerals();fitTimerReadout()});
+function updateClock() {
+  const now=new Date(),h=String(now.getHours()).padStart(2,'0'),m=String(now.getMinutes()).padStart(2,'0'),s=String(now.getSeconds()).padStart(2,'0');
+  const digits=h+m+s;
+  ['hourTens','hourOnes','minTens','minOnes','secTens','secOnes'].forEach((id,i)=>renderDigit(document.getElementById(id),Number(digits[i])));
+  clockNumerals.textContent=h+':'+m+':'+s;
+  clockReading.textContent='Current time '+clockNumerals.textContent+'.';
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('dateFull').textContent=days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
+  document.getElementById('dateShort').textContent=days[now.getDay()].slice(0,3)+', '+months[now.getMonth()].slice(0,3)+' '+now.getDate();
+}
+clockStyleToggle.addEventListener('click',()=>{
+  const numerals=clockStyleToggle.dataset.style!=='numerals';
+  clockStyleToggle.dataset.style=numerals?'numerals':'segments';
+  clockStyleToggle.setAttribute('aria-pressed',String(numerals));
+  clockStyleToggle.title=numerals?'Switch to seven-segment clock':'Switch to numeral clock';
+  updateClock();
+});
+const WEATHER_ICONS={
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/>',
+  partly:'<path d="M8 2v2M2 8h2m-.2-4.2 1.4 1.4M12.8 3.8l-1.4 1.4M5 11a4 4 0 1 1 7-4"/><path d="M8 20a4 4 0 1 1 .3-8 5.5 5.5 0 0 1 10.5 1.5A3.3 3.3 0 1 1 19 20Z"/>',
+  cloud:'<path d="M6.5 19a4.5 4.5 0 1 1 .2-9A6.5 6.5 0 0 1 19 11a4 4 0 0 1 0 8Z"/>',
+  fog:'<path d="M7 11a4 4 0 0 1 0-8 5 5 0 0 1 9 2 3 3 0 0 1 1 6M3 15h18M5 19h14"/>',
+  rain:'<path d="M5 14a3.5 3.5 0 0 1 0-7 5.5 5.5 0 0 1 10.7-1.5A4.3 4.3 0 0 1 19 14M7 17l-1 3m6-3-1 3m6-3-1 3"/>',
+  snow:'<path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 4l3 3 3-3M9 20l3-3 3 3M4 11l4-1-1-4m10 12-1-4 4-1M4 13l4 1-1 4m10-12-1 4 4 1"/>',
+  thunder:'<path d="M5 15a4 4 0 1 1 .4-8 5.5 5.5 0 0 1 10.3-1.5A4.5 4.5 0 0 1 19 14M12 11l-4 6h5l-2 5 7-9h-5l2-2"/>',
+  temperature:'<path d="M9 14.5V5a3 3 0 0 1 6 0v9.5a5 5 0 1 1-6 0ZM12 7v10"/><circle cx="12" cy="18" r="1.5"/>'
+};
+const WEATHER_CODES={0:['sun','Clear sky'],1:['partly','Mainly clear'],2:['partly','Partly cloudy'],3:['cloud','Overcast'],45:['fog','Fog'],48:['fog','Fog'],51:['rain','Drizzle'],53:['rain','Drizzle'],55:['rain','Drizzle'],61:['rain','Rain'],63:['rain','Rain'],65:['rain','Rain'],71:['snow','Snow'],73:['snow','Snow'],75:['snow','Snow'],80:['rain','Rain showers'],81:['rain','Rain showers'],82:['rain','Rain showers'],95:['thunder','Thunderstorm'],96:['thunder','Thunderstorm'],99:['thunder','Thunderstorm']};
+function renderWeather(current,city='') {
+  const widget=document.getElementById('weather'),cityLabel=document.getElementById('weatherCity');
+  if(!Number.isFinite(current?.temperature_2m)) {
+    widget.hidden=true; weatherIcon.replaceChildren(); weatherTemp.textContent=''; cityLabel.textContent='';
+    widget.removeAttribute('title'); widget.setAttribute('aria-label','Weather unavailable'); return;
+  }
+  const [icon,condition]=WEATHER_CODES[current.weather_code]||['temperature','Current temperature'];
+  const location=typeof city==='string'?city.trim():'';
+  weatherIcon.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+WEATHER_ICONS[icon]+'</svg>';
+  weatherTemp.textContent=Math.round(current.temperature_2m)+'°'; cityLabel.textContent=location?' in '+location:'';
+  widget.title=condition+', '+weatherTemp.textContent+'C'+(location?', '+location:'');
+  widget.setAttribute('aria-label',widget.title); widget.hidden=false;
+}
+async function fetchWeather() {
+  try {
+    let lat,lon,city;
+    const geoSources=[{url:'http://ip-api.com/json/?fields=status,country,city,lat,lon',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.status==='success'?{lat:d.lat,lon:d.lon,city:d.city}:null}},{url:'https://ip-api.com/json/?fields=status,country,city,lat,lon',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.status==='success'?{lat:d.lat,lon:d.lon,city:d.city}:null}},{url:'https://ipwho.is/',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.success?{lat:d.latitude,lon:d.longitude,city:d.city}:null}},{url:'https://ipapi.co/json/',ok:r=>r.ok,parse:async r=>{const d=await r.json();return d.latitude?{lat:d.latitude,lon:d.longitude,city:d.city}:null}}];
+    for(const src of geoSources) {
+      try { const res=await fetch(src.url); if(src.ok(res)) { const geo=await src.parse(res); if(geo) { lat=geo.lat; lon=geo.lon; city=geo.city; break; } } } catch { continue; }
+    }
+    if(lat===undefined) throw new Error('Geolocation failed');
+    const response=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code&timezone=auto');
+    if(!response.ok) throw new Error('Weather unavailable');
+    const data=await response.json(); renderWeather(data.current,city);
+  } catch { renderWeather(null); }
+}
 function formatTime(seconds){const mins=Math.floor(seconds/60),secs=seconds%60;return mins.toString().padStart(2,'0')+':'+secs.toString().padStart(2,'0')}
 const modeNames={hour:'Long Focus',work:'Default Focus',long:'Long Break',short:'Short Break'};
 const undoToast=document.getElementById('undoToast'),undoButton=document.getElementById('undoTimer');
@@ -402,9 +654,10 @@ function getDuration(){return(customDuration||config[currentMode])*60}
 function getModeLabelText(){return (customDuration!==null?'CUSTOM ':'')+((currentMode==='work'||currentMode==='hour')?'FOCUS':'BREAK')}
 function getAccentColor(){return currentMode==='work'||currentMode==='hour'?'var(--accent-work)':'var(--accent-break)'}
 function updateDisplay() {
-  timeDisplay.textContent=formatTime(timeRemaining);
+  renderTimerReadout(formatTime(timeRemaining));
   const percent=Math.max(0,Math.min(1,remainingMs/(sessionDuration*1000)));
   progress.style.strokeDashoffset=CIRCUMFERENCE*(1-percent);
+  document.documentElement.style.setProperty('--remaining-fraction',String(percent));
   progress.style.stroke=getAccentColor();
   document.documentElement.style.setProperty('--current-accent',getAccentColor());
   modeLabel.textContent=getModeLabelText();
@@ -535,14 +788,50 @@ function resetTimer() {
   remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
   setPlayState(false); updateModePickerState(); updateDisplay();
 }
+const mainContainer=document.querySelector('.container'),presetPicker=document.querySelector('.mode-picker'),durationControls=document.querySelector('.timer-adjust'),timerContainer=document.querySelector('.timer-container'),quickControls=document.getElementById('settingsQuickControls');
+const miniLayout=matchMedia('(max-width: 279px), (max-height: 319px), (max-width: 479px) and (max-height: 479px)');
+const wideLayout=matchMedia('(min-width: 480px) and (max-height: 479px), (min-width: 480px) and (max-height: 520px) and (min-aspect-ratio: 4/3)');
+const landscapeLayout=matchMedia('(min-width: 1440px) and (min-height: 521px) and (min-aspect-ratio: 2/1)');
+function syncAdaptiveLayout() {
+  const mini=miniLayout.matches;
+  document.body.dataset.layout=mini?'mini':wideLayout.matches?'wide':landscapeLayout.matches?'landscape':'regular';
+  // Keep the stroke at most 8 screen pixels without changing SVG dash lengths.
+  const ringWidth=timerContainer.getBoundingClientRect().width;
+  timerContainer.style.setProperty('--ring-stroke',String(Math.min(6,1600/(ringWidth||200))));
+  const focused=document.activeElement,editing=presetPicker.contains(focused)||durationControls.contains(focused);
+  // Keep an in-progress keyboard edit visible when its controls change location.
+  if(mini&&presetPicker.parentElement!==quickControls) {
+    quickControls.hidden=false; quickControls.append(presetPicker,durationControls);
+    if(editing) { openSettings(); focused.focus({preventScroll:true}); }
+  } else if(!mini&&presetPicker.parentElement===quickControls&&!(editing&&settingsPanel.matches(':popover-open'))) {
+    mainContainer.insertBefore(presetPicker,timerContainer); mainContainer.insertBefore(durationControls,timerContainer);
+    quickControls.hidden=true;
+    if(editing) focused.focus({preventScroll:true});
+  }
+  syncOverlayViewport();
+  fitClockNumerals();
+  fitTimerReadout();
+}
+function syncOverlayViewport() {
+  const viewport=window.visualViewport;
+  for(const [name,value] of Object.entries({width:viewport?.width||innerWidth,height:viewport?.height||innerHeight,left:viewport?.offsetLeft||0,top:viewport?.offsetTop||0})) {
+    document.documentElement.style.setProperty('--view-'+name,value+'px');
+  }
+  if(settingsPanel.matches(':popover-open')) positionSettings();
+}
 function positionSettings() {
   const rect=settingsBtn.getBoundingClientRect(),viewport=window.visualViewport;
   const edge=12,vx=viewport?.offsetLeft||0,vy=viewport?.offsetTop||0;
   const width=viewport?.width||innerWidth,height=viewport?.height||innerHeight;
-  const panelWidth=Math.min(352,width-edge*2),top=Math.max(vy+edge,rect.bottom+10);
+  const sheet=width<480,panelWidth=Math.min(sheet?420:352,width-edge*2);
+  const anchorVisible=rect.top>=vy&&rect.bottom<=vy+height-56&&rect.left>=vx&&rect.right<=vx+width;
+  const top=anchorVisible?rect.bottom+8:vy+edge;
+  settingsPanel.dataset.presentation=sheet?'sheet':'popover';
   settingsPanel.style.width=panelWidth+'px';
-  settingsPanel.style.left=Math.max(vx+edge,Math.min(rect.right-panelWidth,vx+width-panelWidth-edge))+'px';
-  settingsPanel.style.top=top+'px'; settingsPanel.style.maxHeight=Math.max(0,vy+height-top-edge)+'px';
+  settingsPanel.style.left=(sheet?vx+(width-panelWidth)/2:Math.max(vx+edge,Math.min(rect.right-panelWidth,vx+width-panelWidth-edge)))+'px';
+  settingsPanel.style.top=sheet?'auto':top+'px';
+  settingsPanel.style.bottom=sheet?(innerHeight-vy-height+edge)+'px':'auto';
+  settingsPanel.style.maxHeight=Math.max(0,vy+height-top-edge)+'px';
 }
 function openSettings(){settingsPanel.showPopover()}
 function closeSettingsPanel(){settingsPanel.hidePopover()}
@@ -551,10 +840,15 @@ settingsPanel.addEventListener('beforetoggle',event=>{
   if(open) positionSettings();
   settingsBtn.classList.toggle('active',open); settingsBtn.setAttribute('aria-expanded',String(open));
 });
-function refreshSettingsPosition(){if(settingsPanel.matches(':popover-open')) positionSettings()}
-window.addEventListener('resize',refreshSettingsPosition);
-window.addEventListener('scroll',refreshSettingsPosition,{passive:true});
-window.visualViewport?.addEventListener('resize',refreshSettingsPosition);
+miniLayout.addEventListener('change',syncAdaptiveLayout);
+wideLayout.addEventListener('change',syncAdaptiveLayout);
+landscapeLayout.addEventListener('change',syncAdaptiveLayout);
+window.addEventListener('resize',syncAdaptiveLayout);
+window.addEventListener('scroll',syncOverlayViewport,{passive:true});
+window.visualViewport?.addEventListener('resize',syncOverlayViewport);
+window.visualViewport?.addEventListener('scroll',syncOverlayViewport);
+// Native dismissal updates the popover state after beforetoggle; relocate only once it is closed.
+settingsPanel.addEventListener('toggle',event=>{if(event.newState==='closed') syncAdaptiveLayout()});
 function updateSettingDisplay() {
   Object.keys(modeValues).forEach(key=>{modeValues[key].textContent=config[key]});
   soundToggle.checked=config.sound;
@@ -649,8 +943,8 @@ keepAwakeToggle.addEventListener('change',toggleKeepAwake); keepAwakeBtn.addEven
 lockBtn.addEventListener('click',toggleUILock); undoButton.addEventListener('click',restoreTimer);
 undoToast.addEventListener('mouseenter',()=>clearTimeout(undoExpiry)); undoToast.addEventListener('mouseleave',scheduleUndoExpiry);
 undoToast.addEventListener('focusin',()=>clearTimeout(undoExpiry)); undoToast.addEventListener('focusout',()=>setTimeout(scheduleUndoExpiry,0));
-applyTheme(); updateUILock(); setPlayState(false);
-updateClock(); setInterval(updateClock,1000); fetchWeather(); setInterval(fetchWeather,10*60*1000);
+syncAdaptiveLayout(); applyTheme(); updateUILock(); setPlayState(false);
+updateClock(); fitClockNumerals(); setInterval(updateClock,1000); fetchWeather(); setInterval(fetchWeather,10*60*1000);
 updateDisplay(); updateSessionDots(); updateSettingDisplay(); updateModePickerState();
   </script>
   <script>
