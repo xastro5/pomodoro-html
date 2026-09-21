@@ -317,11 +317,26 @@
     body[data-layout="landscape"] .timer-container { grid-area: timer; width: calc(280 * var(--ui-unit)); }
     body[data-layout="landscape"] .session-progress { grid-area: sessions; }
     body[data-layout="landscape"] .controls { grid-area: controls; }
+    /* Completion cues stay outside the layout and never intercept controls. */
+    :root { --completion-edge-blur: clamp(96px, 22vmin, 280px); --completion-halo-blur: clamp(80px, 12vmin, 160px); --completion-spread: clamp(28px, 4vmin, 56px); }
+    .completion-edge { position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0; box-shadow: inset 0 0 var(--completion-edge-blur) var(--completion-spread) color-mix(in srgb, var(--completion-color) 24%, transparent); }
+    .completion-edge.completion-pulse { opacity: 1; animation: completion-breathe 2s ease-in-out 5, completion-breathe 3s ease-in-out 10s infinite; }
+    .timer-container::after { content: ''; position: absolute; inset: 2%; border-radius: 50%; pointer-events: none; opacity: 0; box-shadow: 0 0 var(--completion-halo-blur) var(--completion-spread) color-mix(in srgb, var(--completion-color) 24%, transparent); }
+    .timer-container.completion-pulse::after { opacity: 1; animation: completion-breathe 2s ease-in-out 5, completion-breathe 3s ease-in-out 10s infinite; }
+    #alarmDialog.completion-pulse { --completion-color: var(--alarm-accent); box-shadow: 0 0 var(--completion-halo-blur) var(--completion-spread) color-mix(in srgb, var(--completion-color) 24%, transparent), 0 24px 80px rgba(0,0,0,.16); animation: completion-alarm-halo 2s ease-in-out 5, completion-alarm-halo 3s ease-in-out 10s infinite; }
+    #alarmDialog.completion-pulse::backdrop { --completion-color: var(--alarm-accent); box-shadow: inset 0 0 var(--completion-edge-blur) var(--completion-spread) color-mix(in srgb, var(--completion-color) 24%, transparent); animation: completion-alarm-edge 2s ease-in-out 5, completion-alarm-edge 3s ease-in-out 10s infinite; }
+    body:has(#alarmDialog[open]) .completion-edge, body:has(#alarmDialog[open]) .timer-container::after { visibility: hidden; }
+    @keyframes completion-breathe { 0%,100% { opacity: 0; } 50% { opacity: 1; } }
+    @keyframes completion-alarm-halo { 0%,100% { box-shadow: 0 24px 80px rgba(0,0,0,.16); } 50% { box-shadow: 0 0 var(--completion-halo-blur) var(--completion-spread) color-mix(in srgb, var(--completion-color) 24%, transparent), 0 24px 80px rgba(0,0,0,.16); } }
+    @keyframes completion-alarm-edge { 0%,100% { box-shadow: inset 0 0 0 0 transparent; } 50% { box-shadow: inset 0 0 var(--completion-edge-blur) var(--completion-spread) color-mix(in srgb, var(--completion-color) 24%, transparent); } }
+    @media (max-height: 319px) { body[data-layout="mini"] .timer-container::after { inset: -4px; border-radius: 16px; } }
     @media (pointer: coarse) { .container .mode-options .mode-btn { min-height: max(44px, calc(34 * var(--ui-unit))); } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+    @media (prefers-reduced-motion: reduce) { #alarmDialog::backdrop { animation: none !important; } }
   </style>
 </head>
 <body>
+  <div class="completion-edge" id="completionEdge" aria-hidden="true"></div>
   <div class="container">
     <div class="top-bar">
       <div class="weather" id="weather" role="group" aria-label="Current weather" hidden><button class="weather-icon" id="weatherIcon" type="button" data-style="emoji" aria-label="Use outline weather icons" aria-pressed="false" title="Switch to outline weather icons"></button><button class="weather-temp" id="weatherTemp" type="button" aria-label="Current temperature"></button><span class="weather-city" id="weatherCity"></span></div>
@@ -478,7 +493,7 @@ const CONFIG_KEY='pomodoro-config';const SESSIONS_BEFORE_LONG=4;
 const defaultConfig={hour:60,work:40,short:5,long:15,sound:true,notificationSound:'chime',darkMode:false,keepAwake:false,uiLocked:false};
 function loadConfig(){return{...defaultConfig}}
 let config=loadConfig(),currentMode='work',timeRemaining=config.work*60,isRunning=false,intervalId=null,completedSessions=0,customDuration=null,wakeLock=null,uiLocked=config.uiLocked;
-let sessionDuration=timeRemaining,remainingMs=timeRemaining*1000,timerDeadline=null,transitionId=null;
+let sessionDuration=timeRemaining,remainingMs=timeRemaining*1000,timerDeadline=null,pendingNextMode=null;
 const timeDisplay=document.getElementById('time'),modeLabel=document.getElementById('modeLabel'),progress=document.getElementById('progress'),mainBtn=document.getElementById('mainBtn'),resetBtn=document.getElementById('resetBtn'),modeBtns=document.querySelectorAll('.mode-btn'),sessionDots=document.getElementById('sessionDots'),settingsBtn=document.getElementById('settingsBtn'),settingsPanel=document.getElementById('settingsPanel'),closeSettings=document.getElementById('closeSettings'),soundToggle=document.getElementById('soundToggle'),darkModeToggle=document.getElementById('darkModeToggle'),themeToggle=document.getElementById('themeToggle'),decreaseBtn=document.getElementById('decreaseTime'),increaseBtn=document.getElementById('increaseTime'),durationInput=document.getElementById('durationInput'),currentDateEl=document.getElementById('currentDate'),weatherIcon=document.getElementById('weatherIcon'),weatherTemp=document.getElementById('weatherTemp'),keepAwakeToggle=document.getElementById('keepAwakeToggle'),keepAwakeBtn=document.getElementById('keepAwakeBtn'),lockBtn=document.getElementById('lockBtn');
 const modeValues={hour:document.getElementById('hourValue'),work:document.getElementById('workValue'),short:document.getElementById('shortValue'),long:document.getElementById('longValue')};
 const CIRCUMFERENCE=2*Math.PI*96;progress.style.strokeDasharray=CIRCUMFERENCE;
@@ -645,7 +660,8 @@ function renderWeather(current,city='') {
   weatherIcon.dataset.style=weatherUseOutline?'outline':'emoji';
   weatherIcon.setAttribute('aria-pressed',String(weatherUseOutline));
   weatherIcon.title=weatherUseOutline?'Switch to emoji weather icons':'Switch to outline weather icons';
-  weatherTemp.textContent=temperature+(weatherInFahrenheit?'℉':'℃'); cityLabel.textContent=location?' in '+location:'';
+  // Separate degree and letter glyphs keep the unit in the interface font.
+  weatherTemp.textContent=temperature+(weatherInFahrenheit?'°F':'°C'); cityLabel.textContent=location?' in '+location:'';
   weatherTemp.title='Switch to '+nextUnit;
   weatherTemp.setAttribute('aria-label',temperature+' degrees '+unitName+'. Switch to '+nextUnit);
   widget.title=condition+', '+weatherTemp.textContent+(location?', '+location:'');
@@ -679,6 +695,50 @@ const modeNames={hour:'Long Focus',work:'Default Focus',long:'Long Break',short:
 const undoToast=document.getElementById('undoToast'),undoButton=document.getElementById('undoTimer');
 let undoState=null,undoExpiry=null,wakeRequest=0,wakePending=false;
 function announceTimer(message) { document.getElementById('timerStatus').textContent=message; }
+const completionEdge=document.getElementById('completionEdge'),completionEffects=new Map();
+let timerCompletionMessage='';
+function stopCompletionEffect(target) {
+  const effect=completionEffects.get(target);
+  if(!effect)return;
+  target.classList.remove('completion-pulse');
+  effect.edge?.classList.remove('completion-pulse'); completionEffects.delete(target);
+}
+function runCompletionEffect(target,effect) {
+  effect.pending=false;
+  target.style.setProperty('--completion-color',effect.color);
+  effect.edge?.style.setProperty('--completion-color',effect.color);
+  void target.offsetWidth;
+  target.classList.add('completion-pulse'); effect.edge?.classList.add('completion-pulse');
+}
+function startCompletionEffect(target,edge=null,color='var(--alarm-accent)') {
+  stopCompletionEffect(target);
+  const effect={edge,color,pending:true}; completionEffects.set(target,effect);
+  if(document.visibilityState==='visible')runCompletionEffect(target,effect);
+}
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible')for(const [target,effect]of completionEffects)if(effect.pending)runCompletionEffect(target,effect);
+});
+function acknowledgeCompletionEffects(event) {
+  if(!event.isTrusted||event.repeat)return;
+  for(const target of completionEffects.keys())stopCompletionEffect(target);
+  advanceCompletedTimer();
+}
+// Wait for click before changing the phase so pressed controls keep their click target.
+// Disabled controls do not emit click, but pressing them still acknowledges the cue.
+document.addEventListener('pointerdown',event=>{
+  if(event.target instanceof Element&&event.target.closest(':disabled'))acknowledgeCompletionEffects(event);
+},true);
+document.addEventListener('click',acknowledgeCompletionEffects,true);
+document.addEventListener('keydown',acknowledgeCompletionEffects,true);
+function clearTimerCompletion() {
+  pendingNextMode=null; timerCompletionMessage=''; stopCompletionEffect(timerContainer);
+}
+function advanceCompletedTimer() {
+  if(pendingNextMode===null)return;
+  const nextMode=pendingNextMode;
+  switchMode(nextMode);
+  announceTimer(modeNames[nextMode]+'. Ready to start.');
+}
 function getDuration(){return(customDuration||config[currentMode])*60}
 function getModeLabelText(){return (customDuration!==null?'CUSTOM ':'')+((currentMode==='work'||currentMode==='hour')?'FOCUS':'BREAK')}
 function getAccentColor(){return currentMode==='work'||currentMode==='hour'?'var(--accent-work)':'var(--accent-break)'}
@@ -695,7 +755,7 @@ function updateDisplay() {
 }
 function updateTimerContext() {
   const context=document.getElementById('timerEnd');
-  let label='';
+  let label=timerCompletionMessage;
   if(timerDeadline!==null) {
     const end=new Date(timerDeadline),now=new Date(),tomorrow=new Date(now);
     tomorrow.setDate(tomorrow.getDate()+1);
@@ -705,10 +765,9 @@ function updateTimerContext() {
   } else if(remainingMs>0&&remainingMs<sessionDuration*1000) label='Paused';
   context.textContent=label; context.hidden=!label;
 }
-function cancelTransition() { clearTimeout(transitionId); transitionId=null; }
 function setPlayState(running) {
   mainBtn.querySelector('svg').innerHTML=running?'<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>':'<path d="M8 5v14l11-7z"/>';
-  const title=running?'Pause timer':remainingMs<sessionDuration*1000&&remainingMs>0?'Resume timer':'Start timer';
+  const title=running?'Pause timer':pendingNextMode!==null?'Start '+modeNames[pendingNextMode].toLowerCase():remainingMs<sessionDuration*1000&&remainingMs>0?'Resume timer':'Start timer';
   mainBtn.setAttribute('aria-label',title); mainBtn.title=title;
 }
 function stopTimer() {
@@ -723,10 +782,12 @@ function tickTimer() {
     stopTimer(); clearUndo();
     const focus=currentMode==='work'||currentMode==='hour';
     if(focus) { completedSessions++; updateSessionDots(); }
-    const nextMode=focus ? (completedSessions%SESSIONS_BEFORE_LONG===0?'long':'short') : 'work';
+    pendingNextMode=focus ? (completedSessions%SESSIONS_BEFORE_LONG===0?'long':'short') : 'work';
+    timerCompletionMessage=focus?'Focus complete':'Break complete';
+    setPlayState(false);
+    startCompletionEffect(timerContainer,completionEdge,getAccentColor());
     void playNotification();
-    announceTimer(focus?'Focus complete. Your break is ready.':'Break complete. Ready to focus.');
-    transitionId=setTimeout(()=>{ transitionId=null; switchMode(nextMode); },500);
+    announceTimer(timerCompletionMessage+'. Click or press a key to continue.');
   }
   updateDisplay();
 }
@@ -755,19 +816,21 @@ function switchMode(mode,offerUndo=false) {
   if(offerUndo&&mode===currentMode&&customDuration===null&&remainingMs>0) return;
   if(isRunning) tickTimer();
   const previous=offerUndo&&remainingMs>0?{currentMode,customDuration,sessionDuration,remainingMs,isRunning,timerDeadline}:null;
-  clearUndo(); cancelTransition(); stopTimer();
+  clearUndo(); stopTimer(); clearTimerCompletion();
   currentMode=mode; customDuration=null;
   sessionDuration=getDuration(); remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
+  durationInput.value=sessionDuration/60;
   setPlayState(false); updateModePickerState(); updateDisplay();
   if(previous) {
     undoState=previous; undoToast.hidden=false;
     document.getElementById('undoMessage').textContent='Timer changed'; scheduleUndoExpiry();
   }
+  if(offerUndo)announceTimer(modeNames[currentMode]+'. Ready to start.');
 }
 function restoreTimer() {
   if(!undoState||uiLocked) return;
   const saved=undoState;
-  clearUndo(); cancelTransition(); stopTimer();
+  clearUndo(); stopTimer(); clearTimerCompletion();
   currentMode=saved.currentMode; customDuration=saved.customDuration; sessionDuration=saved.sessionDuration;
   remainingMs=saved.remainingMs; timeRemaining=Math.ceil(remainingMs/1000);
   if(saved.isRunning) {
@@ -775,7 +838,7 @@ function restoreTimer() {
     isRunning=true; timerDeadline=saved.timerDeadline; intervalId=setInterval(tickTimer,250); tickTimer();
   }
   setPlayState(isRunning); updateModePickerState(); updateDisplay();
-  announceTimer('Previous timer restored.');
+  if(pendingNextMode===null)announceTimer('Previous timer restored.');
 }
 function setCustomDuration(minutes) {
   if(uiLocked) return false;
@@ -788,7 +851,8 @@ function setCustomDuration(minutes) {
   if(nextRemaining<=0) {
     durationInput.value=sessionDuration/60; announceTimer('Duration must be longer than the time already elapsed.'); return false;
   }
-  clearUndo(); cancelTransition();
+  clearUndo();
+  clearTimerCompletion();
   customDuration=minutes; sessionDuration=minutes*60;
   remainingMs=nextRemaining; timeRemaining=Math.ceil(remainingMs/1000);
   if(isRunning) timerDeadline=Date.now()+remainingMs;
@@ -803,19 +867,22 @@ function startTimer() {
   clearUndo();
   if(isRunning) {
     tickTimer(); if(!isRunning) return;
-    stopTimer(); updateDisplay(); return;
+    stopTimer(); updateDisplay(); announceTimer(modeNames[currentMode]+' paused.'); return;
   }
-  cancelTransition();
+  advanceCompletedTimer();
+  clearTimerCompletion();
   if(remainingMs<=0) { remainingMs=sessionDuration*1000; timeRemaining=sessionDuration; }
   try { initAudio(); if(audioContext.state==='suspended') void audioContext.resume().catch(()=>{}); } catch {}
   timerDeadline=Date.now()+remainingMs; isRunning=true;
   setPlayState(true); intervalId=setInterval(tickTimer,250); updateDisplay();
+  announceTimer(modeNames[currentMode]+' started.');
 }
 function resetTimer() {
   if(uiLocked) return;
-  clearUndo(); cancelTransition(); stopTimer();
+  clearUndo(); stopTimer(); clearTimerCompletion();
   remainingMs=sessionDuration*1000; timeRemaining=sessionDuration;
   setPlayState(false); updateModePickerState(); updateDisplay();
+  announceTimer(modeNames[currentMode]+' reset.');
 }
 const mainContainer=document.querySelector('.container'),presetPicker=document.querySelector('.mode-picker'),durationControls=document.querySelector('.timer-adjust'),timerContainer=document.querySelector('.timer-container'),quickControls=document.getElementById('settingsQuickControls');
 const miniLayout=matchMedia('(max-width: 279px), (max-height: 319px), (max-width: 479px) and (max-height: 479px)');
@@ -1348,12 +1415,14 @@ updateDisplay(); updateSessionDots(); updateSettingDisplay(); updateModePickerSt
         syncControls();
         closeEditor();
         dialog.showModal();
+        startCompletionEffect(dialog);
         playTone();
         if (soundEnabled) ringInterval = setInterval(playTone, 2000);
       }
 
       function endRinging() {
         ringing = false;
+        stopCompletionEffect(dialog);
         stopSound();
         if (titleBeforeAlarm !== null) document.title = titleBeforeAlarm;
         titleBeforeAlarm = null;

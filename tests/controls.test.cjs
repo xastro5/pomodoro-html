@@ -80,7 +80,9 @@ test('seven-segment countdown remains current through completion, mode changes, 
   await duration(p,1);await button.click();await p.locator('#mainBtn').click();await p.clock.fastForward(59000);
   assert.equal(await segments.getAttribute('data-value'),'00:01');
   await p.clock.runFor(1000);assert.equal(await segments.getAttribute('data-value'),'00:00');
-  await p.clock.runFor(500);assert.equal(await segments.getAttribute('data-value'),'05:00');
+  await p.clock.runFor(15000);assert.equal(await segments.getAttribute('data-value'),'00:00');
+  assert.equal(await p.locator('#modeLabel').textContent(),'CUSTOM FOCUS');
+  await p.mouse.click(5,5);assert.equal(await segments.getAttribute('data-value'),'05:00');
   assert.equal(await button.getAttribute('data-style'),'segments');
   assert.equal(await p.locator('#modeLabel').textContent(),'BREAK');
   await p.locator('[data-mode="hour"]').click();assert.equal(await segments.getAttribute('data-value'),'60:00');
@@ -98,7 +100,7 @@ test('weather hides missing or invalid readings and recovers with a colored symb
     };
   });
   const weather=p.locator('#weather');await weather.waitFor({state:'visible'});
-  assert.equal(await p.locator('#weatherTemp').textContent(),'22℃');
+  assert.equal(await p.locator('#weatherTemp').textContent(),'22°C');
   assert.match(await weather.getAttribute('aria-label'),/Partly cloudy.*Shanghai/);
   assert.equal(await p.locator('#weatherIcon').textContent(),'⛅');
   await p.locator('#weatherIcon').click();
@@ -110,10 +112,10 @@ test('weather hides missing or invalid readings and recovers with a colored symb
   await p.evaluate(async()=>{weatherOffline=false;weatherPayload={current:{temperature_2m:null,weather_code:0}};await fetchWeather()});
   assert.equal(await weather.isVisible(),false);
   await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:0,weather_code:95}};await fetchWeather()});
-  assert.equal(await weather.isVisible(),true);assert.equal(await p.locator('#weatherTemp').textContent(),'0℃');
+  assert.equal(await weather.isVisible(),true);assert.equal(await p.locator('#weatherTemp').textContent(),'0°C');
   assert.match(await weather.getAttribute('aria-label'),/Thunderstorm/);
   await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:-3.2,weather_code:999}};await fetchWeather()});
-  assert.equal(await p.locator('#weatherTemp').textContent(),'-3℃');
+  assert.equal(await p.locator('#weatherTemp').textContent(),'-3°C');
   assert.match(await weather.getAttribute('aria-label'),/Current temperature/);
 });
 
@@ -131,28 +133,28 @@ test('weather units convert unrounded Celsius readings by click and keyboard wit
   await p.locator('#alarmHour [data-value="10"]').click();await p.locator('#alarmMinute [data-value="30"]').click();await p.locator('#alarmSet').click();
   await p.locator('#mainBtn').click();await p.clock.runFor(1250);
   const before=await state(p),calls=await p.evaluate(()=>weatherCalls);
-  for(const [celsius,celsiusText,fahrenheitText]of [[0,'0℃','32℉'],[100,'100℃','212℉'],[-40,'-40℃','-40℉'],[-3.2,'-3℃','26℉'],[0.49,'0℃','33℉']]){
+  for(const [celsius,celsiusText,fahrenheitText]of [[0,'0°C','32°F'],[100,'100°C','212°F'],[-40,'-40°C','-40°F'],[-3.2,'-3°C','26°F'],[0.49,'0°C','33°F']]){
     await p.evaluate(value=>renderWeather({temperature_2m:value,weather_code:0},'Shanghai'),celsius);
     assert.equal(await button.textContent(),celsiusText);
     for(let i=0;i<3;i++){
       await button.click();assert.equal(await button.textContent(),fahrenheitText);
       assert.match(await button.getAttribute('aria-label'),/degrees Fahrenheit.*Switch to Celsius/);
-      assert.match(await p.locator('#weather').getAttribute('title'),/℉, Shanghai/);
+      assert.match(await p.locator('#weather').getAttribute('title'),/°F, Shanghai/);
       await button.click();assert.equal(await button.textContent(),celsiusText);
     }
   }
-  await button.focus();await button.press('Space');assert.equal(await button.textContent(),'33℉');
+  await button.focus();await button.press('Space');assert.equal(await button.textContent(),'33°F');
   await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:10,weather_code:61}};await fetchWeather()});
-  assert.equal(await button.textContent(),'50℉');
-  await button.press('Enter');assert.equal(await button.textContent(),'10℃');
+  assert.equal(await button.textContent(),'50°F');
+  await button.press('Enter');assert.equal(await button.textContent(),'10°C');
   assert.deepEqual(await state(p),before);
   assert.equal(await p.locator('#alarmSummaryTime').textContent(),'10:30');
   assert.equal(await p.evaluate(()=>weatherCalls),calls+2,'Only the explicit weather refresh should fetch');
   await button.click();await p.evaluate(()=>renderWeather(null));
   assert.equal(await button.isVisible(),false);
   await p.evaluate(()=>renderWeather({temperature_2m:20,weather_code:0},'Shanghai'));
-  assert.equal(await button.textContent(),'68℉');
-  await p.reload();assert.equal(await button.textContent(),'22℃');
+  assert.equal(await button.textContent(),'68°F');
+  await p.reload();assert.equal(await button.textContent(),'22°C');
 });
 
 test('weather icons switch independently by click and keyboard and retain the chosen set during updates', async t => {
@@ -178,15 +180,15 @@ test('weather icons switch independently by click and keyboard and retain the ch
     assert.equal(await button.locator('svg').getAttribute('data-icon'),outline);
     assert.deepEqual(await button.boundingBox(),box);
     await button.click();assert.equal(await button.textContent(),emoji);
-    assert.equal(await p.locator('#weatherTemp').textContent(),'22℃');
+    assert.equal(await p.locator('#weatherTemp').textContent(),'22°C');
   }
   await button.focus();await button.press('Space');assert.equal(await button.getAttribute('data-style'),'outline');
   await button.press('Enter');assert.equal(await button.getAttribute('data-style'),'emoji');
   await button.click();await p.locator('#weatherTemp').click();
-  assert.equal(await button.getAttribute('data-style'),'outline');assert.equal(await p.locator('#weatherTemp').textContent(),'72℉');
+  assert.equal(await button.getAttribute('data-style'),'outline');assert.equal(await p.locator('#weatherTemp').textContent(),'72°F');
   assert.equal(await p.evaluate(()=>weatherCalls),calls,'Style and unit changes do not fetch');
   await p.evaluate(async()=>{weatherPayload={current:{temperature_2m:10,weather_code:61}};await fetchWeather()});
-  assert.equal(await button.locator('svg').getAttribute('data-icon'),'rain');assert.equal(await p.locator('#weatherTemp').textContent(),'50℉');
+  assert.equal(await button.locator('svg').getAttribute('data-icon'),'rain');assert.equal(await p.locator('#weatherTemp').textContent(),'50°F');
   await p.evaluate(()=>renderWeather(null));assert.equal(await button.isVisible(),false);
   await p.evaluate(()=>renderWeather({temperature_2m:0,weather_code:71},'Shanghai'));
   assert.equal(await button.locator('svg').getAttribute('data-icon'),'snow');
@@ -213,7 +215,7 @@ test('refreshing and reopening start fresh without saving preferences or restori
     assert.equal(await p.locator('#timerStyleToggle').getAttribute('data-style'),'numerals');
     assert.equal(await p.locator('#weatherIcon').getAttribute('data-style'),'emoji');
     assert.equal(await p.locator('#weatherIcon').textContent(),'⛅');
-    assert.equal(await p.locator('#weatherTemp').textContent(),'22℃');
+    assert.equal(await p.locator('#weatherTemp').textContent(),'22°C');
     assert.equal(await p.locator('#alarmSummaryTime').isVisible(),false);
     assert.deepEqual(await p.evaluate(()=>storageWrites),[]);
     assert.equal(await p.evaluate(()=>localStorage.length),1);assert.equal(await p.evaluate(()=>sessionStorage.length),0);
@@ -228,6 +230,211 @@ test('refreshing and reopening start fresh without saving preferences or restori
   await p.locator('#weatherIcon').click();await p.locator('#weatherTemp').click();
   const url=p.url(),context=p.context();await p.close();
   const reopened=await context.newPage();await reopened.addInitScript(init);await reopened.goto(url);await defaults(reopened);
+});
+
+const hasCompletionPulse = locator => locator.evaluate(e=>e.classList.contains('completion-pulse'));
+async function nextMinuteAlarm(p,sound=false){
+  await p.locator('#alarmOpen').click();await p.locator('#alarmHour [data-value="9"]').click();await p.locator('#alarmMinute [data-value="1"]').click();
+  if(!sound)await p.locator('#alarmSound').uncheck();await p.locator('#alarmSet').click();
+}
+
+test('timer completion pulses faster for ten seconds, then keeps pulsing slowly until acknowledged', async t => {
+  const p=await pageFor(t),ring=p.locator('.timer-container'),edge=p.locator('#completionEdge');
+  await p.locator('#settingsBtn').click();await p.locator('#soundToggle').uncheck();await p.keyboard.press('Escape');
+  await duration(p,1);await p.locator('#mainBtn').click();await p.clock.fastForward(60000);
+  assert(await hasCompletionPulse(ring));assert(await hasCompletionPulse(edge));
+  for(const cue of [ring,edge])assert.equal(await cue.evaluate(e=>e.style.getPropertyValue('--completion-color')),'var(--accent-work)');
+  for(const [locator,pseudo]of [[ring,'::after'],[edge,null]]){
+    assert.deepEqual(await locator.evaluate((e,pseudo)=>{const s=getComputedStyle(e,pseudo);return [s.animationDuration,s.animationDelay,s.animationIterationCount]},pseudo),['2s, 3s','0s, 10s','5, infinite']);
+  }
+  assert.equal(await edge.evaluate(e=>getComputedStyle(e).pointerEvents),'none');
+  await p.clock.runFor(500);assert.equal(await time(p),'00:00');
+  assert.equal((await state(p)).currentMode,'work');
+  assert.equal(await p.locator('#timerEnd').textContent(),'Focus complete');assert(await hasCompletionPulse(ring));
+  for(const cue of [ring,edge])assert.equal(await cue.evaluate(e=>e.style.getPropertyValue('--completion-color')),'var(--accent-work)');
+  await p.clock.runFor(9500);assert(await hasCompletionPulse(ring));assert(await hasCompletionPulse(edge));
+  await p.clock.fastForward(60000);assert(await hasCompletionPulse(ring));assert(await hasCompletionPulse(edge));
+  assert.equal(await p.locator('#timerEnd').textContent(),'Focus complete');assert.equal((await state(p)).completedSessions,1);
+  assert.equal(await time(p),'00:00');assert.equal((await state(p)).currentMode,'work');
+  assert.equal(await p.locator('#mainBtn').getAttribute('aria-label'),'Start short break');
+  await p.mouse.click(5,5);
+  assert.equal(await time(p),'05:00');assert.equal((await state(p)).currentMode,'short');assert.equal((await state(p)).isRunning,false);
+  assert.equal(await hasCompletionPulse(ring),false);assert.equal(await hasCompletionPulse(edge),false);
+  await duration(p,1);assert.equal(await p.locator('#timerEnd').isVisible(),false);
+  await p.locator('#mainBtn').click();await p.clock.fastForward(60000);
+  assert(await hasCompletionPulse(ring));
+  for(const cue of [ring,edge])assert.equal(await cue.evaluate(e=>e.style.getPropertyValue('--completion-color')),'var(--accent-break)');
+  await p.clock.runFor(15000);assert.equal(await time(p),'00:00');assert.equal(await p.locator('#timerEnd').textContent(),'Break complete');
+  assert.equal((await state(p)).currentMode,'short');
+  for(const cue of [ring,edge])assert.equal(await cue.evaluate(e=>e.style.getPropertyValue('--completion-color')),'var(--accent-break)');
+  await p.locator('#mainBtn').click();assert.equal(await hasCompletionPulse(edge),false);assert.match(await p.locator('#timerEnd').textContent(),/Ends/);
+  assert.equal((await state(p)).currentMode,'work');assert.equal((await state(p)).isRunning,true);assert.equal(await time(p),'40:00');
+});
+
+test('reset readies the next phase and manual presets take precedence after acknowledgment', async t => {
+  const p=await pageFor(t),edge=p.locator('#completionEdge');
+  for(const action of ['#resetBtn','[data-mode="hour"]']){
+    await duration(p,1);await p.locator('#mainBtn').click();await p.clock.fastForward(60000);assert(await hasCompletionPulse(edge));
+    await p.locator(action).click();assert.equal(await hasCompletionPulse(edge),false);
+    const text=await time(p);await p.clock.runFor(1000);assert.equal(await time(p),text);
+    assert.equal(text,action==='#resetBtn'?'05:00':'60:00');
+    assert.equal(await p.locator('#timerStatus').textContent(),action==='#resetBtn'?'Short Break reset.':'Long Focus. Ready to start.');
+    assert.equal(await p.locator('#timerEnd').isVisible(),false);
+  }
+});
+
+test('all four presets keep their completed phase and color until acknowledged', async t => {
+  const p=await pageFor(t);
+  for(const mode of ['work','hour','short','long']){
+    await p.locator('[data-mode="'+mode+'"]').click();await duration(p,1);await p.locator('#mainBtn').click();
+    await p.clock.fastForward(60000);await p.clock.runFor(12000);
+    const focus=mode==='work'||mode==='hour';
+    assert.equal((await state(p)).currentMode,mode);assert.equal(await time(p),'00:00');
+    assert.equal(await p.locator('#modeLabel').textContent(),focus?'CUSTOM FOCUS':'CUSTOM BREAK');
+    assert.equal(await p.locator('#timerEnd').textContent(),focus?'Focus complete':'Break complete');
+    assert.equal(await p.locator('#progress').evaluate(e=>e.style.stroke),focus?'var(--accent-work)':'var(--accent-break)');
+    assert.equal(await p.locator('#completionEdge').evaluate(e=>e.style.getPropertyValue('--completion-color')),focus?'var(--accent-work)':'var(--accent-break)');
+    await p.mouse.click(5,5);
+    assert.equal((await state(p)).currentMode,focus?'short':'work');assert.equal((await state(p)).isRunning,false);
+    assert.equal(await p.locator('#timerEnd').isVisible(),false);assert.equal(await p.locator('.completion-pulse').count(),0);
+  }
+});
+
+test('Start, keyboard activation, and duration adjustments act once on the next phase', async t => {
+  for(const action of ['click','Enter','Space','increase','decrease','duration','timerStyle']){
+    const p=await pageFor(t);
+    if(action==='timerStyle')await p.locator('#timerStyleToggle').click();
+    await duration(p,1);await p.locator('#mainBtn').click();await p.clock.fastForward(60000);
+    if(action==='click')await p.locator('#mainBtn').click();
+    else if(action==='Enter'||action==='Space')await p.locator('#mainBtn').press(action);
+    else if(action==='duration'){await p.locator('#durationInput').click();await duration(p,7)}
+    else if(action==='timerStyle')await p.locator('#timerSegments rect').first().click();
+    else await p.locator(action==='increase'?'#increaseTime':'#decreaseTime').click();
+    const next=await state(p),running=['click','Enter','Space'].includes(action);
+    assert.equal(next.currentMode,'short');assert.equal(next.isRunning,running);assert.equal(next.completedSessions,1);
+    assert.equal(next.sessionDuration,action==='increase'?360:action==='decrease'?240:action==='duration'?420:300);
+    assert.equal(next.remainingMs,next.sessionDuration*1000);assert.equal(await p.locator('.completion-pulse').count(),0);
+    if(running)assert.equal(await p.locator('#timerStatus').textContent(),'Short Break started.');
+    if(action==='timerStyle')assert.equal(await p.locator('#timerStyleToggle').getAttribute('data-style'),'numerals');
+    await p.clock.runFor(1000);
+    assert.equal((await state(p)).remainingMs,next.remainingMs-(running?1000:0));
+  }
+});
+
+test('acknowledging while the duration field is focused replaces the completed phase value', async t => {
+  const p=await pageFor(t);
+  await duration(p,1);await p.locator('#mainBtn').click();await p.locator('#durationInput').focus();
+  await p.clock.fastForward(60000);assert.equal(await p.locator('#durationInput').inputValue(),'1');
+  await p.locator('#durationInput').press('Tab');
+  assert.equal(await p.locator('#durationInput').inputValue(),'5');assert.equal(await time(p),'05:00');
+  assert.equal((await state(p)).customDuration,null);assert.equal((await state(p)).isRunning,false);
+});
+
+test('alarm pulses persist with sound off and a background click acknowledges visuals without dismissing the alarm', async t => {
+  const p=await pageFor(t),dialog=p.locator('#alarmDialog');await nextMinuteAlarm(p);
+  await p.locator('#mainBtn').click();const before=await state(p);await p.clock.fastForward(60000);
+  assert(await hasCompletionPulse(dialog));assert.equal(await dialog.isVisible(),true);
+  assert.equal(await dialog.evaluate(e=>getComputedStyle(e).animationName),'completion-alarm-halo, completion-alarm-halo');
+  assert.equal(await dialog.evaluate(e=>getComputedStyle(e,'::backdrop').animationName),'completion-alarm-edge, completion-alarm-edge');
+  for(const pseudo of [null,'::backdrop'])assert.deepEqual(await dialog.evaluate((e,pseudo)=>{const s=getComputedStyle(e,pseudo);return [s.animationDuration,s.animationDelay,s.animationIterationCount]},pseudo),['2s, 3s','0s, 10s','5, infinite']);
+  assert.equal((await state(p)).timerDeadline,before.timerDeadline);
+  await p.clock.runFor(11000);assert(await hasCompletionPulse(dialog));assert.equal(await dialog.isVisible(),true);
+  await p.mouse.click(5,5);assert.equal(await hasCompletionPulse(dialog),false);assert.equal(await dialog.isVisible(),true);
+  assert.equal((await state(p)).timerDeadline,before.timerDeadline);
+  await p.keyboard.press('Escape');assert.equal(await dialog.isVisible(),false);
+  assert.equal(await p.evaluate(()=>completionEffects.size),0);
+});
+
+test('simultaneous timer and alarm completion prioritizes amber; snooze and dismiss clear alarm effects', async t => {
+  const p=await pageFor(t),dialog=p.locator('#alarmDialog'),edge=p.locator('#completionEdge');
+  await nextMinuteAlarm(p);await duration(p,1);await p.locator('#mainBtn').click();await p.clock.fastForward(60000);
+  assert(await hasCompletionPulse(dialog));assert(await hasCompletionPulse(edge));
+  assert.equal(await time(p),'00:00');assert.equal((await state(p)).currentMode,'work');
+  assert.equal(await edge.evaluate(e=>getComputedStyle(e).visibility),'hidden');
+  assert.equal(await p.locator('.timer-container').evaluate(e=>getComputedStyle(e,'::after').visibility),'hidden');
+  await p.locator('#alarmSnooze').click();assert.equal(await hasCompletionPulse(dialog),false);assert.equal(await dialog.isVisible(),false);
+  assert.equal(await hasCompletionPulse(edge),false);
+  assert.equal(await edge.evaluate(e=>getComputedStyle(e).visibility),'visible');
+  await p.clock.runFor(500);assert.equal(await time(p),'05:00');
+  await p.clock.fastForward(300000);assert(await hasCompletionPulse(dialog));assert.equal(await hasCompletionPulse(edge),false);
+  await p.locator('#alarmDismiss').click();assert.equal(await dialog.isVisible(),false);assert.equal(await hasCompletionPulse(dialog),false);
+  assert.equal(await p.evaluate(()=>completionEffects.size),0);assert.equal(await time(p),'05:00');
+});
+
+test('background completion waits for visibility and refreshing removes every cue', async t => {
+  const p=await pageFor(t),dialog=p.locator('#alarmDialog'),edge=p.locator('#completionEdge');
+  await nextMinuteAlarm(p);await duration(p,1);await p.locator('#mainBtn').click();
+  await p.evaluate(()=>Object.defineProperty(document,'visibilityState',{configurable:true,value:'hidden'}));
+  await p.clock.fastForward(60000);await p.clock.runFor(5000);
+  assert.equal(await hasCompletionPulse(dialog),false);assert.equal(await hasCompletionPulse(edge),false);
+  assert.equal(await p.evaluate(()=>completionEffects.size),2);
+  assert.equal(await p.evaluate(()=>[...completionEffects.values()].every(e=>e.pending)),true);
+  assert.equal(await time(p),'00:00');assert.equal((await state(p)).currentMode,'work');
+  await p.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'visible'});document.dispatchEvent(new Event('visibilitychange'))});
+  assert(await hasCompletionPulse(dialog));assert(await hasCompletionPulse(edge));
+  assert.equal(await time(p),'00:00');assert.equal((await state(p)).currentMode,'work');
+  await p.reload();assert.equal(await p.locator('.completion-pulse').count(),0);assert.equal(await dialog.isVisible(),false);
+  assert.equal(await p.locator('#timerEnd').isVisible(),false);assert.equal(await time(p),'40:00');
+});
+
+test('reduced motion uses steady halos and edge glows without blocking the controls', async t => {
+  const p=await pageFor(t),dialog=p.locator('#alarmDialog'),edge=p.locator('#completionEdge');
+  await p.emulateMedia({reducedMotion:'reduce'});await nextMinuteAlarm(p);await duration(p,1);await p.locator('#mainBtn').click();
+  await p.clock.fastForward(60000);
+  assert.equal(await dialog.evaluate(e=>getComputedStyle(e).animationName),'none');
+  assert.equal(await dialog.evaluate(e=>getComputedStyle(e,'::backdrop').animationName),'none');
+  assert.notEqual(await dialog.evaluate(e=>getComputedStyle(e,'::backdrop').boxShadow),'none');
+  assert.equal(await edge.evaluate(e=>getComputedStyle(e).animationName),'none');assert.equal(await edge.evaluate(e=>getComputedStyle(e).opacity),'1');
+  assert.equal(await p.locator('.timer-container').evaluate(e=>getComputedStyle(e,'::after').animationName),'none');
+  await p.clock.runFor(15000);assert(await hasCompletionPulse(dialog));assert(await hasCompletionPulse(edge));
+  assert.equal(await time(p),'00:00');assert.equal((await state(p)).currentMode,'work');
+  await p.locator('#alarmDismiss').click();assert.equal(await hasCompletionPulse(edge),false);assert.equal(await hasCompletionPulse(dialog),false);
+  assert.equal(await time(p),'05:00');assert.equal((await state(p)).isRunning,false);
+});
+
+test('acknowledging a completion preserves the clicked control and ignores synthetic or held-key events', async t => {
+  const p=await pageFor(t),edge=p.locator('#completionEdge'),clock=p.locator('#clockStyleToggle');
+  await duration(p,1);await p.locator('#mainBtn').click();await p.keyboard.down('a');await p.clock.fastForward(60000);
+  await p.keyboard.down('a');assert(await hasCompletionPulse(edge));await p.keyboard.up('a');
+  await p.evaluate(()=>document.body.click());assert(await hasCompletionPulse(edge));
+  await clock.click();assert.equal(await hasCompletionPulse(edge),false);assert.equal(await clock.getAttribute('data-style'),'numerals');
+  await p.clock.runFor(12000);assert.equal(await hasCompletionPulse(edge),false);assert.equal(await p.locator('#timerEnd').isVisible(),false);
+  assert.equal(await time(p),'05:00');assert.equal((await state(p)).isRunning,false);
+  await duration(p,1);await p.locator('#mainBtn').click();await p.clock.fastForward(60000);
+  await p.keyboard.press('ArrowRight');assert.equal(await hasCompletionPulse(edge),false);
+  assert.equal(await p.locator('#timerEnd').isVisible(),false);assert.equal(await time(p),'40:00');
+  await p.clock.runFor(500);await duration(p,1);await p.locator('#mainBtn').click();await p.locator('#lockBtn').click();await p.clock.fastForward(60000);
+  assert(await hasCompletionPulse(edge));assert.equal(await p.locator('#mainBtn').isDisabled(),true);
+  const box=await p.locator('#mainBtn').boundingBox();await p.mouse.click(box.x+box.width/2,box.y+box.height/2);
+  assert.equal(await hasCompletionPulse(edge),false);assert.equal(await p.locator('#mainBtn').isDisabled(),true);
+  assert.equal(await time(p),'05:00');assert.equal((await state(p)).isRunning,false);
+});
+
+test('rendered halo and edge stay synchronized across the ten-second slowdown', async t => {
+  const p=await pageFor(t);await duration(p,1);await p.locator('#mainBtn').click();await p.clock.fastForward(60000);await p.clock.runFor(500);
+  await p.evaluate(()=>{window.effectAnimations=document.getAnimations().filter(a=>a.animationName?.startsWith('completion-'));effectAnimations.forEach(a=>a.pause())});
+  for(const [milliseconds,opacity]of [[0,0],[1000,1],[2000,0],[9000,1],[9999,0],[10000,0],[11500,1],[13000,0],[14500,1],[70000,0]]){
+    const values=await p.evaluate(milliseconds=>{
+      effectAnimations.forEach(a=>a.currentTime=milliseconds);
+      return [getComputedStyle(document.getElementById('completionEdge')).opacity,getComputedStyle(document.querySelector('.timer-container'),'::after').opacity].map(Number);
+    },milliseconds);
+    values.forEach(value=>near(value,opacity));near(values[0],values[1]);
+  }
+  await p.mouse.click(5,5);assert.equal(await p.locator('#completionEdge').evaluate(e=>getComputedStyle(e).opacity),'0');
+});
+
+test('acknowledging alarm visuals leaves its repeating sound active until Dismiss', async t => {
+  const p=await pageFor(t,()=>{
+    window.alarmNotes=0;const Audio=window.AudioContext;
+    window.AudioContext=class extends Audio{createOscillator(){const oscillator=super.createOscillator(),start=oscillator.start.bind(oscillator);oscillator.start=(...args)=>{window.alarmNotes++;return start(...args)};return oscillator}};
+  });
+  await nextMinuteAlarm(p,true);await p.clock.fastForward(60000);
+  const dialog=p.locator('#alarmDialog');assert(await hasCompletionPulse(dialog));
+  await p.locator('#alarmRingTime').click();assert.equal(await hasCompletionPulse(dialog),false);assert.equal(await dialog.isVisible(),true);
+  const before=await p.evaluate(()=>alarmNotes);assert(before>0);
+  await p.clock.runFor(2100);assert((await p.evaluate(()=>alarmNotes))>before);assert.equal(await hasCompletionPulse(dialog),false);
+  await p.locator('#alarmDismiss').click();const stopped=await p.evaluate(()=>alarmNotes);
+  await p.clock.runFor(4000);assert.equal(await p.evaluate(()=>alarmNotes),stopped);assert.equal(await dialog.isVisible(),false);
 });
 
 test('gear stays an icon and closes by second click, outside click, Escape, and close button', async t => {
@@ -333,16 +540,20 @@ test('expired original deadline completes exactly once when restored', async t =
   await duration(p, 1); await p.locator('#mainBtn').click(); await p.clock.runFor(59000);
   await p.locator('[data-mode="hour"]').click(); await p.clock.runFor(2000); await p.locator('#undoTimer').click();
   assert.equal((await state(p)).completedSessions, 1);
-  await p.clock.runFor(1000); assert.equal(await time(p), '05:00');
+  await p.clock.runFor(1000); assert.equal(await time(p), '00:00');
+  assert.equal((await state(p)).currentMode,'work');
+  assert.match(await p.locator('#timerStatus').textContent(),/Focus complete/);
   await p.clock.fastForward(60000); assert.equal((await state(p)).completedSessions, 1);
+  await p.mouse.click(5,5);assert.equal(await time(p),'05:00');assert.equal((await state(p)).isRunning,false);
 });
 
-test('completion transition, late callbacks, and four-session long break still work', async t => {
+test('late callbacks count each completed session once and acknowledgment readies the fourth-session long break', async t => {
   const p = await pageFor(t);
   for (let i=1;i<=4;i++) {
     await p.locator('[data-mode="work"]').click(); await duration(p,1); await p.locator('#mainBtn').click();
     await p.clock.fastForward(90000); assert.equal((await state(p)).completedSessions, i);
-    await p.clock.runFor(500); assert.equal(await time(p), i===4?'15:00':'05:00');
+    await p.clock.runFor(15000);assert.equal(await time(p),'00:00');assert.equal((await state(p)).currentMode,'work');
+    await p.mouse.click(5,5);assert.equal(await time(p),i===4?'15:00':'05:00');assert.equal((await state(p)).isRunning,false);
   }
   await p.locator('[data-mode="work"]').click(); await duration(p,1); await p.locator('#mainBtn').click();
   await p.clock.runFor(60000); await p.locator('[data-mode="hour"]').click();
