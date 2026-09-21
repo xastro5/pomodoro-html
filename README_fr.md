@@ -13,7 +13,7 @@ Un minuteur Pomodoro minimaliste avec un magnifique affichage d'horloge numériq
 - **Durée personnalisée** : ajustez la durée du minuteur directement (minimum 1 minute, sans maximum)
 - **Deux styles d'horloge** : cliquez sur l'heure pour alterner discrètement entre les chiffres à sept segments et la police du décompte, avec la date en dessous
 - **Suivi des sessions** : les points de progression indiquent les sessions de concentration terminées
-- **Widget météo** : détecte automatiquement votre position et affiche la température avec un symbole coloré ; cliquez sur la température pour alterner entre ℃ et ℉. Les données indisponibles sont masquées
+- **Widget météo** : utilise les anciens émojis en couleur par défaut ; cliquez sur l'icône pour alterner entre émojis et contours colorés. Cliquez sur la température pour alterner entre ℃ et ℉. Ces choix ne sont jamais enregistrés : chaque ouverture ou rafraîchissement rétablit les émojis et ℃. Les données indisponibles sont masquées
 - **Notifications sonores** : alertes audio à la fin du minuteur (Carillon, Cloche, Numérique)
 - **Réveil** : alarme ponctuelle à une heure locale, avec rouleaux de sélection, choix et aperçu des sonneries, rappel réglable et arrêt
 - **Thème sombre/clair** : commutation en un clic

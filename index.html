@@ -74,7 +74,7 @@
     .weather { min-width: 0; overflow: hidden; white-space: nowrap; }
     .weather[hidden] { display: none; }
     .top-bar:has(.weather[hidden]) { justify-content: flex-end; }
-    .weather-icon { display: inline-flex; width: 1em; height: 1em; flex-shrink: 0; color: #7896b2; }
+    .weather-icon { display: inline-flex; align-items: center; justify-content: center; width: 1em; height: 1em; flex-shrink: 0; color: #7896b2; padding: 0; border: 0; border-radius: 3px; background: none; line-height: 1; font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; cursor: pointer; }
     .weather-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round; }
     .weather-icon [data-icon="sun"], .weather-icon [data-icon="partly"] > :first-child { color: #e6a000; }
     .weather-icon [data-icon="rain"] { color: #3399e6; }
@@ -324,7 +324,7 @@
 <body>
   <div class="container">
     <div class="top-bar">
-      <div class="weather" id="weather" role="group" aria-label="Current weather" hidden><span class="weather-icon" id="weatherIcon" aria-hidden="true"></span><button class="weather-temp" id="weatherTemp" type="button" aria-label="Current temperature"></button><span class="weather-city" id="weatherCity"></span></div>
+      <div class="weather" id="weather" role="group" aria-label="Current weather" hidden><button class="weather-icon" id="weatherIcon" type="button" data-style="emoji" aria-label="Use outline weather icons" aria-pressed="false" title="Switch to outline weather icons"></button><button class="weather-temp" id="weatherTemp" type="button" aria-label="Current temperature"></button><span class="weather-city" id="weatherCity"></span></div>
       <div class="top-actions">
         <button class="icon-btn" id="alarmOpen" type="button" title="Add alarm" aria-label="Add alarm" aria-haspopup="dialog" aria-controls="alarmEditor"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 1.5M5 3 2 6m17-3 3 3M7 20l-1 1m11-1 1 1"/></svg><span id="alarmSummaryTime" hidden></span></button>
         <button class="icon-btn" id="keepAwakeBtn" title="Keep Awake"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button>
@@ -625,7 +625,9 @@ const WEATHER_ICONS={
   temperature:'<path d="M9 14.5V5a3 3 0 0 1 6 0v9.5a5 5 0 1 1-6 0ZM12 7v10"/><circle cx="12" cy="18" r="1.5"/>'
 };
 const WEATHER_CODES={0:['sun','Clear sky'],1:['partly','Mainly clear'],2:['partly','Partly cloudy'],3:['cloud','Overcast'],45:['fog','Fog'],48:['fog','Fog'],51:['rain','Drizzle'],53:['rain','Drizzle'],55:['rain','Drizzle'],61:['rain','Rain'],63:['rain','Rain'],65:['rain','Rain'],71:['snow','Snow'],73:['snow','Snow'],75:['snow','Snow'],80:['rain','Rain showers'],81:['rain','Rain showers'],82:['rain','Rain showers'],95:['thunder','Thunderstorm'],96:['thunder','Thunderstorm'],99:['thunder','Thunderstorm']};
-let currentWeather=null,weatherInFahrenheit=false;
+const WEATHER_EMOJI={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌧️',53:'🌧️',55:'🌧️',61:'🌧️',63:'🌧️',65:'🌧️',71:'🌨️',73:'🌨️',75:'❄️',80:'🌦️',81:'🌦️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+// Appearance and unit choices last only for this page; every new load starts fresh.
+let currentWeather=null,weatherInFahrenheit=false,weatherUseOutline=false;
 function renderWeather(current,city='') {
   const widget=document.getElementById('weather'),cityLabel=document.getElementById('weatherCity');
   if(!Number.isFinite(current?.temperature_2m)) {
@@ -638,13 +640,22 @@ function renderWeather(current,city='') {
   currentWeather={current:{temperature_2m:current.temperature_2m,weather_code:current.weather_code},city:location};
   const temperature=Math.round(weatherInFahrenheit?current.temperature_2m*9/5+32:current.temperature_2m);
   const unitName=weatherInFahrenheit?'Fahrenheit':'Celsius',nextUnit=weatherInFahrenheit?'Celsius':'Fahrenheit';
-  weatherIcon.innerHTML='<svg viewBox="0 0 24 24" data-icon="'+icon+'" aria-hidden="true">'+WEATHER_ICONS[icon]+'</svg>';
+  if(weatherUseOutline) weatherIcon.innerHTML='<svg viewBox="0 0 24 24" data-icon="'+icon+'" aria-hidden="true">'+WEATHER_ICONS[icon]+'</svg>';
+  else weatherIcon.textContent=WEATHER_EMOJI[current.weather_code]||'🌡️';
+  weatherIcon.dataset.style=weatherUseOutline?'outline':'emoji';
+  weatherIcon.setAttribute('aria-pressed',String(weatherUseOutline));
+  weatherIcon.title=weatherUseOutline?'Switch to emoji weather icons':'Switch to outline weather icons';
   weatherTemp.textContent=temperature+(weatherInFahrenheit?'℉':'℃'); cityLabel.textContent=location?' in '+location:'';
   weatherTemp.title='Switch to '+nextUnit;
   weatherTemp.setAttribute('aria-label',temperature+' degrees '+unitName+'. Switch to '+nextUnit);
   widget.title=condition+', '+weatherTemp.textContent+(location?', '+location:'');
   widget.setAttribute('aria-label',condition+', '+temperature+' degrees '+unitName+(location?', '+location:'')); widget.hidden=false;
 }
+weatherIcon.addEventListener('click',()=>{
+  if(!currentWeather)return;
+  weatherUseOutline=!weatherUseOutline;
+  renderWeather(currentWeather.current,currentWeather.city);
+});
 weatherTemp.addEventListener('click',()=>{
   if(!currentWeather)return;
   weatherInFahrenheit=!weatherInFahrenheit;

@@ -13,7 +13,7 @@ A minimalist Pomodoro timer with a beautiful 7-segment digital clock display, we
 - **Custom Duration**: Adjust timer length directly (minimum 1 minute, no maximum)
 - **Two Clock Styles**: Click the real-time clock to switch quietly between classic seven-segment digits and numerals matching the countdown, with the date below
 - **Session Tracking**: Visual progress dots show completed focus sessions
-- **Weather Widget**: Automatically detects your location and shows current temperature with a colored weather symbol; click the temperature to switch between ℃ and ℉. Unavailable readings are hidden
+- **Weather Widget**: Uses the earlier full-color emoji by default; click the weather icon to switch between emoji and colored outlines. Click the temperature to switch between ℃ and ℉. These choices are never saved: each new opening or refresh starts with emoji and ℃. Unavailable readings are hidden
 - **Sound Notifications**: Audio alerts when timer completes (Chime, Bell, Digital)
 - **Alarm Clock**: Set a one-time local alarm with time wheels, selectable tones, sound preview, adjustable snooze, and dismiss controls
 - **Dark/Light Theme**: One-click theme toggle
